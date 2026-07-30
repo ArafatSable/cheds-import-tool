@@ -1,0 +1,197 @@
+{
+  "_form_note": "IMPORTANT: unlike every other form we've done, Institute_R_D has NO push-to-CHEDS API workflow anywhere in the .ds export -- only a field-visibility helper ('hide_field1', which just hides Record_id/Response, no invokeurl). So this mapping is built purely from the form's own field definitions, not cross-checked against a real API payload the way Student_Research/PLO/CLO were. It's likely this integration hasn't been built yet on the Zoho side. The good news: almost every field here is a plain number/decimal, so there's very little ambiguity -- just double check with whoever owns this integration that these field names line up with the eventual API payload before relying on it.",
+  "fields": [
+    {
+      "raw_column": "IRD_Institution_code",
+      "target_field": "Institution_code",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Fiscal_Year",
+      "target_field": "Fiscal_Year",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Headcount_Researchers_Male",
+      "target_field": "Headcount_Researchers_Male",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Headcount_Researchers_Female",
+      "target_field": "Headcount_Researchers_Female",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Headcount_Technicians_Male",
+      "target_field": "Headcount_Technicians_Male",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Headcount_Technicians_Female",
+      "target_field": "Headcount_Technicians_Female",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Headcount_Other_Support_Staff_Male",
+      "target_field": "Headcount_Other_Support_Staff_Male",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Headcount_Other_Support_Staff_Female",
+      "target_field": "Headcount_Other_Support_Staff_Female",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Total_Research_Personnel_Headcount",
+      "target_field": "Total_Research_Personnel_Headcount",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_FTE_Researchers_Male",
+      "target_field": "FTE_Researchers_Male",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_FTE_Researchers_Female",
+      "target_field": "FTE_Researchers_Female",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_FTE_Technicians_Male",
+      "target_field": "FTE_Technicians_Male",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_FTE_Technicians_Female",
+      "target_field": "FTE_Technicians_Female",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_FTE_Other_Support_Staff_Male",
+      "target_field": "FTE_Other_Support_Staff_Male",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_FTE_Other_Support_Staff_Female",
+      "target_field": "FTE_Other_Support_Staff_Female",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Total_Research_Personnel_Full_time_Equivalent",
+      "target_field": "Total_Research_Personnel_Full_time_Equivalent",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Current_Operating_Costs_of_Research",
+      "target_field": "Current_Operating_Costs_of_Research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Current_Other_Costs_of_Research",
+      "target_field": "Current_Other_Costs_of_Research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Capital_Expenditure_Land_and_Buildings",
+      "target_field": "Capital_Expenditure_Land_and_Buildings",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Capital_Expenditure_Machinery_and_Equipment",
+      "target_field": "Capital_Expenditure_Machinery_and_Equipment",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Capital_Expenditure_Capitalized_Computer_Software",
+      "target_field": "Capital_Expenditure_Capitalized_Computer_Software",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Capital_Expenditure_Other_Intellectual_Property_Products",
+      "target_field": "Capital_Expenditure_Other_Intellectual_Property_Products",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Total_Capital_Expenditure_on_Research",
+      "target_field": "Total_Capital_Expenditure_on_Research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Total_Current_Operating_Costs_of_Research",
+      "target_field": "Total_Current_Operating_Costs_of_Research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Total_of_Current_Operating_Costs_and_Capital_Expenditure_on_Research",
+      "target_field": "Total_of_Current_Operating_Costs_and_Capital_Expenditure_on_Research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Source_of_Funds_for_Research_Business_Enterprise",
+      "target_field": "Source_of_Funds_for_Research_Business_Enterprise",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Source_of_Funds_for_Research_Private_Non_Profit",
+      "target_field": "Source_of_Funds_for_Research_Private_Non_Profit",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Source_of_Funds_for_Research_Government",
+      "target_field": "Source_of_Funds_for_Research_Government",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Source_of_Funds_for_Research_Higher_Education",
+      "target_field": "Source_of_Funds_for_Research_Higher_Education",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Source_of_Funds_for_Research_Rest_of_World_Abroad",
+      "target_field": "Source_of_Funds_for_Research_Rest_of_World_Abroad",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Total_Source_of_Funds_for_Research",
+      "target_field": "Total_Source_of_Funds_for_Research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IRD_Total_yearly_Expenses",
+      "target_field": "Total_yearly_Expenses",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    }
+  ]
+}
