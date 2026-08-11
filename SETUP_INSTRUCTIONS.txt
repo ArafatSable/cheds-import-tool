@@ -4,7 +4,7 @@ CHEDS Import Sheet Builder -- Setup & Usage
 WHAT THIS IS
 ------------
 A small app that turns a raw Excel export into the exact sheet Zoho
-Creator's bulk import expects, for any of these 10 forms:
+Creator's bulk import expects, for any of these 11 forms:
   1. Program Learning Outcomes
   2. Course Learning Outcomes
   3. Program Skills
@@ -15,6 +15,7 @@ Creator's bulk import expects, for any of these 10 forms:
   8. Institute - Financials           (no confirmed live CHEDS workflow yet -- see note below)
   9. Graduate Licensure
   10. Graduates
+  11. Institute - Academic Programs
 
 Two ways to run it are included -- pick whichever your client prefers:
   - app_streamlit.py   a simple page that opens in the browser
