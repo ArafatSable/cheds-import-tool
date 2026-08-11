@@ -341,6 +341,16 @@ def cmd_extract_form(args):
 LOOKUP_SHEET_REGISTRY = {
     "Institutional Codes":        {"header_row": 4, "code_col": 2, "name_col": 3},
     "Academic Period":            {"header_row": 4, "code_col": 2, "name_col": 3},
+    # Academic Year: no "Title"/"Description" spacer rows like most sheets --
+    # just "Back to Main Menu" then the header immediately on row 2. No blank
+    # leading column either: Year Code is col 1, Academic Year is col 2. This
+    # sheet was previously MISSING from this registry entirely, which meant
+    # every Academic_Year lookup silently fell back to the generic default
+    # (header_row 4/col 2/col 3) -- reading real data rows as if they were
+    # the header, so every lookup failed and the raw code (e.g. 999999,
+    # 202425) was kept as-is instead of resolving to its name (e.g.
+    # "Unknown", "Academic Year 2024-2025").
+    "Academic Year":              {"header_row": 2, "code_col": 1, "name_col": 2},
     "Area of Specialization":     {"header_row": 4, "code_col": 2, "name_col": 3},
     "Degree or Program Level":    {"header_row": 4, "code_col": 2, "name_col": 3},
     "Full Part Time":             {"header_row": 4, "code_col": 2, "name_col": 3},
