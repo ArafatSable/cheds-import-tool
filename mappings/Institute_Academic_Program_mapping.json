@@ -1,4 +1,5 @@
 {
+  "_form_note": "Unlike Institute_R_D and Institute_Financials, this form DOES have a confirmed live push-to-CHEDS API workflow in the .ds export -- Institute_Academic_Programs_Function calls invokeurl against https://api.gsb.government.ae/gateway/receiveEducationalInstituteDetails_MOHESR/1.0/Integration/Institute/AcademicPrograms (production) with a matching staging URL commented in the same block. Field names below were verified against both the Zoho form definition and the HEDB 'Institute - Academic Programs' data dictionary. One form-design issue found and handled: the Zoho form has two fields both displayed as 'Program Faculty Members' (Program_Faculty_Members and Program_Faculty_Members1) -- only the first is mapped here; see that field's _note for details.",
   "fields": [
     {
       "raw_column": "Prog_Institution_Code",
@@ -162,13 +163,7 @@
       "raw_column": "Prog_Number_Of_Faculty_FT",
       "target_field": "Program_Faculty_Members",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file. NOTE: the Zoho form has a duplicate field also called 'Program Faculty Members' (internal name Program_Faculty_Members1) with the same display name and type -- this appears to be a form-design bug (duplicate field), and is left unmapped/blank below since there is no second distinct raw column for it."
-    },
-    {
-      "raw_column": null,
-      "target_field": "Program_Faculty_Members1",
-      "kind": "unmapped",
-      "_note": "This field is a duplicate of 'Program_Faculty_Members' in the Zoho form (same display name 'Program Faculty Members', same type). Likely a form-design bug rather than a real distinct field -- left unmapped. Flag to the app owner to confirm whether this should instead have been 'Number of Adjunct Faculty Members' or should be removed."
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file. NOTE: the Zoho form also has a second field called 'Program_Faculty_Members1' with the identical display name ('Program Faculty Members') and type -- this looks like a form-design bug (duplicate field), not a real second data point, so it's intentionally left out of this mapping/import sheet. Flag to the app owner to confirm whether that duplicate should instead have been used for something else, or removed from the form."
     },
     {
       "raw_column": "Prog_Number_Of_Faculty_PT",
