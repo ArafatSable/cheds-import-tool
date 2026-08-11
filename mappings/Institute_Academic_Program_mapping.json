@@ -4,8 +4,10 @@
     {
       "raw_column": "Prog_Institution_Code",
       "target_field": "Institution_code",
-      "kind": "plain",
-      "_note": "No conversion applied -- picklist is pre-filtered to Institution Code 141, so the raw code/name is passed through as-is."
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Institutional Codes",
+      "_note": "Code to name converted"
     },
     {
       "raw_column": "Prog_Academic_Year",
@@ -322,7 +324,7 @@
     },
     {
       "raw_column": "Prog_Revenue_External_Research_Grants",
-      "target_field": "Program_Revenue_External_Research_Grants1",
+      "target_field": "Program Revenue (External Research Grants)",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
