@@ -387,12 +387,6 @@
       "target_field": "Graduates_with_entrepreneurial_accomplishments_per_program",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Last_Updated",
-      "target_field": "Last_Updated_Time",
-      "kind": "date",
-      "_note": "HEDB field 'Last Updated' (yyyy-mm-dd) maps to the Zoho datetime field 'Last_Updated_Time' -- date-only value is used; only relevant if submitting through the Master API rather than manual entry."
     }
   ]
 }
