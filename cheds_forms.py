@@ -25,6 +25,7 @@ FORMS = {
     "8. Institute - Financials":     "mappings/Institute_Financials_mapping.json",
     "9. Graduate Licensure":         "mappings/Graduate_Licensure_mapping.json",
     "10. Graduates":                 "mappings/Student_Graduates_mapping.json",
+    "11. Institute - Academic Programs": "mappings/Institute_Academic_Program_mapping.json",
 }
 
 # Forms known to have NO live push-to-CHEDS workflow in the .ds export yet
