@@ -1,0 +1,124 @@
+CHEDS Import Sheet Builder -- Setup & Usage
+=============================================
+
+WHAT THIS IS
+------------
+A small app that turns a raw Excel export into the exact sheet Zoho
+Creator's bulk import expects, for any of these 11 forms:
+  1. Program Learning Outcomes
+  2. Course Learning Outcomes
+  3. Program Skills
+  4. Students - Research
+  5. Research Impact
+  6. Institute - R&D / GERD           (no confirmed live CHEDS workflow yet -- see note below)
+  7. Students - SOD Applicants
+  8. Institute - Financials           (no confirmed live CHEDS workflow yet -- see note below)
+  9. Graduate Licensure
+  10. Graduates
+  11. Institute - Academic Programs
+
+Two ways to run it are included -- pick whichever your client prefers:
+  - app_streamlit.py   a simple page that opens in the browser
+  - app_cli.py         a menu you use from a plain command window, no browser
+
+ONE-TIME SETUP
+---------------
+1. Make sure Python 3.9+ is installed on the client's machine
+   (https://www.python.org/downloads/ -- during install, tick
+   "Add python.exe to PATH").
+2. Double-click setup.bat once. It installs the two packages this app
+   needs (openpyxl, streamlit).
+
+TWO DELIVERABLES -- TWO SEPARATE FOLDERS
+-------------------------------------------
+Both apps ask you to pick one of two things to generate. The CLI version
+automatically saves each one into its own folder, next to the raw file:
+
+  1. Report   -> saved in a "1_Report" folder.
+     A pure FINDINGS REPORT. It does NOT touch, copy, or modify the client's
+     sheet in any way -- it's just an Excel file with two tables:
+       "Column Changes"  one row per field: is this raw column being
+                          renamed, is it missing entirely, and what happens
+                          to its value (including "stays exactly the same"
+                          for plain fields that aren't converted at all).
+       "Row Issues"      one row per specific problem found: the row number
+                          (matches their own file), the raw column, the
+                          current value, a Type (MUST FIX / PLEASE CHECK /
+                          INFO), and what to check or do about it.
+     Give this to the client FIRST so THEY make the corrections in their
+     own file -- nothing here is pre-edited for them.
+
+  2. Final    -> saved in a "2_Final" folder.
+     The actual converted sheet, ready to feed straight into Zoho Creator's
+     bulk import. Generate this once the client's data is clean (or once
+     you've decided to proceed anyway).
+
+     "Type" column meaning in the Report's "Row Issues" table:
+       MUST FIX      -- blocks a correct import: unreadable value, or an
+                         entire expected column missing from the file.
+       PLEASE CHECK  -- doesn't match the expected code/name list or
+                         picklist. Likely a typo or an outdated/wrong code.
+       INFO          -- nothing to fix. Just a heads-up that this value will
+                         look different in the Final sheet (a code becomes
+                         its descriptive name, a date's time gets dropped,
+                         a phone number's dashes get stripped, etc).
+
+EVERY TIME AFTER SETUP
+-------------------------
+Web app:  double-click run_web_app.bat -- a browser tab opens automatically.
+          1. Pick the form from the dropdown.
+          2. Pick "1. Report" or "2. Final".
+          3. Upload the raw Excel file for that form.
+          4. Click the Generate button, then the Download button.
+
+No-browser version:  double-click run_cli.bat -- a black command window opens.
+          1. Type the number of the form and press Enter.
+          2. Type 1 (Report) or 2 (Final) and press Enter.
+          3. Type (or drag-and-drop) the path to the raw Excel file and press Enter.
+          4. Press Enter twice more to accept the default sheet/output settings
+             (the output path defaults to a "1_Report" or "2_Final" folder
+             next to the raw file, created automatically), or type your own.
+
+AFTER YOU GET THE OUTPUT FILE
+-------------------------------
+Report: hand it to the client. They open "Column Changes" and "Row Issues"
+and make the corrections in their OWN real file (nothing has been edited
+for them). Once they're done, run Report again to confirm it's clean, or
+go straight to Final.
+
+Final: always check the last column, "_NOTES", before importing into Zoho.
+Any row where a lookup code couldn't be matched, a date couldn't be parsed,
+or a field needs a human decision gets a note there instead of silently
+guessing wrong.
+
+ADDING AN 11TH (OR 12TH...) FORM LATER
+-----------------------------------------
+1. Build that form's mapping config the same way the first 10 were built
+   (see cheds_import_tool.py's built-in help: `python cheds_import_tool.py --help`,
+   in particular the `auto-map-ds` command if you have a .ds export).
+2. Drop the finished mapping .json into the mappings\ folder.
+3. Open cheds_forms.py and add one line to the FORMS dictionary.
+That's it -- both apps pick up the new form automatically, no other
+code changes needed.
+
+FOLDER CONTENTS
+-----------------
+  cheds_import_tool.py   the engine -- all the lookup/mapping/date logic
+  cheds_forms.py          the list of 10 forms and where their mapping is
+  app_streamlit.py        the web app
+  app_cli.py              the menu-driven script
+  mappings\               the 10 mapping configs, one per form
+  HEDB_.xlsx              the reference codes workbook -- keep this updated
+                          if HEDB codes change; both apps always read this
+                          file fresh, no need to touch any code
+  requirements.txt        the two Python packages this needs
+  setup.bat / run_web_app.bat / run_cli.bat   double-click helpers (Windows)
+
+IF SOMETHING LOOKS WRONG IN THE OUTPUT
+-----------------------------------------
+That almost always means the raw file's column headers don't match what's
+in the mapping config's "raw_column" values, or a form's mapping needs a
+tweak (e.g. a new HEDB sheet, a picklist's exact wording changed in Zoho).
+Open the relevant mappings\*.json file -- every non-obvious field has a
+"_note" explaining exactly what it does and why, so you can fix it without
+having to re-derive the logic from scratch.
