@@ -318,7 +318,7 @@
       "_note": "Resolves against Program_Code's 'CAA Program Code' column (Program Master sheet), filtered to codes starting with '141'. Passed through as-is; a code not starting with 141 or not present in Program_Code will fail to resolve."
     },
     {
-      "raw_column": "Mode of Study(FT/PT)",
+      "raw_column": "Enroll_Mode_of_Study",
       "target_field": "Mode_of_Study_FT_PT",
       "kind": "map",
       "value_map": {
