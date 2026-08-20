@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Test/output files -- not needed for the deployed app, regenerate locally if needed
+*_Import_Ready_*.xlsx
+*_Review_Report_*.xlsx
+*_Import_Ready.xlsx
+*_Review_Report.xlsx
+raw_clo_test.xlsx
+test_raw_clo.xlsx
+test_raw_sod_review.xlsx
+
+# OS/editor cruft
+.DS_Store
+*.swp
+
+# NOTE: HEDB_.xlsx is intentionally NOT ignored -- app_streamlit.py expects
+# it colocated in this same folder to resolve lookups. It must be committed.

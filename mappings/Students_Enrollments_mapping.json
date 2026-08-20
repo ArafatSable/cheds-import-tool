@@ -1,0 +1,653 @@
+{
+  "_form_note": "This is the largest module you've had mapped so far (72 fields). Built from Zoho_To_CHEDS___7_.ds's Students_Enrollments form definition, cross-referenced against the HEDB 'Students - Enrollments' dictionary and the specific HEDB reference sheets each field's picklist actually draws from (Marital status, Mode of Study, Stud Employment Status, Employment Sector, Student Type, Campus, Emirates, HE/HS Equivalency Indicator, High School System, 12thGrade stream, Student Level, People of Determination, Academic Year, Program Master). I have NOT yet seen this form's actual push/Deluge script (only the form field definitions) -- so field NAMES here are verified against the Zoho form itself, but I can't confirm the API push doesn't do anything unusual with them the way Applicants/Employee did (e.g. hardcoding institutionCode). Worth a quick sanity pass once you can share that push script. Three fields (Area_of_Specialization_CIP_Family_code, Student_Major_CIP_Major_Classification, Student_Program_Code) resolve through Zoho's own Program_Code lookup form rather than a simple HEDB code/name sheet -- see their individual notes, they're passed through as plain values since the current mapping-JSON schema doesn't have a 3-column-sheet lookup kind yet.",
+  "fields": [
+    {
+      "raw_column": "Enroll_Institution_Code",
+      "target_field": "Institution_Code",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Institutional Codes",
+      "_note": "Code converted to descriptive Name (form displayformat = [Name])."
+    },
+    {
+      "raw_column": "Enroll_Academic_Period",
+      "target_field": "Academic_Period",
+      "kind": "lookup",
+      "lookup_direction": "code_to_code",
+      "hedb_sheet": "Academic Period",
+      "_note": "Form displayformat = [Code] here (not Name) -- Zoho shows the raw code itself once it resolves against the Academic_Period lookup form. Value passes through unchanged, but flagged if the code isn't found in the 'Academic Period' HEDB list."
+    },
+    {
+      "raw_column": "Enroll_Student_ID",
+      "target_field": "Student_ID",
+      "kind": "plain",
+      "_note": "No conversion."
+    },
+    {
+      "raw_column": "Enroll_Al_Ethbara",
+      "target_field": "Al_Ethbara",
+      "kind": "plain",
+      "_note": "No conversion. HEDB: use 'NA' if not available."
+    },
+    {
+      "raw_column": "Enroll_Emirates_ID",
+      "target_field": "Emirates_ID",
+      "kind": "plain",
+      "_note": "No conversion. HEDB: use 999999999999999 if not available, and pair with a Reason code below."
+    },
+    {
+      "raw_column": "Enroll_Passport_Number",
+      "target_field": "Passport_Number",
+      "kind": "plain",
+      "_note": "No conversion. HEDB: use 'NA' if not available."
+    },
+    {
+      "raw_column": "Enroll_Missing_EID",
+      "target_field": "Reason_why_Emirates_ID_is_missing",
+      "kind": "map",
+      "value_map": {
+        "GCC": "GCC Resident with no Emirates ID",
+        "VISITING": "Visiting Student/Staff",
+        "ONLINE": "Distance Learning Student Or Faculty teaching online only (outside of UAE) or staff working remotely",
+        "NEW": "New student/faculty and Emirates ID is applied for",
+        "MAR": "Students with UAE passport but not UAE Nationals (Marsoom)",
+        "PRLW": "Emirates ID cannot be provided as GDPR/FERP",
+        "DPL": "Family of diplomats. Do not required emirates ID"
+      },
+      "_note": "IMPORTANT: this form's own picklist text for the PRLW option is truncated ('...GDPR/FERP') compared to the Employee form's full text ('...GDPR/FERPA and/or other privacy laws are applicable') -- mapped to match this form's literal (truncated) text exactly, since that's what's actually stored. Worth flagging to whoever owns the Zoho form as a likely copy-paste cutoff."
+    },
+    {
+      "raw_column": "Enroll_Family_Book_Number ",
+      "target_field": "Family_Book_Number",
+      "kind": "plain",
+      "_note": "Note trailing space in the HEDB Database Field Name -- check your raw file's actual header. HEDB: use 999999 if not available."
+    },
+    {
+      "raw_column": "Enroll_Family_Number",
+      "target_field": "Family_Number",
+      "kind": "plain",
+      "_note": "No conversion. HEDB: use 999 if not available; cannot be null if Nationality = UAE."
+    },
+    {
+      "raw_column": "Enroll_City_Number",
+      "target_field": "City_Number",
+      "kind": "plain",
+      "_note": "No conversion. HEDB: use 999 if not available; cannot be blank if Nationality = UAE."
+    },
+    {
+      "raw_column": "Enroll_Student_Name_English",
+      "target_field": "Student_Name_English",
+      "kind": "plain",
+      "_note": "No conversion."
+    },
+    {
+      "raw_column": "Enroll_Student_Name_Arabic",
+      "target_field": "Student_Name_Arabic",
+      "kind": "plain",
+      "_note": "No conversion. HEDB: leave blank if not available."
+    },
+    {
+      "raw_column": "Enroll_Gender",
+      "target_field": "Gender",
+      "kind": "map",
+      "value_map": {
+        "M": "Male",
+        "F": "Female",
+        "U": "Unreported due to privacy laws applicable (e.g. GDPR , FERPA)"
+      },
+      "_note": "Same 3-value table as Employee_Basic_Details."
+    },
+    {
+      "raw_column": "Enroll_Student_DOB",
+      "target_field": "Student_DOB",
+      "kind": "date",
+      "_note": "Trimmed to yyyy-mm-dd."
+    },
+    {
+      "raw_column": "Enroll_Student_Email_Address",
+      "target_field": "Student_Email_Address",
+      "kind": "plain",
+      "_note": "No conversion. Marked personal data in the Zoho form. HEDB: use xyz@xyz.com if not available."
+    },
+    {
+      "raw_column": "Enroll_Student_Mobile_Number",
+      "target_field": "Student_Mobile_Number",
+      "kind": "phone",
+      "_note": "Cleaned to digits + leading '+'. Marked personal data in the Zoho form. HEDB: use +999-99-9999999 if not available."
+    },
+    {
+      "raw_column": "Enroll_Health_Fitness_Certificate",
+      "target_field": "People_of_Determination_Special_Needs_Indicator",
+      "kind": "map",
+      "value_map": { "Y": "Yes", "N": "No", "U": "Unknown/ Undeclared" },
+      "_note": "NOTE the HEDB Database Field Name for this one ('Enroll_Health_Fitness_Certificate') is misleading -- it's actually the People of Determination / special needs Y-N-U indicator, not a health certificate field. Worth flagging to whoever maintains the HEDB dictionary."
+    },
+    {
+      "raw_column": "Enroll_Special_Needs",
+      "target_field": "People_of_Determination_Category_Special_Needs_Category",
+      "kind": "map",
+      "value_map": {
+        "LD": "Specific Learning Disabilities",
+        "PH": "Physical and health related disability",
+        "VI": "Visual Impairment",
+        "HI": "Hearing Impairment Including Deafness",
+        "SL": "Speech and Language Disorders",
+        "AS": "Autism Spectrum Disorders",
+        "EBD": "Emotional and Behavioural Disorders",
+        "ID": "Intellectual Disabilities",
+        "ADHD": "AttentionDeficit/ Hyperactivity Disorder",
+        "OT": "Other Disabilities not covered above"
+      },
+      "_note": "Required if the indicator above is 'Y' -- worth a report-time warning if that combination is violated either way."
+    },
+    {
+      "raw_column": "Enroll_Marital_Status",
+      "target_field": "Marital_Status",
+      "kind": "map",
+      "value_map": {
+        "S": "Single",
+        "M": "Married",
+        "D": "Divorced",
+        "W": "Widowed",
+        "U": "Undeclared/unknown"
+      },
+      "_note": "5-value table straight from the 'Marital status' HEDB reference sheet."
+    },
+    {
+      "raw_column": "Enroll_Nationality",
+      "target_field": "Nationality",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Country",
+      "_note": "Code converted to descriptive Name."
+    },
+    {
+      "raw_column": "Enroll_Nationality_of_Mother",
+      "target_field": "Nationality_of_Mother",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Country",
+      "_note": "Code converted to descriptive Name."
+    },
+    {
+      "raw_column": "Enroll_Home_Emirate",
+      "target_field": "Home_Emirate_Emirates_Code",
+      "kind": "map",
+      "value_map": {
+        "AD": "Abu Dhabi",
+        "DB": "Dubai",
+        "SH": "Sharjah",
+        "AJ": "Ajman",
+        "RK": "Ras Al Khaimah",
+        "FJ": "Fujairah",
+        "UQ": "Umm Al-Quwain",
+        "UN": "Use in case of GCC students who do not have addresses within UAE",
+        "ON": "Online Study/Teaching/Work"
+      },
+      "_note": "From the dedicated 'Emirates' HEDB sheet (9 entries) -- note this is a DIFFERENT, shorter list than the 32-entry 'Campus' sheet used below for Student_Campus, even though both are Emirate-flavored. Don't reuse one for the other."
+    },
+    {
+      "raw_column": "Enroll_Student_Campus",
+      "target_field": "Student_Campus_Campus_Code",
+      "kind": "map",
+      "value_map": {
+        "AD": "Abu Dhabi",
+        "DB": "Dubai",
+        "SH": "Sharjah",
+        "AJ": "Ajman",
+        "RK": "Ras Al Khaimah",
+        "FJ": "Fujairah",
+        "UQ": "Umm Al-Quwain",
+        "AA": "Al Ain",
+        "RW": "Ruwais",
+        "MZ": "Madinat Zayed",
+        "KF": "Khorfakan",
+        "DI": "Dibba",
+        "KH": "Khalba",
+        "DD": "Dhaid",
+        "AAM": "Al Ain Men\u2019s Campus",
+        "AAW": "Al Ain Women\u2019s Campus",
+        "ADM": "Abu Dhabi Men\u2019s Campus",
+        "ADW": "Abu Dhabi Women\u2019s Campus",
+        "MZM": "Madinat Zayed Men\u2019s Campus",
+        "MZW": "Madinat Zayed Women\u2019s Campus",
+        "RUM": "Ruwais Men\u2019s Campus",
+        "RUW": "Ruwais Women\u2019s Campus",
+        "DBM": "Dubai Men\u2019s Campus",
+        "DBW": "Dubai Women\u2019s Campus",
+        "SJM": "Sharjah Men\u2019s Campus",
+        "SJW": "Sharjah Women\u2019s Campus",
+        "FJM": "Fujairah Men\u2019s Campus",
+        "FJW": "Fujairah Women\u2019s Campus",
+        "RKM": "Ras Al Khaimah Men\u2019s Campus",
+        "RKW": "Ras Al Khaimah Women\u2019s Campus",
+        "MEL": "Melaha",
+        "ON": "Online"
+      },
+      "_note": "Same 32-entry Campus table used in Employee_Basic_Details. HEDB explicitly warns not to use 'OT' here (that's only valid on the Applicants dataset)."
+    },
+    {
+      "raw_column": "Enroll_Student_Type",
+      "target_field": "Student_Type_Type_Code",
+      "kind": "map",
+      "value_map": {
+        "NW": "New to the Institution",
+        "NP": "Existing students starting a new program at the institute",
+        "NF": "New to program after completing foundation at the institution",
+        "CN": "Continuing",
+        "TR": "Transfer (from other institution)",
+        "EX": "Exchange",
+        "VS": "Transient",
+        "RA": "Readmission"
+      },
+      "_note": "8-value table from the 'Student Type' HEDB sheet."
+    },
+    {
+      "raw_column": "Enroll_1st_Academic_Period",
+      "target_field": "Academic_Period1",
+      "kind": "lookup",
+      "lookup_direction": "code_to_code",
+      "hedb_sheet": "Academic Period",
+      "_note": "Same code-passthrough pattern as Enroll_Academic_Period -- displayformat = [Code]."
+    },
+    {
+      "raw_column": "Enroll_Student_Level",
+      "target_field": "Student_Level_Level_Code",
+      "kind": "map",
+      "value_map": {
+        "FN": "Foundation",
+        "RM": "Remedial program (pre Masters).",
+        "FR": "Freshman",
+        "SP": "Sophomore",
+        "JR": "Junior",
+        "SR": "Senior",
+        "M1": "Masters - Year1",
+        "M2": "Masters - Year2 ( 50% or more of required credits completed)",
+        "M3": "Masters - Year3",
+        "D1": "Doctorate 1: Not advanced to candidacy",
+        "D2": "Doctorate 2: Advanced to candidacy",
+        "PD": "Post-doctorate",
+        "PF": "Professional Education",
+        "CR": "Certificate/Credential",
+        "DP": "Diploma",
+        "HD": "Higher Diploma",
+        "P1": "Phase A :Year 1 or 2 or 3 (MBBS), Year 1 (JD or MD), Year 1,2, 3 of DD (Dentistry)",
+        "P2": "Phase B: Year 4, 5, 6 (MBBS), Year 2 (JD or MD), Year 4,5 of DD (Dentistry)",
+        "P3": "Medical residency and training (above year 5) , Year 3 and above (JD or MD)",
+        "PG": "Post graduate diploma",
+        "MC": "Microcredential"
+      },
+      "_note": "21-value table from the 'Student Level' HEDB sheet, wording shortened where HEDB's own descriptions were long-form -- matched to the exact 21 phrases in this Zoho form's picklist (which itself lists only 21 of the 25 Student Level rows in HEDB; the sheet also has RM used elsewhere but not all combinations appear here -- double check any row using a level code not in this list)."
+    },
+    {
+      "raw_column": "Enroll_Student_Degree",
+      "target_field": "Student_Degree_Code",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Degree or Program Level",
+      "_note": "Code converted to descriptive Name."
+    },
+    {
+      "raw_column": "Enroll_Area_of_Specialization",
+      "target_field": "Area_of_Specialization_CIP_Family_code",
+      "kind": "plain",
+      "_note": "Unusual field: Zoho resolves this against Program_Code[...].CIP_Family_Code (the 'Program Master' HEDB sheet's 'CIP_Family CODE' column), not a simple 2-column lookup sheet -- the current mapping schema doesn't have a way to validate against that 3rd-column sheet yet, so the raw CIP family code is passed straight through unchanged (which matches the form's own displayformat = [CIP_Family_Code]). If the code doesn't match an existing Program_Code record's CIP_Family_Code, the import will likely fail at the Zoho picklist-resolution step -- worth spot-checking a few rows against the 'Program Master' sheet before a big import."
+    },
+    {
+      "raw_column": "Enroll_Student_Major",
+      "target_field": "Student_Major_text",
+      "kind": "plain",
+      "_note": "No conversion."
+    },
+    {
+      "raw_column": "Enroll_Major_CIP",
+      "target_field": "Student_Major_CIP_Major_Classification",
+      "kind": "plain",
+      "_note": "Same situation as Area_of_Specialization above -- resolves against Program_Code's 'CIP Code' column (Program Master sheet), passed through as-is."
+    },
+    {
+      "raw_column": "Enroll_Minor",
+      "target_field": "Student_Minor",
+      "kind": "plain",
+      "_note": "No conversion. HEDB: leave blank if not available."
+    },
+    {
+      "raw_column": "Enroll_Program_Code",
+      "target_field": "Student_Program_Code",
+      "kind": "plain",
+      "_note": "Resolves against Program_Code's 'CAA Program Code' column (Program Master sheet), filtered to codes starting with '141'. Passed through as-is; a code not starting with 141 or not present in Program_Code will fail to resolve."
+    },
+    {
+      "raw_column": "Mode of Study(FT/PT)",
+      "target_field": "Mode_of_Study_FT_PT",
+      "kind": "map",
+      "value_map": {
+        "FT": "Student is taking full-time",
+        "PT": "Student is taking less than full-time"
+      },
+      "_note": "IMPORTANT: this HEDB row's own 'Database Field Name' cell appears blank/malformed in the sheet -- use whatever your raw export actually calls this column (likely 'Enroll_Mode_of_Study'); double-check against your real raw file header before running the import, since I could not confirm the exact Database Field Name text from the dictionary for this one row."
+    },
+    {
+      "raw_column": "Enroll_Employment_Status",
+      "target_field": "Employment_Status",
+      "kind": "map",
+      "value_map": {
+        "Y": "Employed",
+        "N": "Not Employed",
+        "S": "Self Employed",
+        "E": "Sponsored students with a job guarantee after graduation"
+      },
+      "_note": "From the 'Stud Employment Status' HEDB sheet -- do NOT confuse with the 'Employment Status' sheet (that one's for Employee_Basic_Details and uses completely different codes/values)."
+    },
+    {
+      "raw_column": "Enroll_Employment_Sector",
+      "target_field": "Employment_Sector",
+      "kind": "map",
+      "value_map": {
+        "Private": "Private Sector",
+        "Local": "Local Government",
+        "Federal": "Federal Government",
+        "Semi": "Semi-Government"
+      },
+      "_note": "Required if Employment Status = Y (Employed) -- worth a report-time warning if blank in that case."
+    },
+    {
+      "raw_column": "Enroll_Employment_Position",
+      "target_field": "Employment_Position",
+      "kind": "plain",
+      "_note": "No conversion. Required if Employment Status = Y."
+    },
+    {
+      "raw_column": "Enroll_Required_Academic_Period",
+      "target_field": "Required_academic_periods_for_Graduation",
+      "kind": "plain",
+      "_note": "No conversion."
+    },
+    {
+      "raw_column": "Enroll_Required_Credits_Graduation",
+      "target_field": "Required_Credits_for_Graduation",
+      "kind": "plain",
+      "_note": "No conversion. HEDB: use 0 for non-credit programs."
+    },
+    {
+      "raw_column": "Enroll_Current_Registered_Credits",
+      "target_field": "Currently_Registered_Credits",
+      "kind": "plain",
+      "_note": "No conversion. HEDB: use 0 for non-credit programs; used in FTE calculations."
+    },
+    {
+      "raw_column": "Enroll_Current_Pre-req_Credits",
+      "target_field": "Currently_Registered_Pre_requisite_Credits",
+      "kind": "plain",
+      "_note": "No conversion. Mandatory only for federal institutions (Institution Code 74, 75, 76) -- not applicable to SIUD (141), can generally be 0."
+    },
+    {
+      "raw_column": "Enroll_Total_Credits_Registered",
+      "target_field": "Total_Credits_Registered_cumulative_till_last_Academic_period",
+      "kind": "plain",
+      "_note": "No conversion. Excludes current academic period's credits."
+    },
+    {
+      "raw_column": "Enroll_Total_Credits_Cumulated",
+      "target_field": "Total_Credits_Completed_cumulative_till_last_Academic_period",
+      "kind": "plain",
+      "_note": "No conversion. Excludes current academic period's credits."
+    },
+    {
+      "raw_column": "Enroll_GPA_Cumulative",
+      "target_field": "Overall_GPA_cumulative_till_last_Academic_period",
+      "kind": "plain",
+      "_note": "No conversion. HEDB: must be on a 4-point scale; map if your institution uses a different scale before this stage."
+    },
+    {
+      "raw_column": "Enroll_Transfer_Institution",
+      "target_field": "Transfer_Institution",
+      "kind": "plain",
+      "_note": "No conversion. HEDB: leave blank if not applicable."
+    },
+    {
+      "raw_column": "Enroll_Transfer_Credits_Cumulative",
+      "target_field": "Transfer_Credits_Cumulative",
+      "kind": "plain",
+      "_note": "No conversion. HEDB: use 0 for non-credit programs; leave blank if not available."
+    },
+    {
+      "raw_column": "Enroll_Language_Test_Name",
+      "target_field": "Language_Test_Proficiency_Exam",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Acad Proficiency Test",
+      "_note": "Code converted to descriptive Name from the shared Academic Proficiency Test list."
+    },
+    {
+      "raw_column": "Enroll_Language_Test_Date",
+      "target_field": "Language_Test_Proficiency_Exam_Pass_Date",
+      "kind": "date",
+      "_note": "Trimmed to yyyy-mm-dd. HEDB: leave blank if not available."
+    },
+    {
+      "raw_column": "Enroll_Language_Test_Score",
+      "target_field": "Language_Test_Proficiency_Exam_Score",
+      "kind": "plain",
+      "_note": "No conversion. Required if a Language Test Name is present."
+    },
+    {
+      "raw_column": "Enroll_Standardized_Test_Name",
+      "target_field": "Standardized_Test_Name_for_Masters_and_Above",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Acad Proficiency Test",
+      "_note": "Uses the SAME 'Acad Proficiency Test' sheet as the language test above -- codes 22-30 in that sheet are the graduate-level tests (GRE, GMAT, LSAT, MCAT, DAT, PCAT, OAT, OTHER). Not a separate lookup list."
+    },
+    {
+      "raw_column": "Enroll_Standardized_Test_Score",
+      "target_field": "Standardized_Test_Score_for_Masters_and_Above",
+      "kind": "plain",
+      "_note": "No conversion. Required if a Standardized Test Name is present."
+    },
+    {
+      "raw_column": "Enroll_High_School_Country",
+      "target_field": "High_School_Country_Code",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Country",
+      "_note": "Required (cannot be blank) for undergraduate Student Degree codes (FD,CR,DP,HD,AS,BA,UD,DD,BM,MD)."
+    },
+    {
+      "raw_column": "Enroll_High_School_System",
+      "target_field": "High_School_System",
+      "kind": "map",
+      "value_map": {
+        "AG": "Algerian Baccalaureate",
+        "AM": "American",
+        "AP": "American - Advacned placement",
+        "AS": "Australian",
+        "BN": "Bangladeshi",
+        "BR": "British",
+        "CA": "Canadian",
+        "CH": "Chinese Curriculum",
+        "CB": "CBSE-INDIAN",
+        "EG": "Egypt",
+        "EN": "English National Curriculum",
+        "ET": "Ethiopian National Curriculum",
+        "FR": "French",
+        "GR": "German",
+        "IN": "Indian (other than CBSE)",
+        "IB": "International Baccalaureate",
+        "IR": "Iranian",
+        "JA": "Japanese",
+        "JR": "Jordanian",
+        "LB": "Lebanese Baccalaureate",
+        "MA": "Mali",
+        "MO": "MOE (UAE)",
+        "MR": "Morrocco",
+        "NR": "Niger",
+        "NG": "NECO (Nigerian National Curriculum)",
+        "PK": "Pakistani",
+        "PH": "Philippines",
+        "RU": "Russian",
+        "SA": "SABIS",
+        "SE": "Senegal",
+        "SI": "Singapore",
+        "SR": "SriLanka",
+        "SY": "Syrian Baccalaureate",
+        "OT": "Other"
+      },
+      "_note": "Full 33-code table from the 'High School System' HEDB sheet (note the typo 'Advacned' is in the sheet itself, kept verbatim to match). Required for undergraduates."
+    },
+    {
+      "raw_column": "Enroll_High_School_Score",
+      "target_field": "High_School_Exit_Score",
+      "kind": "plain",
+      "_note": "No conversion. Required for undergraduates if High School System is present."
+    },
+    {
+      "raw_column": "Enroll_Completion_Year_HSC",
+      "target_field": "High_School_Completion_Year",
+      "kind": "lookup",
+      "lookup_direction": "code_to_code",
+      "hedb_sheet": "Academic Year",
+      "_note": "Form displayformat = [Code] -- code passes through, just validated against the Academic Year list. NOTE: the 'Academic Year' HEDB sheet has a different layout than most lookup sheets (header on row 2, code in column A, name in column B, not the usual row 4 / column B / column C pattern) -- make sure your tool's lookup registry has a specific entry for it rather than the generic default."
+    },
+    {
+      "raw_column": "Enroll_High_School_Equivalency_Indicator",
+      "target_field": "High_School_Equivalency_Indicator",
+      "kind": "map",
+      "value_map": {
+        "Y": "High school equivalency has been received",
+        "M": "High school certificate from UAE-MOE national curriculum",
+        "N": "Not Applied",
+        "R": "Rejected",
+        "A": "Applied"
+      },
+      "_note": "From the 'HS Equivalency Indicator' HEDB sheet -- distinct from 'HE Equivalency Indicator' used further down for higher-education equivalency."
+    },
+    {
+      "raw_column": "Enroll_HighSchool_Equivalency_Number",
+      "target_field": "High_School_Equivalency_Number",
+      "kind": "plain",
+      "_note": "No conversion. HEDB: use '99' if EQ Ind is Y/A/R but no number is available; leave blank for UAE-MOE issued credentials."
+    },
+    {
+      "raw_column": "Enroll_12th_Grade_stream",
+      "target_field": "twelveth_Grade_stream_Stream_Code",
+      "kind": "map",
+      "value_map": {
+        "AD": "Advanced",
+        "GE": "General",
+        "SC": "Science",
+        "AR": "Arts",
+        "EL": "Elite",
+        "PR": "Professional",
+        "TC": "Technical",
+        "AP": "Applied",
+        "CM": "Commercial",
+        "SH": "Shari'a",
+        "IN": "Industrial",
+        "NA": "Not Applicable"
+      },
+      "_note": "12-value table from the '12thGrade stream' HEDB sheet. Only mandatory for UAE public/MOE-curriculum students -- use 'NA' otherwise."
+    },
+    {
+      "raw_column": "Enroll_Last_completed_HE_Degree",
+      "target_field": "Last_Completed_Higher_Education_Degree",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Degree or Program Level",
+      "_note": "Required for graduate-level Student Degree codes (GD,GC,MS,DR,MP,MB,JD,RT,ED,PR,BD,PD); use 'NE' (New Entry) if the student has no prior HE credential."
+    },
+    {
+      "raw_column": "Enroll_Qualifying_institution_Name",
+      "target_field": "Last_Completed_Higher_Education_Institution_Name",
+      "kind": "plain",
+      "_note": "No conversion. HEDB: leave blank if not available; required if Last Completed HE Degree is present."
+    },
+    {
+      "raw_column": "Enroll_Qualifying_institution_Country",
+      "target_field": "Last_Completed_Higher_Education_Institution_Country",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Country",
+      "_note": "Required for the same graduate-level degree codes as above."
+    },
+    {
+      "raw_column": "Enroll_Qualifying_institution_Code",
+      "target_field": "Last_Completed_Higher_Education_Institution_CODE",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Universities",
+      "_note": "Field name says 'CODE' but the Zoho form actually resolves it to the University's Name (values = Universities.ID, displayformat = [Name]) -- same pattern flagged in Employee_Basic_Details. Required for the same graduate-level degree codes as above."
+    },
+    {
+      "raw_column": "Enroll_Last_completed_HE_CGPA",
+      "target_field": "Last_Completed_Higher_Education_Degree_CGPA",
+      "kind": "plain",
+      "_note": "No conversion. Must be <=4.0; map from your institution's scale beforehand if different."
+    },
+    {
+      "raw_column": "Enroll_Last_completed_HE_Year ",
+      "target_field": "Last_Completed_Higher_Education_Year",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Academic Year",
+      "_note": "Note trailing space in the HEDB Database Field Name -- check your raw file's actual header. Unlike High_School_Completion_Year above, this one's displayformat = [Name], so it converts to the descriptive academic-year label rather than passing the code through."
+    },
+    {
+      "raw_column": "Enroll_Last_completed_HE_Equivalency_Indicator",
+      "target_field": "Last_Completed_Higher_Education_Equivalency_Indicator",
+      "kind": "map",
+      "value_map": {
+        "Y": "Holds equivalency for last completed HE degree",
+        "A": "Applied",
+        "N": "Not Applied",
+        "R": "Rejected",
+        "T": "Degree from CAA accredited UAE universities",
+        "U": "Unknown"
+      },
+      "_note": "From the 'HE Equivalency Indicator' HEDB sheet -- includes 'U' (Unknown), which the sheet notes is accepted for enrollment data (unlike Employee Basic Details, which doesn't use 'U')."
+    },
+    {
+      "raw_column": "Enroll_Last_HE_Equivalency_Number",
+      "target_field": "Last_Completed_Higher_Education_Equivalency_Number",
+      "kind": "plain",
+      "_note": "No conversion. Required if the Equivalency Indicator above is Y/A/R."
+    },
+    {
+      "raw_column": "Enroll_Outgoing_Exchange_Indicator",
+      "target_field": "Outgoing_Exchange_student_Indicator1",
+      "kind": "map",
+      "value_map": { "Y": "Yes", "N": "No" },
+      "_note": "Simple Y/N indicator."
+    },
+    {
+      "raw_column": "Enroll_Incoming_Exchange_Indicator",
+      "target_field": "Incoming_Exchange_Student_Indicator1",
+      "kind": "map",
+      "value_map": { "Y": "Yes", "N": "No" },
+      "_note": "Simple Y/N indicator."
+    },
+    {
+      "raw_column": "Enroll_Exchange_University_Code",
+      "target_field": "Exchange_partner_university_code",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Universities",
+      "_note": "Required if either exchange indicator above is 'Y'."
+    },
+    {
+      "raw_column": "Enroll_dual ",
+      "target_field": "Enrolled_in_Joint_Dual_Program",
+      "kind": "map",
+      "value_map": { "Y": "Yes", "N": "No" },
+      "_note": "Note trailing space in the HEDB Database Field Name -- check your raw file's actual header. If Y, the program code used must also be flagged as dual/joint in the Institute Academic Programs dataset."
+    },
+    {
+      "raw_column": "Enroll_Graduation_period",
+      "target_field": "Expected_Graduation_period1",
+      "kind": "lookup",
+      "lookup_direction": "code_to_code",
+      "hedb_sheet": "Academic Period",
+      "_note": "Zoho field uses the Semester_Codes lookup form but displayformat = [Code] -- same code-passthrough pattern, validated against the same semester/academic-period code space as 'Academic Period'."
+    }
+  ]
+}

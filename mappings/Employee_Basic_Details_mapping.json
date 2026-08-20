@@ -1,0 +1,285 @@
+{
+  "_form_note": "Verified against the production push workflow (form=Employee_Basic_Details, url=.../Integration/Employee/BasicDetails, api.gsb.government.ae) in the .ds export -- confidence is high. Same hardcoded institutionCode=141 pattern as the Applicants forms. Several picklists route through Deluge Dropdown_Fields functions (Gender, payroll, Campus, Equivalency_Indicator, Position_Title, Reason_why_Missing) that convert the Zoho display label back to a CHEDS code by NAME MATCH -- value_map below is built directly from those functions' code/name pairs, so it should match exactly. Email and Phone_Number are flagged 'personal data = true' in the form definition -- treat these raw columns with the same care you'd give any PII when building/reviewing import sheets.",
+  "fields": [
+    {
+      "raw_column": "Emp_Institution_Code",
+      "target_field": "Institutional_Codes",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Institutional Codes",
+      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Institutional Codes' reference list. Not used by the actual API push (institutionCode is hardcoded to 141) -- only populates the Zoho record for display."
+    },
+    {
+      "raw_column": "Emp_Institution_Name",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Redundant with the code lookup above -- the Zoho form only has one institution field driven by the code. Intentionally not imported separately."
+    },
+    {
+      "raw_column": "Emp_Academic_Period",
+      "target_field": "Academic_Period1",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Academic Period",
+      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Academic Period' reference list (this form's displayformat = [Name] only -- no combined Name-Code combo, unlike the Applicants forms)."
+    },
+    {
+      "raw_column": "Emp_Employee_ID",
+      "target_field": "Employee_ID",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file. Zoho enforces this as unique -- duplicate Employee IDs in your raw file will fail the import, which is a useful early catch."
+    },
+    {
+      "raw_column": "Emp_Emirates_ID",
+      "target_field": "Emirates_ID",
+      "kind": "plain",
+      "_note": "No conversion applied. HEDB says to use 999999999999999 if not available -- worth a report-time warning if a row has this placeholder without a corresponding 'reason missing' value."
+    },
+    {
+      "raw_column": "Emp_reason",
+      "target_field": "Reason_why_Emirates_ID_is_missing",
+      "kind": "map",
+      "value_map": {
+        "GCC": "GCC Resident with no Emirates ID",
+        "VISITING": "Visiting Student/Staff",
+        "ONLINE": "Distance Learning Student Or Faculty teaching online only (outside of UAE) or staff working remotely",
+        "NEW": "New student/faculty and Emirates ID is applied for",
+        "MAR": "Students with UAE passport but not UAE Nationals (Marsoom)",
+        "PRLW": "Emirates ID cannot be provided as GDPR/FERPA and/or other privacy laws are applicable",
+        "DPL": "Family of diplomats. Do not required emirates ID"
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text using a 7-entry table pulled from the Deluge Reason_why_Missing() dropdown function (e.g. 'GCC' -> 'GCC Resident with no Emirates ID'; 'VISITING' -> 'Visiting Student/Staff'; ...)."
+    },
+    {
+      "raw_column": "Emp_Gender",
+      "target_field": "Gender",
+      "kind": "map",
+      "value_map": {
+        "M": "Male",
+        "F": "Female",
+        "U": "Unreported due to privacy laws applicable (e.g. GDPR , FERPA)"
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text: 'M' -> 'Male'; 'F' -> 'Female'; 'U' -> 'Unreported due to privacy laws applicable (e.g. GDPR , FERPA)'."
+    },
+    {
+      "raw_column": "Emp_Payroll",
+      "target_field": "Payroll",
+      "kind": "map",
+      "value_map": {
+        "U": "University",
+        "O": "Outsourced"
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text: 'U' -> 'University'; 'O' -> 'Outsourced'."
+    },
+    {
+      "raw_column": "Emp_Nationality",
+      "target_field": "Nationality",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Country",
+      "_note": "Raw HEDB country code is converted to its descriptive Name using the 'Country' reference list. Note the form's displayformat is [Code] (not Name) -- the push script reads input.Nationality.Code, so the Zoho lookup record just needs the correct Country matched by code; confirm your Countries lookup form's Code field is populated for this to resolve."
+    },
+    {
+      "raw_column": "Emp_DOB",
+      "target_field": "Date_Of_Birth",
+      "kind": "date",
+      "_note": "Date-time values are trimmed to a plain date (time portion removed) and written as yyyy-mm-dd."
+    },
+    {
+      "raw_column": "Emp_Campus",
+      "target_field": "Campus",
+      "kind": "map",
+      "value_map": {
+        "AD": "Abu Dhabi", "DB": "Dubai", "SH": "Sharjah", "AJ": "Ajman", "RK": "Ras Al Khaimah",
+        "FJ": "Fujairah", "UQ": "Umm Al-Quwain", "AA": "Al Ain", "RW": "Ruwais", "MZ": "Madinat Zayed",
+        "KF": "Khorfakan", "DI": "Dibba", "KH": "Khalba", "DD": "Dhaid",
+        "AAM": "Al Ain Men\u2019s Campus", "AAW": "Al Ain Women\u2019s Campus",
+        "ADM": "Abu Dhabi Men\u2019s Campus", "ADW": "Abu Dhabi Women\u2019s Campus",
+        "MZM": "Madinat Zayed Men\u2019s Campus", "MZW": "Madinat Zayed Women\u2019s Campus",
+        "RUM": "Ruwais Men\u2019s Campus", "RUW": "Ruwais Women\u2019s Campus",
+        "DBM": "Dubai Men\u2019s Campus", "DBW": "Dubai Women\u2019s Campus",
+        "SJM": "Sharjah Men\u2019s Campus", "SJW": "Sharjah Women\u2019s Campus",
+        "FJM": "Fujairah Men\u2019s Campus", "FJW": "Fujairah Women\u2019s Campus",
+        "RKM": "Ras Al Khaimah Men\u2019s Campus", "RKW": "Ras Al Khaimah Women\u2019s Campus",
+        "MEL": "Melaha", "ON": "Online"
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text using a 32-entry table pulled directly from the Deluge Campus() dropdown function, so this should match exactly (that function actually matches by 'name contains val' in reverse, i.e. code-to-name, when converting back for the API push)."
+    },
+    {
+      "raw_column": "Emp_Email",
+      "target_field": "Email",
+      "kind": "plain",
+      "_note": "No conversion applied. Marked 'personal data = true' in the Zoho form -- handle with normal PII care. HEDB says use xyz@xyz.com if not available."
+    },
+    {
+      "raw_column": "Emp_Phone_Number",
+      "target_field": "Phone_Number",
+      "kind": "phone",
+      "_note": "Phone number is cleaned to digits only (plus a leading '+' if present). Marked 'personal data = true' in the Zoho form. HEDB says use +999-99-9999999 if not available."
+    },
+    {
+      "raw_column": "Emp_Name",
+      "target_field": "Name",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Emp_Hire_Date",
+      "target_field": "Hire_Date",
+      "kind": "date",
+      "_note": "Date-time values are trimmed to a plain date (time portion removed) and written as yyyy-mm-dd."
+    },
+    {
+      "raw_column": "Emp_Department",
+      "target_field": "Department",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Emp_College",
+      "target_field": "College",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file. HEDB says use 'NA' for non-academic staff."
+    },
+    {
+      "raw_column": "Emp_Last_Promotion_Date",
+      "target_field": "Last_Promotion_Date",
+      "kind": "date",
+      "_note": "Date-time values are trimmed to a plain date (time portion removed) and written as yyyy-mm-dd. HEDB allows this to be blank if not applicable."
+    },
+    {
+      "raw_column": "Emp_Qualification",
+      "target_field": "Qualification",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Degree or Program Level",
+      "_note": "Raw HEDB degree code is converted to its descriptive Name using the 'Degree or Program Level' reference list. Push script reads input.Qualification.Code, so confirm the Zoho lookup record's Code field matches the HEDB degree code exactly."
+    },
+    {
+      "raw_column": "Emp_Qualification_Country",
+      "target_field": "Qualification_Country",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Country",
+      "_note": "Raw HEDB country code is converted to its descriptive Name using the 'Country' reference list."
+    },
+    {
+      "raw_column": "Emp_Qualification_Institution_Name",
+      "target_field": "Qualification_Institution_Name",
+      "kind": "lookup",
+      "lookup_direction": "name_to_name",
+      "hedb_sheet": "Universities",
+      "_note": "Raw HEDB institution name is matched against the 'Universities' reference list by Name (this field is a picklist over the Universities lookup form, matched on Name -- not a code). HEDB says use 'NA' if the name isn't available; make sure an 'NA' entry exists in your Universities lookup form or these rows will fail to resolve."
+    },
+    {
+      "raw_column": "Emp_Qualification_Institution_Code",
+      "target_field": "Qualification_Institution_Code",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Universities",
+      "_note": "This Zoho field is unusual -- it's a picklist filtered to Universities[ID == input.Qualification_Institution_Name].ID, meaning it auto-derives from whichever University record was picked above rather than being independently selected. Make sure your import fills Qualification_Institution_Name first/correctly since this field depends on it. HEDB says use '9999' if the code isn't available."
+    },
+    {
+      "raw_column": "Emp_Qualification_Year",
+      "target_field": "Qualification_Year",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file. HEDB says use 9999 if not known."
+    },
+    {
+      "raw_column": "Emp_Qualification_Name",
+      "target_field": "Qualification_Name",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file. HEDB says use 'NA' if not available."
+    },
+    {
+      "raw_column": "Emp_Qualification_Major",
+      "target_field": "Qualifications_Major",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file. HEDB says use 'NA' if not available."
+    },
+    {
+      "raw_column": "Emp_Equivalency_Indicator",
+      "target_field": "Equivalency_Indicator",
+      "kind": "map",
+      "value_map": {
+        "Y": "Holds equivalency for last completed HE degree",
+        "A": "Applied",
+        "N": "Not Applied",
+        "R": "Rejected",
+        "T": "Degree from CAA accredited UAE universities",
+        "U": "Unknown"
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text using a 6-entry table pulled from the Deluge Equivalency_Indicator() dropdown function (e.g. 'Y' -> 'Holds equivalency for last completed HE degree'; 'A' -> 'Applied'; ...)."
+    },
+    {
+      "raw_column": "Emp_Equivalency_Application_Number",
+      "target_field": "Equivalency_Number",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file. HEDB constraint: required if Equivalency Indicator is Y/A/R, otherwise leave blank -- worth a report-time warning if that's violated."
+    },
+    {
+      "raw_column": "Emp_Position_Title",
+      "target_field": "Position_Title",
+      "kind": "map",
+      "value_map": {
+        "PRF": "Professor", "ACP": "Associate Professor", "ASP": "Assistant Professor", "INS": "Instructor",
+        "LEC": "Lecturer", "TAA": "Teaching Assistant", "RAS": "Research Assistant", "PDF": "PhD Fellow",
+        "ALT": "Assistant Lecturers", "PTL": "Part time lecturer", "PDC": "Post-Doc", "RES": "Researcher",
+        "SRS": "Senior Researcher (post held at Associate Professor level)",
+        "SRA": "Senior Research Adviser (assistant professor or above)",
+        "CEO": "Chancellor/President/CEO", "VCP": "Vice Chancellor /Vice President", "DEA": "Dean", "VDE": "Vice Deans",
+        "CIO": "Chief information officer", "CFO": "Chief Financial Office", "DIR": "Director", "ADR": "Assistant director",
+        "MGR": "Manager", "AMG": "Assistant Manager", "TEC": "Technician", "TRD": "Technician (R&D)",
+        "AAD": "Academic advisor", "CAD": "Career advisor", "LIB": "Librarian", "LAB": "Library Assistants",
+        "AAS": "Administrative Assistants/Secretary", "SWW": "Student welfare workers",
+        "ARS": "Admission & Registration staff", "RWH": "Residential wardens / Hostel supervisors",
+        "RDM": "Head/Director/Dean/Vice Dean of Research", "RMM": "Research Managers", "IT": "IT Staff",
+        "SSS": "Other Student Services Staff", "SPS": "Other Student Support Staff",
+        "ASS": "Other Academic Support Staff", "HOD": "Head of department", "Psyc": "Psychologist",
+        "SLI": "Sign language interpreter", "SENCO": "Special needs coordinator/ Accessibility Coordinator",
+        "OTH": "Others"
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text using a 45-entry table pulled directly from the Deluge Position_Title() dropdown function."
+    },
+    {
+      "raw_column": "Emp_Position_Title_Other  ",
+      "target_field": "Position_Title_Other",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided. Note the HEDB Database Field Name has trailing spaces ('Emp_Position_Title_Other  ') -- double check your raw file's actual header text matches exactly, trailing spaces and all, or this column won't be found."
+    },
+    {
+      "raw_column": "Emp_Employment_Status",
+      "target_field": "Employment_Status",
+      "kind": "map",
+      "value_map": {
+        "FT": "Full time",
+        "SB": "On sabbatical",
+        "SL": "On study leave",
+        "LV": "On long term leave of more than one semester, approved by the institution(Other than study leave)",
+        "EX": "Visiting another institution as exchange faculty",
+        "PT": "On a part time contract with the institution",
+        "IX": "Visiting your Institution exchange faculty",
+        "OT": "Other. Any other status not covered by the above"
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text using an 8-entry table pulled from the Deluge Employment_Status() dropdown function. Note: the dropdown function's underlying code/name text for EX and IX is longer/more detailed than what's shown in the form's own picklist values list -- used the form's picklist wording here since that's what the Zoho field literally stores."
+    },
+    {
+      "raw_column": "Emp_Years_of_experience ",
+      "target_field": "Years_of_experience",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file. HEDB says use 999 if not available. Note the HEDB Database Field Name has a trailing space -- check your raw file's actual header."
+    },
+    {
+      "raw_column": "Emp_ORC_ID",
+      "target_field": "ORC_ID",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file. HEDB allows this to be blank if not available."
+    },
+    {
+      "raw_column": "Last_Updated",
+      "target_field": "LastUpdated",
+      "kind": "date",
+      "_note": "Date-time values are trimmed to a plain date (time portion removed) and written as yyyy-mm-dd. Note: the push script overwrites this field itself with zoho.currenttime on a successful add, so this raw value mostly matters for update-type re-imports."
+    }
+  ]
+}

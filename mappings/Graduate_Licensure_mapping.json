@@ -1,0 +1,141 @@
+{
+  "fields": [
+    {
+      "raw_column": "GLC_Institution_Code",
+      "target_field": "Institutional_Codes",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "GLC_Academic_Period",
+      "target_field": "Graduating_Academic_Period",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Grad_1st_Academic_Period",
+      "target_field": "st_Academic_Period",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "GLC_Student_ID",
+      "target_field": "Graduate_ID",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "GLC_Student_Level",
+      "target_field": "Graduate_Level_Level_Code",
+      "kind": "map",
+      "value_map": {
+        "FN": "Foundation",
+        "RM": "Remedial program (pre Masters).",
+        "FR": "Freshman",
+        "SP": "Sophomore",
+        "JR": "Junior",
+        "SR": "Senior",
+        "M1": "Masters - Year1",
+        "M2": "Masters - Year2 ( 50% or more of required credits completed)",
+        "M3": "Masters - Year3",
+        "D1": "Doctorate 1: Not advanced to candidacy",
+        "D2": "Doctorate 2: Advanced to candidacy",
+        "PD": "Post-doctorate",
+        "PF": "Professional Education",
+        "CR": "Certificate/Credential",
+        "DP": "Diploma",
+        "HD": "Higher Diploma",
+        "P1": "Phase A :Year 1 or 2 or 3 (MBBS), Year 1 (JD or MD), Year 1,2, 3 of DD (Dentistry)",
+        "P2": "Phase B: Year 4, 5, 6 (MBBS), Year 2 (JD or MD), Year 4,5 of DD (Dentistry)",
+        "P3": "Medical residency and training (above year 5) , Year 3 and above (JD or MD)",
+        "PG": "Post graduate diploma",
+        "MC": "Microcredential"
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text using a 21-entry table (e.g. 'FN' -> 'Foundation'; 'RM' -> 'Remedial program (pre Masters).'; 'FR' -> 'Freshman'; 'SP' -> 'Sophomore'; ...). See value_map for the full list."
+    },
+    {
+      "raw_column": "GLC_Student_Degree",
+      "target_field": "Graduate_Degree_Degree_Code",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "GLC_Program_Code",
+      "target_field": "Graduate_Program_Program_Code",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "GLC_LC_Name ",
+      "target_field": "License_certificate_name",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "GLC_Org_name",
+      "target_field": "Licensing_body_name",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "GLC_Org_website",
+      "target_field": "Licensing_body_website",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "GLC_CNTRY",
+      "target_field": "Licensing_body_country",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Country",
+      "value_overrides": {
+        "INTL": ""
+      },
+      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Country' reference list. Exception: 'INTL' -> blank (bypasses the normal lookup)."
+    },
+    {
+      "raw_column": "GLC_CNTRY",
+      "target_field": "Licensing_Body_Country_text",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "GLC_status ",
+      "target_field": "Licensure_Certificate_award_status",
+      "kind": "map",
+      "value_map": {
+        "IP": "IP- In Progress",
+        "EP": "EP- exam passed/certificate awarded",
+        "EX": "EX- exam failed",
+        "NA": "NA- Exam Not required",
+        "UN": "UN- unknown"
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text: 'IP' -> 'IP- In Progress'; 'EP' -> 'EP- exam passed/certificate awarded'; 'EX' -> 'EX- exam failed'; 'NA' -> 'NA- Exam Not required'; 'UN' -> 'UN- unknown'."
+    },
+    {
+      "raw_column": "GLC_date",
+      "target_field": "Licensure_Certificate_award_date",
+      "kind": "date",
+      "_note": "Date-time values are trimmed to a plain date (time portion removed) and written as yyyy-mm-dd so Zoho's Date field accepts them."
+    },
+    {
+      "raw_column": "GLC_LC_number",
+      "target_field": "Licenses_certificate_number",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "GLC_comments",
+      "target_field": "Comments",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "GLC_submission_term",
+      "target_field": "Submission_Term",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    }
+  ]
+}
