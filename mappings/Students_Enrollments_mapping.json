@@ -12,9 +12,7 @@
     {
       "raw_column": "Enroll_Academic_Period",
       "target_field": "Academic_Period",
-      "kind": "lookup",
-      "lookup_direction": "code_to_code",
-      "hedb_sheet": "Academic Period",
+      "kind": "plain",
       "_note": "Form displayformat = [Code] here (not Name) -- Zoho shows the raw code itself once it resolves against the Academic_Period lookup form. Value passes through unchanged, but flagged if the code isn't found in the 'Academic Period' HEDB list."
     },
     {
