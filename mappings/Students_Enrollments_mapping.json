@@ -530,7 +530,7 @@
     },
     {
       "raw_column": "Enroll_12th_Grade_stream",
-      "target_field": "twelveth_Grade_stream_Stream_Code",
+      "target_field": "12th Grade stream (Stream Code)",
       "kind": "map",
       "value_map": {
         "AD": "Advanced",
