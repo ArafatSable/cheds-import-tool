@@ -614,14 +614,14 @@
     },
     {
       "raw_column": "Enroll_Outgoing_Exchange_Indicator",
-      "target_field": "Outgoing_Exchange_student_Indicator1",
+      "target_field": "Outgoing Exchange student Indicator",
       "kind": "map",
       "value_map": { "Y": "Yes", "N": "No" },
       "_note": "Simple Y/N indicator."
     },
     {
       "raw_column": "Enroll_Incoming_Exchange_Indicator",
-      "target_field": "Incoming_Exchange_Student_Indicator1",
+      "target_field": "Incoming Exchange Student Indicator",
       "kind": "map",
       "value_map": { "Y": "Yes", "N": "No" },
       "_note": "Simple Y/N indicator."
@@ -643,7 +643,7 @@
     },
     {
       "raw_column": "Enroll_Graduation_period",
-      "target_field": "Expected_Graduation_period1",
+      "target_field": "Expected Graduation period",
       "kind": "lookup",
       "lookup_direction": "code_to_code",
       "hedb_sheet": "Academic Period",
