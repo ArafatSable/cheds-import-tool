@@ -377,7 +377,7 @@
     },
     {
       "raw_column": "Enroll_Current_Pre-req_Credits",
-      "target_field": "Currently_Registered_Pre_requisite_Credits",
+      "target_field": "Currently Registered Pre-requisite Credits",
       "kind": "plain",
       "_note": "No conversion. Mandatory only for federal institutions (Institution Code 74, 75, 76) -- not applicable to SIUD (141), can generally be 0."
     },
