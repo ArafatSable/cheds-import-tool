@@ -310,8 +310,12 @@
     {
       "raw_column": "Enroll_Program_Code",
       "target_field": "Student_Program_Code",
-      "kind": "plain",
-      "_note": "Resolves against Program_Code's 'CAA Program Code' column (Program Master sheet), filtered to codes starting with '141'. Passed through as-is; a code not starting with 141 or not present in Program_Code will fail to resolve."
+      "kind": "lookup",
+      "_note": "Raw HEDB value is matched against the 'Program Master' sheet's 'Old Program Code' column (e.g. '141.BA.0005') and converted to the corresponding 'CAA Program Code' (e.g. '141-6509-999999999'), which is what the Zoho Student_Program_Code field actually expects/displays. If a raw value doesn't match any Old Program Code, it will be flagged as a warning in the Issues sheet rather than silently passed through. NOTE: if some of your raw exports already contain the CAA-format code directly rather than the old dotted format, those rows will show as unresolved warnings here even though they're actually fine -- worth confirming which format your real raw file uses.",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Program Master",
+      "code_col": 4,
+      "name_col": 3
     },
     {
       "raw_column": "Enroll_Mode_of_Study",
