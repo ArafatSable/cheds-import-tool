@@ -243,9 +243,7 @@
     {
       "raw_column": "Enroll_1st_Academic_Period",
       "target_field": "Student 1st Academic Period",
-      "kind": "lookup",
-      "lookup_direction": "code_to_code",
-      "hedb_sheet": "Academic Period",
+      "kind": "plain",
       "_note": "Same code-passthrough pattern as Enroll_Academic_Period -- displayformat = [Code]."
     },
     {
