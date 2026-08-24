@@ -288,14 +288,12 @@
       "_note": "Code converted to descriptive Name."
     },
     {
-      "raw_column": "Enroll_Program_Code",
+      "raw_column": "Enroll_Area_of_Specialization",
       "target_field": "Area_of_Specialization_CIP_Family_code",
       "kind": "lookup",
-      "_note": "CHANGED SOURCE COLUMN: now derived from Enroll_Program_Code (not Enroll_Area_of_Specialization) because the raw CIP family code alone can't reliably disambiguate between programs that share a family code -- the Program Code uniquely identifies exactly one row in 'Program Master', so we read that row's own CIP_Family_Code column instead of trusting the raw HEDB Area of Specialization value independently. The old Enroll_Area_of_Specialization raw column is no longer used for this field; kept available in your raw file for reference/cross-checking only.",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Program Master",
-      "code_col": 3,
-      "name_col": 8
+      "_note": "REVERTED per the latest Zoho form export: this field is no longer tied to Program_Code -- it's a direct picklist over the Area_of_Specialization lookup form with displayformat=[Code]. Back to a normal code-to-code validation against the 'Area of Specialization' HEDB reference list, sourced from the raw Enroll_Area_of_Specialization column.",
+      "lookup_direction": "code_to_code",
+      "hedb_sheet": "Area of Specialization"
     },
     {
       "raw_column": "Enroll_Student_Major",
@@ -307,11 +305,11 @@
       "raw_column": "Enroll_Program_Code",
       "target_field": "Student_Major_CIP_Major_Classification",
       "kind": "lookup",
-      "_note": "CHANGED SOURCE COLUMN: now derived from Enroll_Program_Code (not Enroll_Major_CIP). Root cause: the same CIP Major Classification code can belong to more than one program at different degree levels -- confirmed real example, CIP 52.0201 is shared by both '141-6532-999999999' (BACHELOR OF BUSINESS ADMINISTRATION) and '141-6515-999999999' (MASTER OF BUSINESS ADMINISTRATION) in your actual Program Master data. Program Code uniquely identifies the exact program+degree-level combination, so deriving the CIP Code from that row removes the ambiguity entirely. The raw Enroll_Major_CIP column is no longer used for this field; kept available in your raw file for reference/cross-checking only (e.g. flag a row if Enroll_Major_CIP disagrees with what the Program Code resolves to -- that would indicate a data entry mismatch worth investigating).",
+      "_note": "UPDATED per the latest Zoho form (confirmed both in the .ds export and directly in your Field Properties screenshot): Display Fields = Name, Choices filter = CIP_Family_Code == input.Area_of_Specialization_CIP_Family_code.Code. So this outputs the full descriptive Program Name (e.g. 'BACHELOR OF BUSINESS ADMINISTRATION') rather than the raw CIP code, derived from the matching row in 'Program Master' via Enroll_Program_Code. This solves the ambiguity (CIP 52.0201 shared by BBA and MBA) because Program Name is unique per program. The push script itself (confirmed in the .ds) reads rec.Student_Major_CIP_Major_Classification.CIP_Code -- once the correct Name-matched record is selected, Zoho automatically pulls the real CIP code from that record when pushing to CHEDS, so the final API payload is still correct even though this import column shows a Name.",
       "lookup_direction": "code_to_name",
       "hedb_sheet": "Program Master",
       "code_col": 3,
-      "name_col": 9
+      "name_col": 5
     },
     {
       "raw_column": "Enroll_Minor",

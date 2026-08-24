@@ -1168,6 +1168,17 @@ def apply_lookup_transform(v, code_to_name, name_to_code, direction, separator, 
     if direction == "name_to_combo":
         hit = name_to_code.get(str(v).strip().lower())
         return (combo(hit[0], hit[1]) if hit else None)
+    if direction == "code_to_code":
+        # Validate the raw code exists in the reference sheet, but pass the
+        # code straight through unchanged (for fields whose Zoho displayformat
+        # is [Code], not [Name] -- e.g. Academic_Period, Expected_Graduation_
+        # period1, and now Area_of_Specialization_CIP_Family_code). Found
+        # missing entirely: this direction silently fell through to the
+        # code_to_name default below, so every "code_to_code" field in every
+        # mapping config was actually being converted to its descriptive Name
+        # instead of being validated and left as the code.
+        key = norm(v)
+        return key if key in code_to_name else None
     # default: code_to_name
     return code_to_name.get(norm(v))
 
