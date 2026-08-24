@@ -560,13 +560,16 @@
       "hedb_sheet": "Country",
       "_note": "Required for the same graduate-level degree codes as above."
     },
-    {
+   {
       "raw_column": "Enroll_Qualifying_institution_Code",
       "target_field": "Last_Completed_Higher_Education_Institution_CODE",
       "kind": "lookup",
       "lookup_direction": "code_to_name",
       "hedb_sheet": "Universities",
-      "_note": "Field name says 'CODE' but the Zoho form actually resolves it to the University's Name (values = Universities.ID, displayformat = [Name]) -- same pattern flagged in Employee_Basic_Details. Required for the same graduate-level degree codes as above."
+      "_note": "Field name says 'CODE' but the Zoho form actually resolves it to the University's Name (values = Universities.ID, displayformat = [Name]) -- same pattern flagged in Employee_Basic_Details. Required for the same graduate-level degree codes as above. SPECIAL CASE: HEDB code 9999 means 'Use this code if the university is not on the list' -- the actual name is meant to go in the free-text Enroll_Qualifying_institution_Name column instead. So when the raw value is 9999, this outputs 'NA' directly rather than attempting (and failing) a Universities lookup.",
+      "value_overrides": {
+        "9999": "NA"
+      }
     },
     {
       "raw_column": "Enroll_Last_completed_HE_CGPA",
