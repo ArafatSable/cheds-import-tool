@@ -296,16 +296,6 @@
       "_note": "No conversion."
     },
     {
-  "raw_column": "Enroll_Program_Code",
-  "target_field": "Student_Major_CIP_Major_Classification",
-  "kind": "lookup",
-  "lookup_direction": "code_to_name",
-  "hedb_sheet": "Program Master",
-  "code_col": 3,
-  "name_col": 5,
-  "_note": "Derived from Enroll_Program_Code (not Enroll_Major_CIP) -- looks up the row in 'Program Master' whose CAA Program Code (column 3) matches, and takes that row's Program Name (column 5). This is what disambiguates BBA vs MBA sharing the same CIP code 52.0201 -- Program Code is unique per program, the raw CIP code isn't."
-},
-    {
       "raw_column": "Enroll_Minor",
       "target_field": "Student_Minor",
       "kind": "plain",
