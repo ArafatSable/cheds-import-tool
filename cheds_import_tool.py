@@ -1168,17 +1168,6 @@ def apply_lookup_transform(v, code_to_name, name_to_code, direction, separator, 
     if direction == "name_to_combo":
         hit = name_to_code.get(str(v).strip().lower())
         return (combo(hit[0], hit[1]) if hit else None)
-    if direction == "code_to_code":
-        # Validate the raw code exists in the reference sheet, but pass the
-        # code straight through unchanged (for fields whose Zoho displayformat
-        # is [Code], not [Name] -- e.g. Academic_Period, Expected_Graduation_
-        # period1, and now Area_of_Specialization_CIP_Family_code). Found
-        # missing entirely: this direction silently fell through to the
-        # code_to_name default below, so every "code_to_code" field in every
-        # mapping config was actually being converted to its descriptive Name
-        # instead of being validated and left as the code.
-        key = norm(v)
-        return key if key in code_to_name else None
     # default: code_to_name
     return code_to_name.get(norm(v))
 
@@ -1215,35 +1204,15 @@ def apply_phone_transform(v):
     return ("+" if plus else "") + digits
 
 
-def _lookup_cache_key(fdef):
-    """
-    Cache key for a field's lookup table. Deliberately more than just the
-    sheet name: two different fields can legitimately point at the SAME
-    hedb_sheet but different columns within it (e.g. 'Program Master' used
-    once for its CIP_Family_Code column and again for its CIP Code column --
-    found via a real bug where both fields silently shared one cached map,
-    keyed only by sheet name, so the second field silently returned the
-    first field's column). Keying on the full (sheet, header_row, code_col,
-    name_col) tuple keeps each distinct lookup shape independent.
-    """
-    return (
-        fdef.get("hedb_sheet", ""),
-        fdef.get("header_row"),
-        fdef.get("code_col"),
-        fdef.get("name_col"),
-    )
-
-
 def preload_lookup_maps(config, hedb_wb):
     """
-    Load a code->name map (and its reverse) for every distinct lookup
-    "shape" (see _lookup_cache_key) a config's lookup fields reference.
-    Shared by build_import_ready and build_review_report so both stay
-    consistent. Don't let one unfinished/placeholder config entry (e.g. an
-    un-edited "TODO -- pick matching sheet name..." left over from auto-map)
-    blow up the whole run -- record the failure per-key and keep going.
-    Returns (lookup_maps, reverse_maps, sheet_load_errors) -- all three
-    dicts are keyed by _lookup_cache_key(fdef), NOT by sheet name alone.
+    Load a code->name map (and its reverse) for every distinct hedb_sheet a
+    config's lookup fields reference. Shared by build_import_ready and
+    build_review_report so both stay consistent. Don't let one unfinished/
+    placeholder config entry (e.g. an un-edited "TODO -- pick matching sheet
+    name..." left over from auto-map) blow up the whole run -- record the
+    failure per-sheet and keep going.
+    Returns (lookup_maps, reverse_maps, sheet_load_errors).
     """
     lookup_maps = {}
     reverse_maps = {}
@@ -1251,8 +1220,7 @@ def preload_lookup_maps(config, hedb_wb):
     for fdef in config["fields"]:
         if fdef.get("kind") == "lookup":
             sheet_name = fdef.get("hedb_sheet", "")
-            key = _lookup_cache_key(fdef)
-            if key in lookup_maps or key in sheet_load_errors:
+            if sheet_name in lookup_maps or sheet_name in sheet_load_errors:
                 continue
             try:
                 m = load_lookup_map(
@@ -1261,10 +1229,10 @@ def preload_lookup_maps(config, hedb_wb):
                     code_col=fdef.get("code_col"),
                     name_col=fdef.get("name_col"),
                 )
-                lookup_maps[key] = m
-                reverse_maps[key] = build_reverse_map(m)
+                lookup_maps[sheet_name] = m
+                reverse_maps[sheet_name] = build_reverse_map(m)
             except ValueError as e:
-                sheet_load_errors[key] = str(e)
+                sheet_load_errors[sheet_name] = str(e)
     return lookup_maps, reverse_maps, sheet_load_errors
 
 
@@ -1398,15 +1366,14 @@ def build_import_ready(raw_path, config_path, hedb_path, out_path, sheet=None):
 
             if kind == "lookup" and v not in (None, ""):
                 sheet_name = fdef.get("hedb_sheet", "")
-                key = _lookup_cache_key(fdef)
                 direction = fdef.get("lookup_direction", "code_to_name")
                 separator = fdef.get("combo_separator", " - ")
                 combo_order = fdef.get("combo_order", "name_code")
-                lut = lookup_maps.get(key, {})
-                rev = reverse_maps.get(key, {})
+                lut = lookup_maps.get(sheet_name, {})
+                rev = reverse_maps.get(sheet_name, {})
                 result = apply_lookup_transform(v, lut, rev, direction, separator, combo_order)
                 if result is None:
-                    reason = sheet_load_errors.get(key)
+                    reason = sheet_load_errors.get(sheet_name)
                     if reason:
                         notes.append(f"{target}: hedb_sheet not usable ({reason}) -- kept raw value as-is")
                     else:
@@ -1501,8 +1468,7 @@ def cmd_build(args):
         print("WARNING -- these hedb_sheet values in your config are not usable yet "
               "(still a TODO placeholder, or the sheet name is wrong); affected "
               "columns will be left as raw codes with a note instead of stopping the run:")
-        for lookup_key, err in stats["sheet_load_errors"].items():
-            sheet_name = lookup_key[0] if isinstance(lookup_key, tuple) else lookup_key
+        for sheet_name, err in stats["sheet_load_errors"].items():
             print(f"  - {sheet_name!r}: {err}")
     print(f"Wrote {stats['out_path']}  ({stats['rows']} rows)")
     print(f"Lookup fields resolved OK: {stats['lookup_ok']}")
@@ -1572,15 +1538,14 @@ def classify_cell(fdef, v, lookup_maps, reverse_maps, sheet_load_errors):
 
     if kind == "lookup":
         sheet_name = fdef.get("hedb_sheet", "")
-        key = _lookup_cache_key(fdef)
-        if key in sheet_load_errors:
+        if sheet_name in sheet_load_errors:
             return "error", (f"Can't verify this value yet -- the reference list "
-                              f"'{sheet_name}' isn't set up ({sheet_load_errors[key]}).")
+                              f"'{sheet_name}' isn't set up ({sheet_load_errors[sheet_name]}).")
         direction = fdef.get("lookup_direction", "code_to_name")
         separator = fdef.get("combo_separator", " - ")
         combo_order = fdef.get("combo_order", "name_code")
-        lut = lookup_maps.get(key, {})
-        rev = reverse_maps.get(key, {})
+        lut = lookup_maps.get(sheet_name, {})
+        rev = reverse_maps.get(sheet_name, {})
         result = apply_lookup_transform(v, lut, rev, direction, separator, combo_order)
         if result is None:
             return "warning", (f"'{v}' was not found in the '{sheet_name}' reference list -- "
