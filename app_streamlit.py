@@ -119,7 +119,10 @@ if generate and uploaded is not None:
                     st.warning(
                         "Some HEDB sheet names in this form's mapping aren't resolvable yet -- "
                         "those columns were left as raw values instead of being converted:\n\n"
-                        + "\n".join(f"- **{k}**: {v}" for k, v in stats["sheet_load_errors"].items())
+                        + "\n".join(
+                            f"- **{(k[0] if isinstance(k, tuple) else k)}**: {v}"
+                            for k, v in stats["sheet_load_errors"].items()
+                        )
                     )
                 st.success(f"Done -- {stats['rows']} row(s) processed.")
                 c1, c2, c3, c4 = st.columns(4)

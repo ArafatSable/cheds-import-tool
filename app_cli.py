@@ -133,6 +133,8 @@ def main():
         if stats["sheet_load_errors"]:
             print("\nWARNING -- these hedb_sheet values in the mapping aren't usable yet:")
             for sheet_name_, err in stats["sheet_load_errors"].items():
+                if isinstance(sheet_name_, tuple):
+                    sheet_name_ = sheet_name_[0]
                 print(f"  - {sheet_name_!r}: {err}")
         print("\nThis is the final sheet -- ready to import into Zoho once its _NOTES column is clear.")
 

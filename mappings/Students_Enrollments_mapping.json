@@ -117,7 +117,11 @@
       "raw_column": "Enroll_Health_Fitness_Certificate",
       "target_field": "People_of_Determination_Special_Needs_Indicator",
       "kind": "map",
-      "value_map": { "Y": "Yes", "N": "No", "U": "Unknown/ Undeclared" },
+      "value_map": {
+        "Y": "Yes",
+        "N": "No",
+        "U": "Unknown/ Undeclared"
+      },
       "_note": "NOTE the HEDB Database Field Name for this one ('Enroll_Health_Fitness_Certificate') is misleading -- it's actually the People of Determination / special needs Y-N-U indicator, not a health certificate field. Worth flagging to whoever maintains the HEDB dictionary."
     },
     {
@@ -203,22 +207,22 @@
         "DI": "Dibba",
         "KH": "Khalba",
         "DD": "Dhaid",
-        "AAM": "Al Ain Men\u2019s Campus",
-        "AAW": "Al Ain Women\u2019s Campus",
-        "ADM": "Abu Dhabi Men\u2019s Campus",
-        "ADW": "Abu Dhabi Women\u2019s Campus",
-        "MZM": "Madinat Zayed Men\u2019s Campus",
-        "MZW": "Madinat Zayed Women\u2019s Campus",
-        "RUM": "Ruwais Men\u2019s Campus",
-        "RUW": "Ruwais Women\u2019s Campus",
-        "DBM": "Dubai Men\u2019s Campus",
-        "DBW": "Dubai Women\u2019s Campus",
-        "SJM": "Sharjah Men\u2019s Campus",
-        "SJW": "Sharjah Women\u2019s Campus",
-        "FJM": "Fujairah Men\u2019s Campus",
-        "FJW": "Fujairah Women\u2019s Campus",
-        "RKM": "Ras Al Khaimah Men\u2019s Campus",
-        "RKW": "Ras Al Khaimah Women\u2019s Campus",
+        "AAM": "Al Ain Men’s Campus",
+        "AAW": "Al Ain Women’s Campus",
+        "ADM": "Abu Dhabi Men’s Campus",
+        "ADW": "Abu Dhabi Women’s Campus",
+        "MZM": "Madinat Zayed Men’s Campus",
+        "MZW": "Madinat Zayed Women’s Campus",
+        "RUM": "Ruwais Men’s Campus",
+        "RUW": "Ruwais Women’s Campus",
+        "DBM": "Dubai Men’s Campus",
+        "DBW": "Dubai Women’s Campus",
+        "SJM": "Sharjah Men’s Campus",
+        "SJW": "Sharjah Women’s Campus",
+        "FJM": "Fujairah Men’s Campus",
+        "FJW": "Fujairah Women’s Campus",
+        "RKM": "Ras Al Khaimah Men’s Campus",
+        "RKW": "Ras Al Khaimah Women’s Campus",
         "MEL": "Melaha",
         "ON": "Online"
       },
@@ -284,10 +288,14 @@
       "_note": "Code converted to descriptive Name."
     },
     {
-      "raw_column": "Enroll_Area_of_Specialization",
+      "raw_column": "Enroll_Program_Code",
       "target_field": "Area_of_Specialization_CIP_Family_code",
-      "kind": "plain",
-      "_note": "Unusual field: Zoho resolves this against Program_Code[...].CIP_Family_Code (the 'Program Master' HEDB sheet's 'CIP_Family CODE' column), not a simple 2-column lookup sheet -- the current mapping schema doesn't have a way to validate against that 3rd-column sheet yet, so the raw CIP family code is passed straight through unchanged (which matches the form's own displayformat = [CIP_Family_Code]). If the code doesn't match an existing Program_Code record's CIP_Family_Code, the import will likely fail at the Zoho picklist-resolution step -- worth spot-checking a few rows against the 'Program Master' sheet before a big import."
+      "kind": "lookup",
+      "_note": "CHANGED SOURCE COLUMN: now derived from Enroll_Program_Code (not Enroll_Area_of_Specialization) because the raw CIP family code alone can't reliably disambiguate between programs that share a family code -- the Program Code uniquely identifies exactly one row in 'Program Master', so we read that row's own CIP_Family_Code column instead of trusting the raw HEDB Area of Specialization value independently. The old Enroll_Area_of_Specialization raw column is no longer used for this field; kept available in your raw file for reference/cross-checking only.",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Program Master",
+      "code_col": 3,
+      "name_col": 8
     },
     {
       "raw_column": "Enroll_Student_Major",
@@ -296,10 +304,14 @@
       "_note": "No conversion."
     },
     {
-      "raw_column": "Enroll_Major_CIP",
+      "raw_column": "Enroll_Program_Code",
       "target_field": "Student_Major_CIP_Major_Classification",
-      "kind": "plain",
-      "_note": "Same situation as Area_of_Specialization above -- resolves against Program_Code's 'CIP Code' column (Program Master sheet), passed through as-is."
+      "kind": "lookup",
+      "_note": "CHANGED SOURCE COLUMN: now derived from Enroll_Program_Code (not Enroll_Major_CIP). Root cause: the same CIP Major Classification code can belong to more than one program at different degree levels -- confirmed real example, CIP 52.0201 is shared by both '141-6532-999999999' (BACHELOR OF BUSINESS ADMINISTRATION) and '141-6515-999999999' (MASTER OF BUSINESS ADMINISTRATION) in your actual Program Master data. Program Code uniquely identifies the exact program+degree-level combination, so deriving the CIP Code from that row removes the ambiguity entirely. The raw Enroll_Major_CIP column is no longer used for this field; kept available in your raw file for reference/cross-checking only (e.g. flag a row if Enroll_Major_CIP disagrees with what the Program Code resolves to -- that would indicate a data entry mismatch worth investigating).",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Program Master",
+      "code_col": 3,
+      "name_col": 9
     },
     {
       "raw_column": "Enroll_Minor",
@@ -612,14 +624,20 @@
       "raw_column": "Enroll_Outgoing_Exchange_Indicator",
       "target_field": "Outgoing Exchange student Indicator",
       "kind": "map",
-      "value_map": { "Y": "Yes", "N": "No" },
+      "value_map": {
+        "Y": "Yes",
+        "N": "No"
+      },
       "_note": "Simple Y/N indicator."
     },
     {
       "raw_column": "Enroll_Incoming_Exchange_Indicator",
       "target_field": "Incoming Exchange Student Indicator",
       "kind": "map",
-      "value_map": { "Y": "Yes", "N": "No" },
+      "value_map": {
+        "Y": "Yes",
+        "N": "No"
+      },
       "_note": "Simple Y/N indicator."
     },
     {
@@ -634,7 +652,10 @@
       "raw_column": "Enroll_dual ",
       "target_field": "Enrolled_in_Joint_Dual_Program",
       "kind": "map",
-      "value_map": { "Y": "Yes", "N": "No" },
+      "value_map": {
+        "Y": "Yes",
+        "N": "No"
+      },
       "_note": "Note trailing space in the HEDB Database Field Name -- check your raw file's actual header. If Y, the program code used must also be flagged as dual/joint in the Institute Academic Programs dataset."
     },
     {
