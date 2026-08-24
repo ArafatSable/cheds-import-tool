@@ -640,9 +640,7 @@
     {
       "raw_column": "Enroll_Graduation_period",
       "target_field": "Expected Graduation period",
-      "kind": "lookup",
-      "lookup_direction": "code_to_code",
-      "hedb_sheet": "Academic Period",
+      "kind": "plain",
       "_note": "Zoho field uses the Semester_Codes lookup form but displayformat = [Code] -- same code-passthrough pattern, validated against the same semester/academic-period code space as 'Academic Period'."
     }
   ]
