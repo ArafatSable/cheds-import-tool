@@ -289,11 +289,37 @@
       "kind": "plain",
       "_note": "Unusual field: Zoho resolves this against Program_Code[...].CIP_Family_Code (the 'Program Master' HEDB sheet's 'CIP_Family CODE' column), not a simple 2-column lookup sheet -- the current mapping schema doesn't have a way to validate against that 3rd-column sheet yet, so the raw CIP family code is passed straight through unchanged (which matches the form's own displayformat = [CIP_Family_Code]). If the code doesn't match an existing Program_Code record's CIP_Family_Code, the import will likely fail at the Zoho picklist-resolution step -- worth spot-checking a few rows against the 'Program Master' sheet before a big import."
     },
-    {
-      "raw_column": "Enroll_Major_CIP",
-      "target_field": "Student_Major_CIP_Major_Classification", 
-      "kind": "plain",
-      "_note": "Unusual field: Zoho resolves this against Program_Code[...].CIP_Major_Classification (the 'Program Master' HEDB sheet's 'CIP_Major Classification' column), not a simple 2-column lookup sheet -- the current mapping schema doesn't have a way to validate against that 3rd-column sheet yet, so the raw CIP major code is passed straight through unchanged (which matches the form's own displayformat = [CIP_Major_Classification]). If the code doesn't match an existing Program_Code record's CIP_Major_Classification, the import will likely fail at the Zoho picklist-resolution step -- worth spot-checking a few rows against the 'Program Master' sheet before a big import."
+   {
+      "raw_column": "Enroll_Program_Code",
+      "target_field": "Student_Major_CIP_Major_Classification",
+      "kind": "lookup",
+      "lookup_direction": "code_to_combo",
+      "hedb_sheet": "Program Master",
+      "code_col": 3,
+      "name_col": 9,
+      "_note": "Looks up 'Program Master' (col 3 = CAA Program Code, col 9 = CIP Code) and formats '{CIP Code} - {Program Code}', matching this field's Display Fields = CIP Code + Code combo confirmed in your Zoho Field Properties screenshot. IMPORTANT DATA GAP: your HEDB_.xlsx's 'Program Master' sheet has BLANK or entirely MISSING CIP Code/Family Code cells for a number of newer programs (mostly the '(HONORS)' BBA/BCOM variants and a couple of Psychology program codes) that DO exist with CIP 99.9999 in your live Zoho Program Codes list. value_overrides above patches these specific known codes using the values visible in your screenshot so imports don't silently fail for them. This is a workaround, not a real fix -- the actual fix is getting an updated HEDB_.xlsx from the ministry/registrar with these rows filled in, at which point these overrides become redundant (harmless to leave in either way, since value_overrides is checked first) and can be removed.",
+      "combo_separator": " - ",
+      "combo_order": "name_code",
+      "value_overrides": {
+        "141-8907-999999999": "99.9999 - 141-8907-999999999",
+        "141-8906-999999999": "99.9999 - 141-8906-999999999",
+        "141-8905-999999999": "99.9999 - 141-8905-999999999",
+        "141-8904-999999999": "99.9999 - 141-8904-999999999",
+        "141-8903-999999999": "99.9999 - 141-8903-999999999",
+        "141-8902-999999999": "99.9999 - 141-8902-999999999",
+        "141-8901-999999999": "99.9999 - 141-8901-999999999",
+        "141-8900-999999999": "99.9999 - 141-8900-999999999",
+        "141-8806-12483": "99.9999 - 141-8806-12483",
+        "141-8805-12481": "99.9999 - 141-8805-12481",
+        "141-8786-999999999": "99.9999 - 141-8786-999999999",
+        "141-7772-999999999": "99.9999 - 141-7772-999999999",
+        "141-7771-999999999": "99.9999 - 141-7771-999999999",
+        "141-7770-999999999": "99.9999 - 141-7770-999999999",
+        "141-8806-12484": "99.9999 - 141-8806-12484",
+        "141-8805-12482": "99.9999 - 141-8805-12482",
+        "141-8806-999999999": "99.9999 - 141-8806-999999999",
+        "141-8805-999999999": "99.9999 - 141-8805-999999999"
+      }
     },
     {
       "raw_column": "Enroll_Student_Major",
