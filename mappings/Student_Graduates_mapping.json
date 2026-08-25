@@ -169,12 +169,14 @@
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "Grad_Major_CIP",
+      "raw_column": "Grad_Program_Code",
       "target_field": "Graduate_Major_CIP_Major_Classification",
       "kind": "lookup",
       "lookup_direction": "code_to_name",
       "hedb_sheet": "Program Master",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Program Master' reference list."
+      "_note": "FIXED: was looking up the raw CIP code (e.g. '52.0201') directly against 'Program Master' without specifying which columns to match -- CIP codes aren't unique per program (BBA and MBA can share one), and without code_col/name_col the lookup was reading the wrong columns entirely, so it never resolved. Now derives from Grad_Program_Code instead: looks up the row in 'Program Master' whose CAA Program Code (column 3) matches, and takes that row's Program Name (column 5). NOTE: I haven't seen this form's Field Properties/Display Fields setting the way I confirmed it for the Enrollments form's equivalent field -- if Zoho actually expects a combo like 'CIP Code - Program Code' here too rather than just the Name, let me know the exact Display Fields configuration and I'll adjust (name_col/lookup_direction) to match.",
+      "code_col": 3,
+      "name_col": 5
     },
     {
       "raw_column": "Grad_Minor",
