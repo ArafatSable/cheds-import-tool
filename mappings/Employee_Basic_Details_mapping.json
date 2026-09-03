@@ -166,18 +166,14 @@
     {
       "raw_column": "Emp_Qualification_Institution_Name",
       "target_field": "Qualification_Institution_Name",
-      "kind": "lookup",
-      "lookup_direction": "name_to_name",
-      "hedb_sheet": "Universities",
-      "_note": "Raw HEDB institution name is matched against the 'Universities' reference list by Name (this field is a picklist over the Universities lookup form, matched on Name -- not a code). HEDB says use 'NA' if the name isn't available; make sure an 'NA' entry exists in your Universities lookup form or these rows will fail to resolve."
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file. HEDB says use 'NA' if not available."
     },
     {
       "raw_column": "Emp_Qualification_Institution_Code",
       "target_field": "Qualification_Institution_Code",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Universities",
-      "_note": "This Zoho field is unusual -- it's a picklist filtered to Universities[ID == input.Qualification_Institution_Name].ID, meaning it auto-derives from whichever University record was picked above rather than being independently selected. Make sure your import fills Qualification_Institution_Name first/correctly since this field depends on it. HEDB says use '9999' if the code isn't available."
+      "kind": "plain",
+      "_note": "Raw HEDB institution code is imported exactly as provided in the raw file. HEDB says use '9999' if the code isn't available."
     },
     {
       "raw_column": "Emp_Qualification_Year",
