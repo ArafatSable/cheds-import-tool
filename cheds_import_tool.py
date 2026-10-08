@@ -1110,7 +1110,15 @@ def cmd_auto_map_ds(args):
 # ---------------------------------------------------------------------------
 # Step 3: build
 # ---------------------------------------------------------------------------
-def load_lookup_map(hedb_wb, sheet_name, header_row=None, code_col=None, name_col=None):
+def load_lookup_map(hedb_wb, sheet_name, header_row=None, code_col=None, name_col=None,
+                    filter_col=None, filter_value=None, dups_out=None):
+    """code -> name for one HEDB sheet.
+    filter_col/filter_value: only keep rows whose filter_col equals filter_value
+    (e.g. Program Master rows for institution 141 only).
+    dups_out: optional dict; filled with code -> [every distinct name] for any
+    code that appears with MORE than one name (e.g. one CIP code shared by
+    two programs), so callers can flag/disambiguate instead of silently
+    taking whichever row came last."""
     if sheet_name not in hedb_wb.sheetnames:
         raise ValueError(f"HEDB sheet '{sheet_name}' not found in workbook.")
     reg = LOOKUP_SHEET_REGISTRY.get(sheet_name, {})
@@ -1120,12 +1128,68 @@ def load_lookup_map(hedb_wb, sheet_name, header_row=None, code_col=None, name_co
 
     ws = hedb_wb[sheet_name]
     m = {}
+    all_names = {}
+    want = norm(filter_value) if filter_col else None
     for r in range(header_row + 1, ws.max_row + 1):
+        if filter_col and norm(ws.cell(row=r, column=filter_col).value) != want:
+            continue
         c = ws.cell(row=r, column=code_col).value
         n = ws.cell(row=r, column=name_col).value
         if c not in (None, "") and n not in (None, ""):
-            m[norm(c)] = str(n).strip()
+            k, nm = norm(c), str(n).strip()
+            m[k] = nm
+            lst = all_names.setdefault(k, [])
+            if nm not in lst:
+                lst.append(nm)
+    if dups_out is not None:
+        dups_out.update({k: v for k, v in all_names.items() if len(v) > 1})
     return m
+
+
+def lookup_cache_key(fdef):
+    """Two fields can use the same HEDB sheet with DIFFERENT columns/filters
+    (e.g. Program Master by CAA code vs by CIP code) -- so cache per
+    (sheet, header_row, code_col, name_col, filter), not per sheet name."""
+    return (fdef.get("hedb_sheet", ""), fdef.get("header_row"), fdef.get("code_col"),
+            fdef.get("name_col"), fdef.get("filter_col"), norm(fdef.get("filter_value")))
+
+
+def resolve_lookup(fdef, v, row, lookup_maps, reverse_maps, dup_maps):
+    """Shared by build + report. Returns (result_or_None, note_or_None).
+    If the code is ambiguous (several names), uses fdef["disambiguate_by"]
+    = {"raw_column": X, "contains": {raw_X_value: KEYWORD}} to pick the one
+    name containing KEYWORD; otherwise returns None + an 'ambiguous' note."""
+    key = lookup_cache_key(fdef)
+    direction = fdef.get("lookup_direction", "code_to_name")
+    lut = lookup_maps.get(key, {})
+    rev = reverse_maps.get(key, {})
+    cands = dup_maps.get(key, {}).get(norm(v)) if direction in ("code_to_name", "code_to_combo") else None
+    if cands:
+        dis = fdef.get("disambiguate_by") or {}
+        ctx = (row or {}).get(dis.get("raw_column")) if dis else None
+        kw = None
+        if ctx not in (None, ""):
+            kw = next((w for k, w in dis.get("contains", {}).items()
+                       if str(k).strip().lower() == str(ctx).strip().lower()), None)
+        picks = [c for c in cands if kw and kw.lower() in c.lower()]
+        if len(picks) == 1:
+            name = picks[0]
+            if direction == "code_to_combo":
+                sep = fdef.get("combo_separator", " - ")
+                name = f"{norm(v)}{sep}{name}" if fdef.get("combo_order") == "code_name" else f"{name}{sep}{norm(v)}"
+            return name, None
+        return None, (f"'{v}' matches more than one entry in '{fdef.get('hedb_sheet')}' "
+                      f"({' | '.join(cands)}) -- pick the right one manually")
+    res = apply_lookup_transform(v, lut, rev, direction, fdef.get("combo_separator", " - "),
+                                 fdef.get("combo_order", "name_code"))
+    return res, None
+
+
+def active_fields(config):
+    """Fields that actually produce an output column (skips kind 'unmapped'
+    / target_field null reference-only entries)."""
+    return [f for f in config["fields"]
+            if f.get("target_field") and f.get("kind") != "unmapped"]
 
 
 def build_reverse_map(code_to_name):
@@ -1251,24 +1315,31 @@ def preload_lookup_maps(config, hedb_wb):
     """
     lookup_maps = {}
     reverse_maps = {}
+    dup_maps = {}
     sheet_load_errors = {}
-    for fdef in config["fields"]:
+    for fdef in active_fields(config):
         if fdef.get("kind") == "lookup":
             sheet_name = fdef.get("hedb_sheet", "")
-            if sheet_name in lookup_maps or sheet_name in sheet_load_errors:
+            key = lookup_cache_key(fdef)
+            if key in lookup_maps or sheet_name in sheet_load_errors:
                 continue
             try:
+                dups = {}
                 m = load_lookup_map(
                     hedb_wb, sheet_name,
                     header_row=fdef.get("header_row"),
                     code_col=fdef.get("code_col"),
                     name_col=fdef.get("name_col"),
+                    filter_col=fdef.get("filter_col"),
+                    filter_value=fdef.get("filter_value"),
+                    dups_out=dups,
                 )
-                lookup_maps[sheet_name] = m
-                reverse_maps[sheet_name] = build_reverse_map(m)
+                lookup_maps[key] = m
+                reverse_maps[key] = build_reverse_map(m)
+                dup_maps[key] = dups
             except ValueError as e:
                 sheet_load_errors[sheet_name] = str(e)
-    return lookup_maps, reverse_maps, sheet_load_errors
+    return lookup_maps, reverse_maps, sheet_load_errors, dup_maps
 
 
 def parse_date_value(v):
@@ -1325,7 +1396,8 @@ def build_import_ready(raw_path, config_path, hedb_path, out_path, sheet=None):
             rows.append(row)
 
     hedb_wb = openpyxl.load_workbook(hedb_path, data_only=True)
-    lookup_maps, reverse_maps, sheet_load_errors = preload_lookup_maps(config, hedb_wb)
+    config["fields"] = active_fields(config)
+    lookup_maps, reverse_maps, sheet_load_errors, dup_maps = preload_lookup_maps(config, hedb_wb)
 
     # (sheet_load_errors, if any, is reported by the caller -- see cmd_build
     # below for the CLI's console-print version -- rather than printed here,
@@ -1402,14 +1474,12 @@ def build_import_ready(raw_path, config_path, hedb_path, out_path, sheet=None):
             if kind == "lookup" and v not in (None, ""):
                 sheet_name = fdef.get("hedb_sheet", "")
                 direction = fdef.get("lookup_direction", "code_to_name")
-                separator = fdef.get("combo_separator", " - ")
-                combo_order = fdef.get("combo_order", "name_code")
-                lut = lookup_maps.get(sheet_name, {})
-                rev = reverse_maps.get(sheet_name, {})
-                result = apply_lookup_transform(v, lut, rev, direction, separator, combo_order)
+                result, amb = resolve_lookup(fdef, v, row, lookup_maps, reverse_maps, dup_maps)
                 if result is None:
                     reason = sheet_load_errors.get(sheet_name)
-                    if reason:
+                    if amb:
+                        notes.append(f"{target}: {amb} -- kept as-is")
+                    elif reason:
                         notes.append(f"{target}: hedb_sheet not usable ({reason}) -- kept raw value as-is")
                     else:
                         notes.append(f"{target}: value '{v}' not found in '{sheet_name}' "
@@ -1544,7 +1614,7 @@ REVIEW_COLORS = {
 }
 
 
-def classify_cell(fdef, v, lookup_maps, reverse_maps, sheet_load_errors, row=None):
+def classify_cell(fdef, v, lookup_maps, reverse_maps, sheet_load_errors, row=None, dup_maps=None):
     """
     Look at one raw cell's value against its field definition and decide:
     does this need to change before import? Returns (severity, message)
@@ -1577,12 +1647,9 @@ def classify_cell(fdef, v, lookup_maps, reverse_maps, sheet_load_errors, row=Non
         if sheet_name in sheet_load_errors:
             return "error", (f"Can't verify this value yet -- the reference list "
                               f"'{sheet_name}' isn't set up ({sheet_load_errors[sheet_name]}).")
-        direction = fdef.get("lookup_direction", "code_to_name")
-        separator = fdef.get("combo_separator", " - ")
-        combo_order = fdef.get("combo_order", "name_code")
-        lut = lookup_maps.get(sheet_name, {})
-        rev = reverse_maps.get(sheet_name, {})
-        result = apply_lookup_transform(v, lut, rev, direction, separator, combo_order)
+        result, amb = resolve_lookup(fdef, v, row, lookup_maps, reverse_maps, dup_maps or {})
+        if amb:
+            return "warning", amb
         if result is None:
             return "warning", (f"'{v}' was not found in the '{sheet_name}' reference list -- "
                                 f"check this code/name is correct.")
@@ -1718,7 +1785,8 @@ def build_issue_report(raw_path, config_path, hedb_path, out_path, sheet=None):
     header_to_col = {h: c + 1 for c, h in enumerate(headers) if h}
 
     hedb_wb = openpyxl.load_workbook(hedb_path, data_only=True)
-    lookup_maps, reverse_maps, sheet_load_errors = preload_lookup_maps(config, hedb_wb)
+    config["fields"] = active_fields(config)
+    lookup_maps, reverse_maps, sheet_load_errors, dup_maps = preload_lookup_maps(config, hedb_wb)
 
     field_to_col = {}
     missing_columns = []
@@ -1795,7 +1863,7 @@ def build_issue_report(raw_path, config_path, hedb_path, out_path, sheet=None):
             if col is None:
                 continue
             v = raw_ws.cell(row=row_num, column=col).value
-            sev, msg = classify_cell(fdef, v, lookup_maps, reverse_maps, sheet_load_errors, row=row_dict)
+            sev, msg = classify_cell(fdef, v, lookup_maps, reverse_maps, sheet_load_errors, row=row_dict, dup_maps=dup_maps)
             if sev is None:
                 continue
             counts[sev] += 1

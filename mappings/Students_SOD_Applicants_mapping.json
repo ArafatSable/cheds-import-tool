@@ -1,12 +1,18 @@
 {
   "fields": [
     {
-      "raw_column": "Ap_Institution_Name",
+      "raw_column": "App_Institution_CODE",
       "target_field": "Institutional_Name",
       "kind": "lookup",
       "lookup_direction": "code_to_name",
       "hedb_sheet": "Institutional Codes",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Institutional Codes' reference list."
+      "_note": "FIXED: was keyed off Ap_Institution_Name (a name, not a code) so the code->name lookup could never match. Now 141 -> institution Name; form displayformat = [Name]."
+    },
+    {
+      "raw_column": "Ap_Institution_Name",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Redundant with App_Institution_CODE. Not imported."
     },
     {
       "raw_column": "App_Academic_period",
@@ -16,7 +22,7 @@
       "combo_order": "name_code",
       "combo_separator": " - ",
       "hedb_sheet": "Academic Period",
-      "_note": "Raw HEDB code is converted to a combined 'Name - Code' display value using the 'Academic Period' reference list."
+      "_note": "Form displayformat = [\" \" + Name + \" - \" + Code] -> e.g. '2026-2027 : Fall - 202601'. Zoho's display adds a leading space; if the import doesn't match, prefix one space."
     },
     {
       "raw_column": "App_Applicant_ID",
@@ -45,12 +51,6 @@
     {
       "raw_column": "App_Emirates_ID",
       "target_field": "Emirates_ID",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Name_Arabic",
-      "target_field": "Al_Ethbara",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
@@ -223,11 +223,11 @@
       "target_field": "High_School_System",
       "kind": "map",
       "value_map": {
-        "AB": "Algerian Baccalaureate",
+        "AG": "Algerian Baccalaureate",
         "AM": "American",
-        "AP": "American - Advanced Placement",
-        "AU": "Australian",
-        "BA": "Bangladeshi",
+        "AP": "American - Advacned placement",
+        "AS": "Australian",
+        "BN": "Bangladeshi",
         "BR": "British",
         "CA": "Canadian",
         "CH": "Chinese Curriculum",
@@ -236,29 +236,29 @@
         "EN": "English National Curriculum",
         "ET": "Ethiopian National Curriculum",
         "FR": "French",
-        "GE": "German",
+        "GR": "German",
         "IN": "Indian (other than CBSE)",
         "IB": "International Baccalaureate",
         "IR": "Iranian",
         "JA": "Japanese",
-        "JO": "Jordanian",
+        "JR": "Jordanian",
         "LB": "Lebanese Baccalaureate",
         "MA": "Mali",
         "MO": "MOE (UAE)",
-        "MR": "Morocco",
-        "NI": "Niger",
-        "NE": "NECO (Nigerian National Curriculum)",
-        "PA": "Pakistani",
+        "MR": "Morrocco",
+        "NR": "Niger",
+        "NG": "NECO (Nigerian National Curriculum)",
+        "PK": "Pakistani",
         "PH": "Philippines",
         "RU": "Russian",
         "SA": "SABIS",
         "SE": "Senegal",
         "SI": "Singapore",
-        "SL": "SriLanka",
+        "SR": "SriLanka",
         "SY": "Syrian Baccalaureate",
         "OT": "Other"
       },
-      "_note": "Raw short code is converted to the exact Zoho picklist text using a 34-entry table (e.g. 'AB' -> 'Algerian Baccalaureate'; 'AM' -> 'American'; 'AP' -> 'American - Advanced Placement'; 'AU' -> 'Australian'; ...). See value_map for the full list."
+      "_note": "FIXED: rebuilt from HEDB 'High School System' sheet. Previous map had 9 wrong codes (AB/AU/BA/GE/JO/NI/NE/PA/SL vs HEDB AG/AS/BN/GR/JR/NR/NG/PK/SR) and 2 labels that don't exist on the form ('American - Advanced Placement', 'Morocco' vs form 'American - Advacned placement', 'Morrocco')."
     },
     {
       "raw_column": "App_High_School_Score",
@@ -278,7 +278,10 @@
       "kind": "lookup",
       "lookup_direction": "code_to_name",
       "hedb_sheet": "Academic Year",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Academic Year' reference list."
+      "_note": "FIXED: 'Academic Year' sheet has Code in col 1 and Name in col 2 (data from row 4) -- the default col 2/3 read nothing. 201718 -> 'Academic Year 2017-2018' (matches Zoho Academic_Year Name).",
+      "header_row": 3,
+      "code_col": 1,
+      "name_col": 2
     },
     {
       "raw_column": "App_Qual_institution_Name",
@@ -314,7 +317,10 @@
       "kind": "lookup",
       "lookup_direction": "code_to_name",
       "hedb_sheet": "Academic Year",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Academic Year' reference list."
+      "_note": "FIXED: 'Academic Year' sheet has Code in col 1 and Name in col 2 (data from row 4) -- the default col 2/3 read nothing. 201718 -> 'Academic Year 2017-2018' (matches Zoho Academic_Year Name).",
+      "header_row": 3,
+      "code_col": 1,
+      "name_col": 2
     },
     {
       "raw_column": "App_Language_Test_Name1",
@@ -358,7 +364,7 @@
       "kind": "lookup",
       "lookup_direction": "code_to_name",
       "hedb_sheet": "Area of Specialization",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Area of Specialization' reference list."
+      "_note": "CIP family code -> family name (e.g. 52 -> 'Business, Management, Marketing, And Related Support Services.'). Form picklist is Program_Code with displayformat [CIP_Family_Name]; workflow sends .CIP_Family_Code."
     },
     {
       "raw_column": "App_Student_Major",
@@ -374,10 +380,22 @@
       "hedb_sheet": "Program Master",
       "code_col": 9,
       "name_col": 5,
+      "_note": "FIXED: CIP code -> Program Name, restricted to institution 141 rows (filter_col 1) -- before, ALL universities' rows were searched and the last match won, so a CIP like 11.0102 could return another university's program. 52.0201 is shared by MBA and BBA at SIUD, so App_Target_Degree_Level picks between them (MB/MS -> 'MASTER...', BA -> 'BACHELOR...'); if it still can't decide, the row is flagged. Codes ending .9999 -> blank. Newer SIUD programs (141-77xx/88xx/89xx) have no CIP in HEDB Program Master, so they can't be found by CIP.",
+      "filter_col": 1,
+      "filter_value": "141",
       "value_override_suffixes": {
         ".9999": ""
       },
-      "_note": "Raw value is a CIP code (e.g. 11.0101), matched against Program Master's 'CIP Code' column (col 9) to get the Program Name (col 5) -- NOT the default code_col/name_col for this sheet (those are for the CAA Program Code field instead), which is why code_col/name_col are overridden here explicitly. Any code ending in '.9999' (CIP's generic 'Other/catch-all' sub-code within any family -- 99.9999 is the spec's own sentinel for 'undeclared major', but 15.9999/52.9999/etc. are the same idea for other families) has no single specific program in Program Master by design, so it's forced blank via value_override_suffixes instead of being flagged as a lookup failure. CAVEAT: for a real (non-.9999) CIP code, Program Master can list more than one program under the same CIP classification (seen for this same institution: MBA and BBA both = 52.0201) -- when that happens this lookup picks whichever matching row comes last in Program Master, which is NOT guaranteed to be the applicant's actual program. Spot-check Student_program on the Final sheet against App_Student_Major for any CIP code shared by multiple programs."
+      "disambiguate_by": {
+        "raw_column": "App_Target_Degree_Level",
+        "contains": {
+          "MB": "MASTER",
+          "MS": "MASTER",
+          "GD": "MASTER",
+          "BA": "BACHELOR"
+        }
+      }
     }
-  ]
+  ],
+  "_form_note": "Students_SOD_Applicants (Zoho form 'Students – SOD Applicants'). Verified against form field definitions + push workflow 'push_api_production26' in Zoho_To_CHEDS_(23).ds. Raw column names = HEDB 'SOD Applicants' Database Field Names. Workflow hardcodes institutionCode=141."
 }

@@ -1,0 +1,112 @@
+{
+  "_form_note": "Students_Students_of_Determination_SOD (Zoho form 'Students - Students of Determination (SOD)'). Verified against the form's field definitions and the push workflow 'push_api_production25' in Zoho_To_CHEDS_(23).ds. Raw column names = HEDB 'SOD' Database_Field_Name. Workflow hardcodes institutionCode=141 and sends Academic_Period.Code, Accommodation_Type.subString(0,1), Yes/No .subString(0,1), and Dropdown_Fields.SodAccomodations(Special_Accomodations1).",
+  "fields": [
+    {
+      "raw_column": "SOD_Institution_code",
+      "target_field": "Institutional_Codes",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Institutional Codes",
+      "_note": "Form displayformat = [Name]. 141 -> institution Name."
+    },
+    {
+      "raw_column": "SOD_Institution_Name",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Redundant with SOD_Institution_code -- the form has one institution picklist. Not imported."
+    },
+    {
+      "raw_column": "SOD_AcademicPeriod",
+      "target_field": "Academic_Period",
+      "kind": "lookup",
+      "lookup_direction": "code_to_combo",
+      "combo_order": "code_name",
+      "combo_separator": " - ",
+      "hedb_sheet": "Academic Period",
+      "_note": "Form displayformat = [Code + \" - \" + Name] -> e.g. '202601 - 2026-2027 : Fall' (Code FIRST on this form, unlike most others)."
+    },
+    {
+      "raw_column": "SOD_StudentID",
+      "target_field": "Student_ID",
+      "kind": "plain",
+      "_note": "No conversion."
+    },
+    {
+      "raw_column": "SOD_Accomodation_type",
+      "target_field": "Accommodation_Type",
+      "kind": "map",
+      "value_map": {
+        "Y": "Y - Student is using special use accomodation on campus",
+        "O": "O - Student is using special use accomodation off-campus",
+        "N": "N - Student does not need special needs accomodation"
+      },
+      "_note": "Exact form picklist text. Workflow sends the first character back to CHEDS."
+    },
+    {
+      "raw_column": "SOD_National_Award_Participated",
+      "target_field": "Name_of_National_Award_student_participated_in",
+      "kind": "plain",
+      "_note": "Optional free text; multiple names separated by ';'."
+    },
+    {
+      "raw_column": "SOD_National_Award_WON",
+      "target_field": "Name_of_National_Award_student_WON",
+      "kind": "plain",
+      "_note": "Optional free text."
+    },
+    {
+      "raw_column": "SOD_INTERNATIONAL_Award_participated",
+      "target_field": "Name_of_INTERNATIONAL_Award_student_participated_in",
+      "kind": "plain",
+      "_note": "Optional free text."
+    },
+    {
+      "raw_column": "SOD_INTERNATIONAL_Award_WON",
+      "target_field": "Name_of_INTERNATIONAL_Award_student_WON",
+      "kind": "plain",
+      "_note": "Optional free text."
+    },
+    {
+      "raw_column": "SOD_Instructional_assitive_technology",
+      "target_field": "Instructional_assitive_technology",
+      "kind": "yesno",
+      "_note": "HEDB Y/N -> form 'Yes'/'No'."
+    },
+    {
+      "raw_column": "SOD_Instructional_assitive_technology_details",
+      "target_field": "Instructional_assitive_technology_details",
+      "kind": "plain",
+      "_note": "Required by HEDB when the field above is Y."
+    },
+    {
+      "raw_column": "SOD_Medical_assitive_devices",
+      "target_field": "Medical_Assistive_Devices",
+      "kind": "yesno",
+      "_note": "HEDB Y/N -> form 'Yes'/'No'."
+    },
+    {
+      "raw_column": "SOD_Medical_assitive_devices_details",
+      "target_field": "Medical_assitive_devices_details",
+      "kind": "plain",
+      "_note": "Required by HEDB when the field above is Y."
+    },
+    {
+      "raw_column": "SOD_NEEDS_Accomodation",
+      "target_field": "Special_Accomodations1",
+      "kind": "map",
+      "value_map": {
+        "IA": "Instructional Accommodations",
+        "EA": "Environmental Accommodations",
+        "AA": "Assessment Accommodations",
+        "NO": "No accomodations"
+      },
+      "_note": "HEDB 'SOD Accomodations' codes -> exact form picklist text."
+    },
+    {
+      "raw_column": "SOD_NEEDS_Accomodation_details",
+      "target_field": "Special_Accomodations_details",
+      "kind": "plain",
+      "_note": "May be blank when code is NO."
+    }
+  ]
+}
