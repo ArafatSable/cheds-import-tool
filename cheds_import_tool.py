@@ -1135,6 +1135,10 @@ def load_lookup_map(hedb_wb, sheet_name, header_row=None, code_col=None, name_co
             continue
         c = ws.cell(row=r, column=code_col).value
         n = ws.cell(row=r, column=name_col).value
+        if n not in (None, ""):
+            every = all_names.setdefault("__all_names__", [])
+            if str(n).strip() not in every:
+                every.append(str(n).strip())
         if c not in (None, "") and n not in (None, ""):
             k, nm = norm(c), str(n).strip()
             m[k] = nm
@@ -1142,7 +1146,10 @@ def load_lookup_map(hedb_wb, sheet_name, header_row=None, code_col=None, name_co
             if nm not in lst:
                 lst.append(nm)
     if dups_out is not None:
-        dups_out.update({k: v for k, v in all_names.items() if len(v) > 1})
+        dups_out.update({k: v for k, v in all_names.items() if len(v) > 1 and k != "__all_names__"})
+        # every name in the (filtered) sheet, even rows with a blank code --
+        # used by fallback_name_column (e.g. new programs with no CIP yet)
+        dups_out["__all_names__"] = all_names.get("__all_names__", [])
     return m
 
 
@@ -1163,8 +1170,34 @@ def resolve_lookup(fdef, v, row, lookup_maps, reverse_maps, dup_maps):
     direction = fdef.get("lookup_direction", "code_to_name")
     lut = lookup_maps.get(key, {})
     rev = reverse_maps.get(key, {})
+
+    # fallback_name_column: when the code can't settle it (catch-all code like
+    # 99.9999, code not in the sheet, or a code shared by several entries),
+    # use ANOTHER raw column of the same row whose value is expected to be the
+    # entry's Name itself (e.g. Student Major = the program name), matched
+    # case-insensitively against this sheet's (filtered) name column.
+    def _by_name():
+        col = fdef.get("fallback_name_column")
+        nv = (row or {}).get(col) if col else None
+        if nv in (None, ""):
+            return None
+        want = str(nv).strip().lower()
+        allnames = set(lut.values()) | set(dup_maps.get(key, {}).get("__all_names__", []))
+        return next((n for n in allnames if n.strip().lower() == want), None)
+
+    sfx = [str(x).lower() for x in fdef.get("fallback_on_suffixes", [])]
+    if sfx and str(v).strip().lower().endswith(tuple(sfx)):
+        hit = _by_name()
+        if hit:
+            return hit, None
+        return None, (f"'{v}' is a catch-all code shared by many programs -- put the exact "
+                      f"program name in '{fdef.get('fallback_name_column')}' so it can be matched")
+
     cands = dup_maps.get(key, {}).get(norm(v)) if direction in ("code_to_name", "code_to_combo") else None
     if cands:
+        hit = _by_name()
+        if hit and hit in cands:
+            return hit, None
         dis = fdef.get("disambiguate_by") or {}
         ctx = (row or {}).get(dis.get("raw_column")) if dis else None
         kw = None
@@ -1182,6 +1215,8 @@ def resolve_lookup(fdef, v, row, lookup_maps, reverse_maps, dup_maps):
                       f"({' | '.join(cands)}) -- pick the right one manually")
     res = apply_lookup_transform(v, lut, rev, direction, fdef.get("combo_separator", " - "),
                                  fdef.get("combo_order", "name_code"))
+    if res is None:
+        res = _by_name()
     return res, None
 
 

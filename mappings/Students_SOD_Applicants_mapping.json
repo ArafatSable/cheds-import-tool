@@ -360,11 +360,9 @@
     },
     {
       "raw_column": "App_Area_of_Specialization",
-      "target_field": "Area_of_Specialization_CIP_Family_code1",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Area of Specialization",
-      "_note": "CIP family code -> family name (e.g. 52 -> 'Business, Management, Marketing, And Related Support Services.'). Form picklist is Program_Code with displayformat [CIP_Family_Name]; workflow sends .CIP_Family_Code."
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "NOT imported. Zoho fills this automatically from Student_program (on validate: Area = same Program_Code record), so the push always sends that program's CIP_Family_Code -- incl. 99. Importing it by CIP_Family_Name would risk matching the wrong Program_Code record (many share a name) and 'Not listed' isn't a choice. Keep the column in the raw file for reference only."
     },
     {
       "raw_column": "App_Student_Major",
@@ -380,12 +378,9 @@
       "hedb_sheet": "Program Master",
       "code_col": 9,
       "name_col": 5,
-      "_note": "FIXED: CIP code -> Program Name, restricted to institution 141 rows (filter_col 1) -- before, ALL universities' rows were searched and the last match won, so a CIP like 11.0102 could return another university's program. 52.0201 is shared by MBA and BBA at SIUD, so App_Target_Degree_Level picks between them (MB/MS -> 'MASTER...', BA -> 'BACHELOR...'); if it still can't decide, the row is flagged. Codes ending .9999 -> blank. Newer SIUD programs (141-77xx/88xx/89xx) have no CIP in HEDB Program Master, so they can't be found by CIP.",
+      "_note": "CIP code -> Program Name (Program_Code displayformat [Name]), SIUD (141) rows only. Programs with a unique official CIP resolve directly. 52.0201 (MBA/BBA): resolved by App_Student_Major if it equals the program name, else by App_Target_Degree_Level (MB/MS -> MASTER, BA -> BACHELOR). Catch-all codes ending .9999 (all newer programs) can't be resolved from the CIP -- App_Student_Major must hold the exact program name (e.g. 'BACHELOR OF COMMERCE'); otherwise the row is flagged. Never blanked, because Student_program is mandatory.",
       "filter_col": 1,
       "filter_value": "141",
-      "value_override_suffixes": {
-        ".9999": ""
-      },
       "disambiguate_by": {
         "raw_column": "App_Target_Degree_Level",
         "contains": {
@@ -394,7 +389,11 @@
           "GD": "MASTER",
           "BA": "BACHELOR"
         }
-      }
+      },
+      "fallback_name_column": "App_Student_Major",
+      "fallback_on_suffixes": [
+        ".9999"
+      ]
     }
   ],
   "_form_note": "Students_SOD_Applicants (Zoho form 'Students – SOD Applicants'). Verified against form field definitions + push workflow 'push_api_production26' in Zoho_To_CHEDS_(23).ds. Raw column names = HEDB 'SOD Applicants' Database Field Names. Workflow hardcodes institutionCode=141."
