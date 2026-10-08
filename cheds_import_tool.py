@@ -1177,6 +1177,41 @@ def apply_lookup_transform(v, code_to_name, name_to_code, direction, separator, 
 # "kind": "yesno" on a field handles this without needing any HEDB sheet at
 # all -- pass "yes_label"/"no_label" in the field def if a field ever uses
 # different exact wording than "Yes"/"No" (check the field's Choices list).
+def resolve_value_map(fdef, row=None):
+    """
+    Returns (value_map, context_note) for a kind:"map" field.
+
+    Normally that's just fdef["value_map"]. But some fields' raw codes only
+    make sense together with ANOTHER column in the same row -- e.g. Student
+    Attrition's reason code "TR" means "Transfer to an institute within UAE"
+    when the category is VW, but "Transportation issues" when the category
+    is LA. For those, the config carries:
+
+        "value_map_by": {
+            "raw_column": "Attrition_Category",      # the other raw column
+            "maps": { "VW": {...}, "LA": {...}, ... } # one value_map per value
+        }
+
+    If the row's value in that other column matches one of the keys in
+    "maps" (case-insensitive), ONLY that sub-map is used -- so a reason that
+    doesn't belong to its category gets flagged instead of silently mapped.
+    If the other column is blank or holds an unknown value, falls back to
+    the plain "value_map" (which should leave out any ambiguous codes).
+    """
+    flat = fdef.get("value_map", {})
+    by = fdef.get("value_map_by")
+    if not by or row is None:
+        return flat, None
+    ctx_raw = row.get(by.get("raw_column"))
+    if ctx_raw in (None, ""):
+        return flat, None
+    ctx_key = str(ctx_raw).strip().lower()
+    for k, sub in by.get("maps", {}).items():
+        if str(k).strip().lower() == ctx_key:
+            return sub, f"{by.get('raw_column')} = '{ctx_raw}'"
+    return flat, None
+
+
 YES_VALUES = {"y", "yes", "true", "1"}
 NO_VALUES = {"n", "no", "false", "0"}
 
@@ -1401,7 +1436,7 @@ def build_import_ready(raw_path, config_path, hedb_path, out_path, sheet=None):
                 # "CR-CREATIVE ENDEAVORS"). "value_map" is written directly
                 # in the config: {"raw_value": "exact Zoho choice text", ...}.
                 # Matching is case-insensitive/stripped on the raw side.
-                value_map = fdef.get("value_map", {})
+                value_map, ctx = resolve_value_map(fdef, row)
                 lookup_key = next(
                     (k for k in value_map if str(k).strip().lower() == str(v).strip().lower()),
                     None,
@@ -1412,7 +1447,8 @@ def build_import_ready(raw_path, config_path, hedb_path, out_path, sheet=None):
                 elif v in (None, ""):
                     out_row.append(v)
                 else:
-                    notes.append(f"{target}: value '{v}' not in value_map {list(value_map.keys())} -- kept as-is, verify manually")
+                    where = f" (for {ctx})" if ctx else ""
+                    notes.append(f"{target}: value '{v}' not in value_map{where} {list(value_map.keys())} -- kept as-is, verify manually")
                     out_row.append(v)
                     stats["lookup_unresolved"] += 1
             elif kind == "phone":
@@ -1508,7 +1544,7 @@ REVIEW_COLORS = {
 }
 
 
-def classify_cell(fdef, v, lookup_maps, reverse_maps, sheet_load_errors):
+def classify_cell(fdef, v, lookup_maps, reverse_maps, sheet_load_errors, row=None):
     """
     Look at one raw cell's value against its field definition and decide:
     does this need to change before import? Returns (severity, message)
@@ -1555,9 +1591,12 @@ def classify_cell(fdef, v, lookup_maps, reverse_maps, sheet_load_errors):
         return "info", f"Will be converted to '{result}'."
 
     if kind == "map":
-        value_map = fdef.get("value_map", {})
+        value_map, ctx = resolve_value_map(fdef, row)
         key = next((k for k in value_map if str(k).strip().lower() == str(v).strip().lower()), None)
         if key is None:
+            if ctx:
+                return "warning", (f"'{v}' isn't a valid value when {ctx} -- "
+                                    f"allowed: {', '.join(value_map.keys()) or '(none on the Zoho form)'}.")
             return "warning", (f"'{v}' doesn't match any of this field's expected values -- "
                                 f"check it against the accepted list.")
         result = value_map[key]
@@ -1749,13 +1788,14 @@ def build_issue_report(raw_path, config_path, hedb_path, out_path, sheet=None):
         if all(v is None for v in row_values):
             continue
         n_rows += 1
+        row_dict = {h: row_values[c] for c, h in enumerate(headers[:max_col]) if h}
 
         for fdef in config["fields"]:
             col = field_to_col.get(fdef["target_field"])
             if col is None:
                 continue
             v = raw_ws.cell(row=row_num, column=col).value
-            sev, msg = classify_cell(fdef, v, lookup_maps, reverse_maps, sheet_load_errors)
+            sev, msg = classify_cell(fdef, v, lookup_maps, reverse_maps, sheet_load_errors, row=row_dict)
             if sev is None:
                 continue
             counts[sev] += 1
