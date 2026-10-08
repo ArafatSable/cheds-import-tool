@@ -23,6 +23,10 @@ from pathlib import Path
 
 import streamlit as st
 
+import importlib
+import cheds_import_tool, cheds_forms
+importlib.reload(cheds_import_tool)
+importlib.reload(cheds_forms)
 from cheds_import_tool import build_import_ready, build_issue_report
 from cheds_forms import FORMS, UNVERIFIED_NO_WORKFLOW
 
