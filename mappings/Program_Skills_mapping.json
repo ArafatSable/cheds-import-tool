@@ -1,0 +1,41 @@
+{
+  "fields": [
+    {
+      "raw_column": "SKL_Institution_Code",
+      "target_field": "Institutional_Codes",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "SKL_Academic_Period",
+      "target_field": "Academic_Period",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "SKL_Program_Code",
+      "target_field": "Program_Code",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Crse_Name ",
+      "target_field": "Course_Name",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Crse_code",
+      "target_field": "Course_code",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "SKL_desc",
+      "target_field": "Skills_Description",
+      "kind": "plain",
+      "_match_method": "low-confidence guess only (0.58)",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    }
+  ]
+}

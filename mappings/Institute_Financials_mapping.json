@@ -1,0 +1,385 @@
+{
+  "_form_note": "Same situation as Institute_R_D: grep across the entire .ds export found NO invokeurl anywhere referencing form = Institute_Financials -- only validation/percentage helpers (Percent_Flow, validate_percentage, validate_percentage_OPEX x2, hide_field2), none of which push to CHEDS. This integration likely isn't built yet on the Zoho side, so this mapping is from the form's own field definitions only, not verified against a real API payload. raw_column values are GUESSES (IF_ prefix) -- replace with your actual raw file's headers.",
+  "fields": [
+    {
+      "raw_column": "IF_Institutional_Codes",
+      "target_field": "Institutional_Codes",
+      "kind": "lookup",
+      "hedb_sheet": "Institutional Codes",
+      "lookup_direction": "code_to_name",
+      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Institutional Codes' reference list."
+    },
+    {
+      "raw_column": "IF_Finance_Type_Code",
+      "target_field": "Finance_Type_Code",
+      "kind": "map",
+      "value_map": {
+        "AC": "AC- Actual",
+        "Actual": "AC- Actual",
+        "BD": "BD- Budget",
+        "Budget": "BD- Budget"
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text: 'AC' -> 'AC- Actual'; 'Actual' -> 'AC- Actual'; 'BD' -> 'BD- Budget'; 'Budget' -> 'BD- Budget'."
+    },
+    {
+      "raw_column": "IF_Capital_Expenses_Academic",
+      "target_field": "Capital_Expenses_Academic",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Capital_Expenses_Academic_Actual_without_depreciation",
+      "target_field": "Capital_Expenses_Academic_Actual_without_depreciation",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Capital_Expenses_Administrative",
+      "target_field": "Capital_Expenses_Administrative",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Capital_Expenses_Administrative_Actual_without_depreciation",
+      "target_field": "Capital_Expenses_Administrative_Actual_without_depreciation",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Capital_Expenses_Infrastructure",
+      "target_field": "Capital_Expenses_Infrastructure",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Capital_Expenses_Infrastructure_Actual_without_depreciation",
+      "target_field": "Capital_Expenses_Infrastructure_Actual_without_depreciation",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Capital_Expenses_Library",
+      "target_field": "Capital_Expenses_Library",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Capital_Expenses_Library_Without_depreciation",
+      "target_field": "Capital_Expenses_Library_Without_depreciation",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Capital_Expenses_Research",
+      "target_field": "Capital_Expenses_Research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Capital_Expenses_Research_Actual_without_depreciation",
+      "target_field": "Capital_Expenses_Research_Actual_without_depreciation",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Capital_Expenses_Student_Actual_without_depreciation",
+      "target_field": "Capital_Expenses_Student_Actual_without_depreciation",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Capital_Expenses_Welfare_Services_Actual_without_depreciation",
+      "target_field": "Capital_Expenses_Welfare_Services_Actual_without_depreciation",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Capital_Expenses_Other_Capital_Expenses_Actual_without_depreciation",
+      "target_field": "Capital_Expenses_Other_Capital_Expenses_Actual_without_depreciation",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_pct_total_CAPEX_indirect_research",
+      "target_field": "of_total_CAPEX_which_was_spent_indirectly_on_research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Operational_Expenses_Academic",
+      "target_field": "Operational_Expenses_Academic",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Operational_Expenses_Administrative",
+      "target_field": "Operational_Expenses_Administrative",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Operational_Expenses_Infrastructure",
+      "target_field": "Operational_Expenses_Infrastructure",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Operational_Expenses_Library",
+      "target_field": "Operational_Expenses_Library",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Operational_Expenses_Research",
+      "target_field": "Operational_Expenses_Research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Intellectual_property_rights_Trademarks_patents_copyrights",
+      "target_field": "Intellectual_property_rights_Trademarks_patents_copyrights",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Operational_Expenses_Student",
+      "target_field": "Operational_Expenses_Student",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Operational_Expenses_Welfare_Services",
+      "target_field": "Operational_Expenses_Welfare_Services",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_pct_total_OPEX_indirect_research",
+      "target_field": "of_total_OPEX_which_was_spent_indirectly_on_research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Salaries_Benefits_Academic_Support",
+      "target_field": "Salaries_Benefits_Academic_Support",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Salaries_Benefits_Administrative_Services",
+      "target_field": "Salaries_Benefits_Administrative_Services",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Salaries_Benefits_Faculty_FT",
+      "target_field": "Salaries_Benefits_Faculty_FT",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Salaries_Benefits_Faculty_PT_FT_Overload",
+      "target_field": "Salaries_Benefits_Faculty_PT_FT_Overload",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Salaries_Benefits_Faculty_PT_FT_Other_payments",
+      "target_field": "Salaries_Benefits_Faculty_PT_FT_Other_payments",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Salaries_Benefits_Total_Yearly_Salary_of_Full_Time_Research_staff",
+      "target_field": "Salaries_Benefits_Total_Yearly_Salary_of_Full_Time_Research_staff",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Salaries_Benefits_Student_Services",
+      "target_field": "Salaries_Benefits_Student_Services",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_pct_salaries_benefits_indirect_research",
+      "target_field": "of_total_salaries_and_benefits_spent_indirectly_on_research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Other_Expenses_Rent",
+      "target_field": "Other_Expenses_Rent",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Other_Expenses_Scholarships_And_Grants",
+      "target_field": "Other_Expenses_Scholarships_And_Grants",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Other_Expenses_Staff_Development_Academic_Staff",
+      "target_field": "Other_Expenses_Staff_Development_Academic_Staff",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Other_Expenses_Staff_Development_Non_Academic_Staff",
+      "target_field": "Other_Expenses_Staff_Development_Non_Academic_Staff",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Other_Expenses_Other_Costs",
+      "target_field": "Other_Expenses_Other_Costs",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_pct_other_expenses_indirect_research",
+      "target_field": "of_Other_expenses_spent_INDIRECTLY_on_research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Total_Budget_Expenses",
+      "target_field": "Total_Budget_Expenses",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Revenue_Tuition_Fees_Undergraduate_Credited_Courses",
+      "target_field": "Revenue_Tuition_Fees_Undergraduate_Credited_Courses",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Revenue_Tuition_Fees_Undergraduate_Non_Credited_Courses",
+      "target_field": "Revenue_Tuition_Fees_Undergraduate_Non_Credited_Courses",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Revenue_Tuition_Fees_Graduate_Program",
+      "target_field": "Revenue_Tuition_Fees_Graduate_Program",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Revenue_Private_Entity_Donations",
+      "target_field": "Revenue_Private_Entity_Donations",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Revenue_Local_Government",
+      "target_field": "Revenue_Local_Government",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Revenue_Federal_Government",
+      "target_field": "Revenue_Federal_Government",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Revenue_External_Research_Grants",
+      "target_field": "Revenue_External_Research_Grants",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Revenue_Revenues_Generated_By_Welfare_Services",
+      "target_field": "Revenue_Revenues_Generated_By_Welfare_Services",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Revenue_Revenues_By_Consultation_Services",
+      "target_field": "Revenue_Revenues_By_Consultation_Services",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Revenue_Other_Internal_Revenues",
+      "target_field": "Revenue_Other_Internal_Revenues",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Revenue_Other_External_Revenues",
+      "target_field": "Revenue_Other_External_Revenues",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Total_Revenue",
+      "target_field": "Total_Revenue",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Research_fund_Amount_provided_by_the_institution_for_intramural_research",
+      "target_field": "Research_fund_Amount_provided_by_the_institution_for_intramural_research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Research_fund_Amount_provided_by_a_federal_entity",
+      "target_field": "Research_fund_Amount_provided_by_a_federal_entity",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Research_fund_Amount_provided_by_a_local_governmental_entity",
+      "target_field": "Research_fund_Amount_provided_by_a_local_governmental_entity",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Research_fund_Amount_provided_by_a_private_UAE_entity",
+      "target_field": "Research_fund_Amount_provided_by_a_private_UAE_entity",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Research_fund_Amount_provided_by_a_private_NON_PROFIT_UAE_entity",
+      "target_field": "Research_fund_Amount_provided_by_a_private_NON_PROFIT_UAE_entity",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Research_fund_Amount_provided_by_a_foreign_entity",
+      "target_field": "Research_fund_Amount_provided_by_a_foreign_entity",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Research_Funds_received_from_entities_not_covered_by_above_categories",
+      "target_field": "Research_Funds_received_from_entities_not_covered_by_above_categories",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Research_funds_allocated_for_extramural_research",
+      "target_field": "Research_funds_allocated_for_extramural_research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Total_Funding_received_available_for_Research",
+      "target_field": "Total_Funding_received_available_for_Research",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "IF_Total_budget_expenses_on_R_D",
+      "target_field": "Total_budget_expenses_on_R_D",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "fields": [
+    {
+      "raw_column": "Institution_Code",
+      "target_field": "Institutional_Codes",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Year",
+      "target_field": "Year_field",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Project_Title",
+      "target_field": "Project_Title",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Project_ID",
+      "target_field": "Project_ID",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Research_Department",
+      "target_field": "Department",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Research_College",
+      "target_field": "College",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Research_Type",
+      "target_field": "Type_of_Scholarly_Activity",
+      "kind": "map",
+      "value_map": {
+        "BR": "Basic Research",
+        "AR": "Applied Research",
+        "ED": "Experimental Development"
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text: 'BR' -> 'Basic Research'; 'AR' -> 'Applied Research'; 'ED' -> 'Experimental Development'."
+    },
+    {
+      "raw_column": "Impact_funding",
+      "target_field": "Funding_attraction",
+      "kind": "map",
+      "value_map": {
+        "G": "Attracting grants or funding for minimum 50k AED",
+        "F": "research has resulted in both grants and revenues",
+        "NA": "no funding attraction"
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text: 'G' -> 'Attracting grants or funding for minimum 50k AED'; 'F' -> 'research has resulted in both grants and revenues'; 'NA' -> 'no funding attraction'."
+    },
+    {
+      "raw_column": "Impact_Comm",
+      "target_field": "Commercialization",
+      "kind": "map",
+      "value_map": {
+        "S": "impact Resulting in spin-offs or licensing agreements",
+        "T": "impact Resulting in trademark",
+        "B": "research has resulted in spinoffs/lincenses and trademarks",
+        "R": "Generating revenues of minimum 50k AED",
+        "NA": "not applicable"
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text: 'S' -> 'impact Resulting in spin-offs or licensing agreements'; 'T' -> 'impact Resulting in trademark'; 'B' -> 'research has resulted in spinoffs/lincenses and trademarks'; 'R' -> 'Generating revenues of minimum 50k AED'; 'NA' -> 'not applicable'."
+    },
+    {
+      "raw_column": "Impact_policy",
+      "target_field": "Public_policy_public_good",
+      "kind": "map",
+      "value_map": {
+        "C": "Citation in government or international organization policy documents",
+        "E": "impact in terms of Speaking events with government officials",
+        "A": "research covers all of these impacts",
+        "NA": "not applicable"
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text: 'C' -> 'Citation in government or international organization policy documents'; 'E' -> 'impact in terms of Speaking events with government officials'; 'A' -> 'research covers all of these impacts'; 'NA' -> 'not applicable'."
+    },
+    {
+      "raw_column": "Impact_outreach ",
+      "target_field": "Public_outreach",
+      "kind": "map",
+      "value_map": {
+        "P": "Participation in minimum 5 public events (lectures, conferences, workshops, symposiums)",
+        "E": "research Resulting in published and referenced educational material",
+        "M": "Widespread coverage in traditional or social media",
+        "C": "participation in competition/prize",
+        "A": "research covers all of these impacts",
+        "NA": "all these options are applicable."
+      },
+      "_note": "Raw short code is converted to the exact Zoho picklist text: 'P' -> 'Participation in minimum 5 public events (lectures, conferences, workshops, symposiums)'; 'E' -> 'research Resulting in published and referenced educational material'; 'M' -> 'Widespread coverage in traditional or social media'; 'C' -> 'participation in competition/prize'; 'A' -> 'research covers all of these impacts'; 'NA' -> 'all these options are applicable.'."
+    }
+  ]
+}

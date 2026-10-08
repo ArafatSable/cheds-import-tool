@@ -1,0 +1,46 @@
+{
+  "fields": [
+    {
+      "raw_column": "CLO_Institution_Code",
+      "target_field": "Institutional_Codes",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "CLO_Program_Code",
+      "target_field": "Program_Code",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "CLO_Academic_Period",
+      "target_field": "Academic_Period",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Crse_Name",
+      "target_field": "Course_Name",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Crse_code",
+      "target_field": "Course_code",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "CLO_code",
+      "target_field": "CLO_code",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "CLO_desc",
+      "target_field": "CLO_Description",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    }
+  ]
+}
