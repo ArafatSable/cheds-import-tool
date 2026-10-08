@@ -1,5 +1,5 @@
 {
-  "_form_note": "Student_Attrition (Zoho form 'Student – Attrition'), built from Zoho_To_CHEDS_(23).ds field definitions + the push workflow 'push_api_production2' (POST .../Integration/Students/Attrition) + the four thisapp.Dropdown_Fields functions it calls (Gender, Student_Level_Code, Attrition_Category, Attrition_Reason -- their source IS in this .ds export, so every picklist map below is verified against the exact text those functions match on, not guessed). Raw column names = HEDB 'Student- Attrition' Database Field Names. institutionCode is hardcoded to 141 in the workflow, but Institution_code is a mandatory field on the form so it's still imported. Attrition_Reason uses the new 'value_map_by' option: the same code (TR) means different things under different categories, so the reason is resolved per row using that row's Attrition_Category -- and a reason that doesn't belong to its category is flagged rather than silently mapped. HEDB codes with NO matching choice on the Zoho form (will be flagged, need a form change before they can be imported): reason TI (VW Transportation Issues), TRP (Voluntary transfer to another program), TRM (Mandated transfer to another program); and category TR (Transfer to another program) currently has no valid reason choices on the form at all.",
+  "_form_note": "Student_Attrition (Zoho form 'Student – Attrition'), built from Zoho_To_CHEDS_(23).ds field definitions + the push workflow 'push_api_production2' (POST .../Integration/Students/Attrition) + the four thisapp.Dropdown_Fields functions it calls (Gender, Student_Level_Code, Attrition_Category, Attrition_Reason). Raw column names = HEDB 'Student- Attrition' Database Field Names. institutionCode is hardcoded to 141 in the workflow, but Institution_code is a mandatory field on the form so it's still imported. Attrition_Reason uses 'value_map_by': the same code (TR) means different things under different categories, so the reason is resolved per row using that row's Attrition_Category -- and a reason that doesn't belong to its category is flagged rather than silently mapped. 2026 reason codes TI, TRP, TRM are mapped to the new picklist labels added on the Zoho form.",
   "fields": [
     {
       "raw_column": "Attrition_Institution_Code",
@@ -7,7 +7,7 @@
       "kind": "lookup",
       "lookup_direction": "code_to_name",
       "hedb_sheet": "Institutional Codes",
-      "_note": "Form displayformat = [Name]. Code (141) converted to the institution Name. (Workflow hardcodes institutionCode=141 for the API anyway.)"
+      "_note": "Form displayformat = [Name]. Code (141) converted to the institution Name."
     },
     {
       "raw_column": "Attrition_Submission_Term",
@@ -17,7 +17,7 @@
       "combo_order": "name_code",
       "combo_separator": " - ",
       "hedb_sheet": "Academic Period",
-      "_note": "Form displayformat = [Name + \" - \" + Code] (confirmed in .ds). Raw period code converted to 'Name - Code' using the 'Academic Period' list. Workflow sends .Code.toNumber()."
+      "_note": "Form displayformat = [Name + \" - \" + Code]. Workflow sends .Code.toNumber()."
     },
     {
       "raw_column": "Attrition_Academic_Period",
@@ -27,7 +27,7 @@
       "combo_order": "name_code",
       "combo_separator": " - ",
       "hedb_sheet": "Academic Period",
-      "_note": "Form displayformat = [Name + \" - \" + Code] (confirmed in .ds). Raw period code converted to 'Name - Code' using the 'Academic Period' list. Note: HEDB DB field name is 'Attrition_Academic_Period' (not '..._Last_Academic_Period')."
+      "_note": "Form displayformat = [Name + \" - \" + Code]. HEDB DB field name is 'Attrition_Academic_Period'."
     },
     {
       "raw_column": "Attrition_Student_ID",
@@ -39,7 +39,7 @@
       "raw_column": "Attrition_Emirates_ID",
       "target_field": "Emirates_ID",
       "kind": "plain",
-      "_note": "No conversion. Zoho field is a 15-digit Number. HEDB: use 999999999999999 if not available."
+      "_note": "15-digit Number. HEDB: use 999999999999999 if not available."
     },
     {
       "raw_column": "Attrition_Student_Name_English",
@@ -51,7 +51,7 @@
       "raw_column": "Attrition_Name_Arabic",
       "target_field": "Student_Name_Arabic",
       "kind": "plain",
-      "_note": "No conversion. Optional -- leave blank if not available. Note HEDB DB field name is 'Attrition_Name_Arabic' (no 'Student_')."
+      "_note": "Optional -- leave blank if not available."
     },
     {
       "raw_column": "Attrition_Gender",
@@ -76,7 +76,7 @@
       "kind": "lookup",
       "lookup_direction": "code_to_name",
       "hedb_sheet": "Country",
-      "_note": "Form values = Countries.ID, displayformat = [Name]. 2-letter code converted to country Name."
+      "_note": "2-letter code converted to country Name."
     },
     {
       "raw_column": "Attrition_Student_Level",
@@ -105,7 +105,7 @@
         "PG": "Post graduate diploma",
         "MC": "Microcredential"
       },
-      "_note": "Exact form picklist text. Reverse of Dropdown_Fields.Student_Level_Code(), which does name.contains(choice) and keeps the LAST match. ZOHO BUG TO KNOW: choice 'Diploma' is also contained in 'Higher Diploma', so a DP student is pushed to CHEDS as HD. The import is correct; the Zoho function needs an exact-match fix (same pattern as Student_Level_Code_Enrollment)."
+      "_note": "Exact form picklist text. ZOHO BUG: Dropdown_Fields.Student_Level_Code() uses contains(), so 'Diploma' matches 'Higher Diploma' and DP is pushed as HD."
     },
     {
       "raw_column": "Attrition_Area_of_Specialization",
@@ -113,13 +113,13 @@
       "kind": "lookup",
       "lookup_direction": "code_to_name",
       "hedb_sheet": "Area of Specialization",
-      "_note": "Form displayformat = [Name]. CIP family code converted to Name. HEDB: 99 for undeclared."
+      "_note": "CIP family code converted to Name. HEDB: 99 for undeclared."
     },
     {
       "raw_column": "Attrition_Program_Code",
       "target_field": "Program_Program_Code",
       "kind": "plain",
-      "_note": "Form displayformat = [Code] (filtered to codes starting '141'), so the bare program code is imported unchanged, e.g. 141-6511-999999999."
+      "_note": "Bare program code imported unchanged, e.g. 141-6511-999999999."
     },
     {
       "raw_column": "Attrition_Category",
@@ -161,7 +161,10 @@
         "MS": "National Military Service",
         "PR": "Peronal reasons",
         "FT": "Failure to register in the courses",
-        "MJ": "Change of major from next semester"
+        "MJ": "Change of major from next semester",
+        "TI": "Transportation Issues - Withdrawal",
+        "TRP": "Voluntary transfer to another program",
+        "TRM": "Mandated transfer to another program (low grades/academic reasons)"
       },
       "value_map_by": {
         "raw_column": "Attrition_Category",
@@ -180,13 +183,16 @@
             "CL": "Cultural issues (e.g. co-education, etc.)",
             "AR": "Aacdemic Reasons (e.g. low GPA)",
             "PA": "Personal reasons not defined elsewhere",
+            "TI": "Transportation Issues - Withdrawal",
             "RV": "Residency/Visa Issues",
+            "TRP": "Voluntary transfer to another program",
             "OT": "Others"
           },
           "D": {
             "AD": "Academic Dismissal: for reasons related to bad academic performance",
             "NAD": "Non-academic dismissal. For reasons related to behavior",
-            "NAF": "Non academic dismissal due to financial reasons (student could not pay the fee)"
+            "NAF": "Non academic dismissal due to financial reasons (student could not pay the fee)",
+            "TRM": "Mandated transfer to another program (low grades/academic reasons)"
           },
           "S": {
             "AS": "Academic Suspension",
@@ -204,22 +210,25 @@
             "MJ": "Change of major from next semester",
             "OT": "Others"
           },
-          "TR": {}
+          "TR": {
+            "TRP": "Voluntary transfer to another program",
+            "TRM": "Mandated transfer to another program (low grades/academic reasons)"
+          }
         }
       },
-      "_note": "Resolved per row using Attrition_Category (code TR = 'Transfer to an institute within UAE' under VW, 'Transportation issues' under LA). Texts match Dropdown_Fields.Attrition_Reason() exactly. Not on the Zoho form (flagged): TI, TRP, TRM, and any reason under category TR."
+      "_note": "Resolved per row using Attrition_Category (TR = 'Transfer to an institute within UAE' under VW, 'Transportation issues' under LA). 2026 codes: TI, TRP (VW), TRM (D), TRP/TRM (TR). Labels match the updated Zoho picklist + Dropdown_Fields.Attrition_Reason()."
     },
     {
       "raw_column": "Attrition_Withdrawn_Credits",
       "target_field": "Withdrawn_Credit_Hours",
       "kind": "plain",
-      "_note": "NEW 202601. Decimal. HEDB 2026 doesn't print a DB field name for this on the Attrition sheet -- header assumed by analogy with Student-Funding's 'Funding_Withdrawn_Credits'; rename if your export differs. Blank is pushed as 0.00 by the workflow."
+      "_note": "NEW 202601. Decimal. Header assumed by analogy with Funding_Withdrawn_Credits; rename if your export differs."
     },
     {
       "raw_column": "Attrition_Excess_Absence_Credits",
       "target_field": "Credit_Hours_Exceeding_15_Absence_Limit",
       "kind": "plain",
-      "_note": "NEW 202601. Decimal. Header assumed by analogy with Student-Funding's 'Funding_Excess_Absence_Credits'; rename if your export differs. Blank is pushed as 0.00 by the workflow."
+      "_note": "NEW 202601. Decimal. Header assumed by analogy with Funding_Excess_Absence_Credits; rename if your export differs."
     }
   ]
 }
