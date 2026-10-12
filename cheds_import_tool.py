@@ -1456,6 +1456,7 @@ def build_import_ready(raw_path, config_path, hedb_path, out_path, sheet=None):
     for row in rows:
         out_row = []
         notes = []
+        text_cells = []
         for fdef in config["fields"]:
             raw_col = fdef["raw_column"]
             target = fdef["target_field"]
@@ -1582,10 +1583,20 @@ def build_import_ready(raw_path, config_path, hedb_path, out_path, sheet=None):
                 # that comes from Excel storing whole numbers as floats.
                 if isinstance(v, float) and v.is_integer():
                     v = int(v)
+                # Long numeric IDs (Emirates ID, passport/unified numbers, etc.)
+                # must be written as TEXT. Stored as numbers, Excel shows them
+                # as 7.84201E+14 and Zoho's import reads that displayed text,
+                # so 784201234567890 arrives as 784201000000000 and
+                # 999999999999999 arrives as 1E+15 (= 1000000000000000).
+                if isinstance(v, int) and not isinstance(v, bool) and abs(v) >= 10**10:
+                    v = str(v)
+                    text_cells.append(len(out_row) + 1)
                 out_row.append(v)
 
         out_row.append("; ".join(notes))
         sh.append(out_row)
+        for c_idx in text_cells:
+            sh.cell(row=sh.max_row, column=c_idx).number_format = "@"
         if date_cols:
             r_idx = sh.max_row
             for c_idx in date_cols:
