@@ -1,0 +1,186 @@
+{
+  "_form_note": "Student_Scholarship (Zoho form 'Student – Scholarship'). Verified against Zoho_To_CHEDS_(25).ds field definitions + push workflow 'push_api_production14'. Raw columns = HEDB 202601 'Students - Scholarship' Database Field Names. Last_Updated is not imported. Reason_why_Emirates_ID_is_missing is on the form but not in the HEDB dataset, so it isn't imported (its validation is inactive).",
+  "fields": [
+    {
+      "raw_column": "Sch_Institution_Code",
+      "target_field": "Institutional_Codes",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Institutional Codes",
+      "_note": "141 -> institution Name (displayformat [Name]). Push hardcodes institutionCode=141."
+    },
+    {
+      "raw_column": "Sch_Institution_Name",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Redundant with Sch_Institution_Code. Not imported."
+    },
+    {
+      "raw_column": "Sch_Academic_Period",
+      "target_field": "Academic_Period",
+      "kind": "plain",
+      "_note": "displayformat [Code] -> code imported as-is, e.g. 202601."
+    },
+    {
+      "raw_column": "Sch_Student_ID",
+      "target_field": "Student_ID",
+      "kind": "plain",
+      "_note": "Text. Numeric IDs of 10+ digits are written as TEXT by the engine (no 2.6E+10 truncation)."
+    },
+    {
+      "raw_column": "Sch_Emirates_ID",
+      "target_field": "Emirates_ID",
+      "kind": "plain",
+      "_note": "Text field. Written as TEXT by the engine so all 15 digits survive (7.84E+14 / 1E+15 problem). 999999999999999 if not available. Form 'on user input' rejects anything under 15 digits."
+    },
+    {
+      "raw_column": "Sch_Student_Name_English",
+      "target_field": "Student_Name_English",
+      "kind": "plain",
+      "_note": "No conversion."
+    },
+    {
+      "raw_column": "Sch_Student_Name_Arabic",
+      "target_field": "Student_Name_Arabic",
+      "kind": "plain",
+      "_note": "Optional."
+    },
+    {
+      "raw_column": "Sch_Gender",
+      "target_field": "Gender",
+      "kind": "map",
+      "value_map": {
+        "M": "Male",
+        "F": "Female",
+        "U": "Unreported due to privacy laws applicable (e.g. GDPR , FERPA)"
+      },
+      "_note": "HEDB Gender codes."
+    },
+    {
+      "raw_column": "Sch_Student_DOB",
+      "target_field": "Student_DOB",
+      "kind": "date",
+      "_note": "yyyy-mm-dd."
+    },
+    {
+      "raw_column": "Sch_Nationality",
+      "target_field": "Nationality",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Country",
+      "_note": "2-letter code -> country Name."
+    },
+    {
+      "raw_column": "Sch_Student_Level",
+      "target_field": "Student_Level",
+      "kind": "map",
+      "value_map": {
+        "FN": "Foundation",
+        "RM": "Remedial program (pre Masters).",
+        "FR": "Freshman: e.g. Less than 1/4th of the total credit hours completed",
+        "SP": "Sophomore: e.g. At least (=) 1/4th and less than half of the credits required for graduation",
+        "JR": "Junior: e.g. At least 1/2 of total required credits and less than 3/4th of total required",
+        "SR": "Senior: e.g. At 3/4th of total required credit hours completed OR student who has completed",
+        "M1": "Masters - Year1",
+        "M2": "Masters - Year2 ( 50% or more of required credits completed)",
+        "M3": "Masters - Year3",
+        "D1": "Doctorate 1: Not advanced to candidacy",
+        "D2": "Doctorate 2: Advanced to candidacy",
+        "PD": "Post-doctorate",
+        "PF": "Professional Education",
+        "CR": "Certificate/Credential",
+        "DP": "Diploma",
+        "HD": "Higher Diploma",
+        "P1": "Phase A :Year 1 or 2 or 3 (MBBS), Year 1 (JD or MD), Year 1,2, 3 of DD (Dentistry)",
+        "P2": "Phase B: Year 4, 5, 6 (MBBS), Year 2 (JD or MD), Year 4,5 of DD (Dentistry)",
+        "P3": "Medical residency and training (above year 5) , Year 3 and above (JD or MD)",
+        "PG": "Post graduate diploma",
+        "MC": "Microcredential"
+      },
+      "_note": "HEDB 'Student Level' codes -> this form's own (longer, truncated) picklist text. NOTE: different wording from the Enrollments/Attrition forms."
+    },
+    {
+      "raw_column": "Sch_Area_of_Specialization",
+      "target_field": "Area_of_Specialization_CIP_Family_code1",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Area of Specialization",
+      "_note": "CIP family code -> Area_of_Specialization Name (displayformat [Name]); push sends .Code. 99 -> 'Not listed'. Must equal the first 2 digits of the program's CIP (99 for programs without an official CIP)."
+    },
+    {
+      "raw_column": "Sch_Program_Code",
+      "target_field": "Program_Program_Code",
+      "kind": "plain",
+      "_note": "displayformat [Code] -> CAA program code imported as-is."
+    },
+    {
+      "raw_column": "Sch_Scholarship_Type",
+      "target_field": "Scholarship_Type",
+      "kind": "map",
+      "value_map": {
+        "NB": "Need based",
+        "AE": "Academic excellence; Based on the academic performance",
+        "AA": "Merit based: Based on academic performance but is automatically renewable for each year",
+        "DS": "Discount (when the reduction in tuition is a discount)",
+        "MX": "Mixed (merit and need based)",
+        "MN": "Mixed (Employer AND Sponsor OR/AND institution itself)",
+        "SE": "Sponsorship from Employer",
+        "SO": "Sponsorship from any other Organization(Other than employer)",
+        "OT": "Others"
+      },
+      "_note": "HEDB 'Scholarship Type' codes. HR (Sponsorship from employer/industrial partner with an intent to hire) is in HEDB 2026 but NOT on the Zoho form -- such rows are flagged."
+    },
+    {
+      "raw_column": "Sch_Scholarship_Provider_Type ",
+      "target_field": "Scholarship_Provider_type",
+      "kind": "map",
+      "value_map": {
+        "GO": "UAE Government (Federal)",
+        "LG": "Local Government (emirates based public entity)",
+        "SG": "Semi-Government Entities",
+        "NG": "Non-Governmental UAE Entity (non-profit)",
+        "PT": "Private sector company (UAE based)",
+        "IG": "International (Govt. )",
+        "IC": "International Company (Industrial)",
+        "IO": "International Organization (UN, UNESCO etc.)",
+        "IN": "Institution (same institution itself)",
+        "RA": "Research Assistantship (by Institution)",
+        "TA": "Teaching Assistantship (by Institution)",
+        "SI": "Individual",
+        "HH": "HH Offices",
+        "OT": "Other"
+      },
+      "_note": "HEDB 'SC Provider Type' codes. HEDB header has a trailing space."
+    },
+    {
+      "raw_column": "Sch_Scholarship_Provider_Name ",
+      "target_field": "Scholarship_Provider_Name",
+      "kind": "plain",
+      "_note": "Free text. HEDB header has a trailing space."
+    },
+    {
+      "raw_column": "Sch_Scholarship_Value",
+      "target_field": "Scholarship_Value",
+      "kind": "plain",
+      "_note": "Percentage, >0 and <=100."
+    },
+    {
+      "raw_column": "Sch_Scholarship_Amount",
+      "target_field": "Scholarship_Amount1",
+      "kind": "plain",
+      "_note": "AED per semester (decimal). Link name ends in 1."
+    },
+    {
+      "raw_column": "Sch_Scholarship_Duration",
+      "target_field": "Scholarship_Duration",
+      "kind": "map",
+      "value_map": {
+        "Y": "The scholarship/discount/sponsorship is awarded for full academic year",
+        "S": "The scholarship/discount/sponsorship is awarded for current semester only",
+        "F": "The scholarship/discount/sponsorship is awarded during the entire length of the program of study",
+        "OT": "Other"
+      },
+      "_note": "HEDB 'SC Duration Type' codes."
+    }
+  ]
+}
