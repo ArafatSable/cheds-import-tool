@@ -1,268 +1,283 @@
 {
- "fields": [
+  "_source": "HEDB Data Dictionary 202601, sheet 'Institute - R&D '",
+  "_zoho_form": "Institute_R_D",
+  "_note": "raw_column values are the dictionary's 'Database Field Name' column, verbatim. Rebuilt 2026-10-22: the previous version used an invented IRD_* prefix that matches no CHEDS header, so every column resolved as MISSING at build time.",
+  "fields": [
     {
-      "raw_column": "IRD_Institution_code",
+      "raw_column": "RD_Institution_Code",
       "target_field": "Institution_code",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- the Zoho lookup 'Institution code' displays the Institutional Codes [Code], so the raw CHEDS code (141) is already the exact display value. The push workflow sends rec.Institution_code.Code."
     },
     {
-      "raw_column": "IRD_Fiscal_Year",
+      "raw_column": "RD_Institution_Name",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- HEDB carries the institution name, but the Zoho form derives it from the Institution code lookup, so no column is written."
+    },
+    {
+      "raw_column": "RD_Fiscal_Year",
       "target_field": "Fiscal_Year",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Headcount_Researchers_Male",
+      "raw_column": "RD_Research_Person_Headcount_M",
       "target_field": "Headcount_Researchers_Male",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Headcount_Researchers_Female",
+      "raw_column": "RD_Research_Person_Headcount_F",
       "target_field": "Headcount_Researchers_Female",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Headcount_Researchers_Emirati_Male",
+      "raw_column": "RD_Research_Person_Headcount_MN",
       "target_field": "Headcount_Researchers_Emirati_Male",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Headcount_Researchers_Emirati_Female",
+      "raw_column": "RD_Research_Person_Headcount_FN",
       "target_field": "Headcount_Researchers_Emirati_Female",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Headcount_Technicians_Male",
+      "raw_column": "RD_Research_Technician_Headcount_M",
       "target_field": "Headcount_Technicians_Male",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Headcount_Technicians_Female",
+      "raw_column": "RD_Research_Technician_Headcount_F",
       "target_field": "Headcount_Technicians_Female",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Headcount_Technicians_Emirati_Male",
+      "raw_column": "RD_Research_Technician_Headcount_MN",
       "target_field": "Headcount_Technicians_Emirati_Male",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Headcount_Technicians_Emirati_Female",
+      "raw_column": "RD_Research_Technician_Headcount_FN",
       "target_field": "Headcount_Technicians_Emirati_Female",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Headcount_Other_Support_Staff_Male",
+      "raw_column": "RD_Research_Supp_Staff_Headcount_M",
       "target_field": "Headcount_Other_Support_Staff_Male",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Headcount_Other_Support_Staff_Female",
+      "raw_column": "RD_Research_Support_Staff_Headcount_F",
       "target_field": "Headcount_Other_Support_Staff_Female",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion. NOTE: CHEDS spells this header 'Support' in full while the male equivalent uses 'Supp' -- that inconsistency is in the HEDB 202601 dictionary itself, not a typo here."
     },
     {
-      "raw_column": "IRD_Headcount_Other_Support_Staff_Male_Emirati",
+      "raw_column": "RD_Research_Supp_Staff_Headcount_MN",
       "target_field": "Headcount_Other_Support_Staff_Male_Emirati",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Headcount_Other_Support_Staff_Female_Emirati",
+      "raw_column": "RD_Research_Support_Staff_Headcount_FN",
       "target_field": "Headcount_Other_Support_Staff_Female_Emirati",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion. NOTE: CHEDS spells this header 'Support' in full -- see the male-emirati equivalent, which uses 'Supp'."
     },
     {
-      "raw_column": "IRD_Total_Research_Personnel_Headcount",
+      "raw_column": "RD_Tot_Research_Personnel_Headcount",
       "target_field": "Total_Research_Personnel_Headcount",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_FTE_Researchers_Male",
+      "raw_column": "RD_Research_Person_Headcount_FTE_M",
       "target_field": "FTE_Researchers_Male",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_FTE_Researchers_Female",
+      "raw_column": "RD_Research_Person_Headcount_FTE_F",
       "target_field": "FTE_Researchers_Female",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_FTE_Researchers_Emirati_Male",
+      "raw_column": "RD_Research_Person_Headcount_FTE_MN",
       "target_field": "FTE_Researchers_Emirati_Male",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_FTE_Researchers_Emirati_Female",
+      "raw_column": "RD_Research_Person_Headcount_FTE_FN",
       "target_field": "FTE_Researchers_Emirati_Female",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_FTE_Technicians_Male",
+      "raw_column": "RD_Research_Technician_Headcount_FTE_M",
       "target_field": "FTE_Technicians_Male",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_FTE_Technicians_Female",
+      "raw_column": "RD_Research_Technician_Headcount_FTE_F",
       "target_field": "FTE_Technicians_Female",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_FTE_Technicians_Emirati_Male",
+      "raw_column": "RD_Research_Technician_Headcount_FTE_MN",
       "target_field": "FTE_Technicians_Emirati_Male",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_FTE_Technicians_Emirati_Female",
+      "raw_column": "RD_Research_Technician_Headcount_FTE_FN",
       "target_field": "FTE_Technicians_Emirati_Female",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_FTE_Other_Support_Staff_Male",
+      "raw_column": "RD_Research_Supp_Staff_Headcount_FTE_M",
       "target_field": "FTE_Other_Support_Staff_Male",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_FTE_Other_Support_Staff_Female",
+      "raw_column": "RD_Research_Supp_Staff_Headcount_FTE_F",
       "target_field": "FTE_Other_Support_Staff_Female",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_FTE_Other_Support_Staff_Emirati_Male",
+      "raw_column": "RD_Research_Supp_Staff_Headcount_FTE_MN",
       "target_field": "FTE_Other_Support_Staff_Emirati_Male",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_FTE_Other_Support_Staff_Emirati_Female",
+      "raw_column": "RD_Research_Supp_Staff_Headcount_FTE_FN",
       "target_field": "FTE_Other_Support_Staff_Emirati_Female",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Total_Research_Personnel_Full_time_Equivalent",
+      "raw_column": "RD_Tot_Research_Personnel_Headcount_FT",
       "target_field": "Total_Research_Personnel_Full_time_Equivalent",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Current_Operating_Costs_of_Research",
+      "raw_column": "RD_Current_Opex_Labor_Costs_Research",
       "target_field": "Current_Operating_Costs_of_Research",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Current_Other_Costs_of_Research",
+      "raw_column": "RD_Current_Opex_Other_Costs_Research",
       "target_field": "Current_Other_Costs_of_Research",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Total_Current_Operating_Costs_of_Research",
+      "raw_column": "RD_Total_Current_Opex_Costs_Research",
       "target_field": "Total_Current_Operating_Costs_of_Research",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Capital_Expenditure_Land_and_Buildings",
+      "raw_column": "RD_Capex_Research_Land&Building",
       "target_field": "Capital_Expenditure_Land_and_Buildings",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion. NOTE: the CHEDS header contains a literal '&' and is singular ('Land&Building') -- it must match character-for-character."
     },
     {
-      "raw_column": "IRD_Capital_Expenditure_Machinery_and_Equipment",
+      "raw_column": "RD_Capex_Research_Machine&Equipment",
       "target_field": "Capital_Expenditure_Machinery_and_Equipment",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion. NOTE: the CHEDS header contains a literal '&' ('Machine&Equipment')."
     },
     {
-      "raw_column": "IRD_Capital_Expenditure_Capitalized_Computer_Software",
+      "raw_column": "RD_Capex_Research_Computer_Software",
       "target_field": "Capital_Expenditure_Capitalized_Computer_Software",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Capital_Expenditure_Other_Intellectual_Property_Products",
+      "raw_column": "RD_Capex_Research_Other_Intellectual_Property",
       "target_field": "Capital_Expenditure_Other_Intellectual_Property_Products",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Total_Capital_Expenditure_on_Research",
+      "raw_column": "RD_Total_Capex_On_Research",
       "target_field": "Total_Capital_Expenditure_on_Research",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Total_of_Current_Operating_Costs_and_Capital_Expenditure_on_Research",
+      "raw_column": "RD_Total_Opex_And_Capex_Research",
       "target_field": "Total_of_Current_Operating_Costs_and_Capital_Expenditure_on_Research",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Source_of_Funds_for_Research_Business_Enterprise",
+      "raw_column": "RD_Source_Of_Fund_Research_Business_Enterprise",
       "target_field": "Source_of_Funds_for_Research_Business_Enterprise",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Source_of_Funds_for_Research_Government",
+      "raw_column": "RD_Source_Of_Fund_Research_Government",
       "target_field": "Source_of_Funds_for_Research_Government",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Source_of_Funds_for_Research_Higher_Education",
+      "raw_column": "RD_Source_Of_Fund_Research_Higher_Education",
       "target_field": "Source_of_Funds_for_Research_Higher_Education",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Source_of_Funds_for_Research_Private_Non_Profit",
+      "raw_column": "RD_Source_Of_Fund_Research_Private",
       "target_field": "Source_of_Funds_for_Research_Private_Non_Profit",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Source_of_Funds_for_Research_Rest_of_World_Abroad",
+      "raw_column": "RD_Source_Of_Fund_Research_Row_Abroad",
       "target_field": "Source_of_Funds_for_Research_Rest_of_World_Abroad",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Total_Source_of_Funds_for_Research",
+      "raw_column": "RD_Total_Source_Of_Fund_Research",
       "target_field": "Total_Source_of_Funds_for_Research",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "IRD_Total_yearly_Expenses",
+      "raw_column": "RD_Costs_total_expenses",
       "target_field": "Total_yearly_Expenses",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Last_Updated",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API. The Zoho form stamps Last_Updated_Time itself on a successful push."
     }
   ]
 }

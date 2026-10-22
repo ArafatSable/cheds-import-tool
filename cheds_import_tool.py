@@ -355,7 +355,13 @@ LOOKUP_SHEET_REGISTRY = {
     # into one sheet. Using col1(code)/col5(name) naturally skips the Domain
     # summary rows (their col5 is blank) and keeps only the real sub-Field
     # entries, which is what a "Research_Area" field actually needs.
-    "Fields of R&D":              {"header_row": 2, "code_col": 1, "name_col": 5},
+    # 2026-10-22: code_col moved 1 -> 4. Column 1 stores the codes as FLOATS,
+    # so Nanotechnology's 2.10 reads back as 2.1 and collides with Civil
+    # Engineering (also 2.1) -- the collision silently resolved one of them to
+    # the wrong name. Column 4 is self-consistent (it numbers Nanotechnology
+    # 2.11 and Other Engineering 2.12). CHEDS's own two columns disagree about
+    # those last two rows; confirm with the ministry before relying on them.
+    "Fields of R&D":              {"header_row": 2, "code_col": 4, "name_col": 5},
     # Program Master: columns are Institution code / Institution Name /
     # CAA Program Code / Old Program Code / Program Name / Concentration /
     # Program Status. The program identifier that raw exports actually use
@@ -1557,6 +1563,40 @@ def build_import_ready(raw_path, config_path, hedb_path, out_path, sheet=None):
                     notes.append(f"{target}: value '{v}' not in value_map{where} {list(value_map.keys())} -- kept as-is, verify manually")
                     out_row.append(v)
                     stats["lookup_unresolved"] += 1
+            elif kind == "multimap":
+                # Same idea as "map", but for a Zoho MULTI-SELECT (type = list)
+                # whose raw CHEDS value is several codes in one cell, e.g.
+                # "2.1, 3.5, 5.3" or "G, HEI". Each code is converted on its
+                # own and the results re-joined, because Zoho's import expects
+                # the display texts separated the same way the field shows them.
+                value_map, ctx = resolve_value_map(fdef, row)
+                sep_in = fdef.get("input_separator", ",")
+                sep_out = fdef.get("output_separator", ", ")
+                if v in (None, ""):
+                    out_row.append(v)
+                else:
+                    parts = [p.strip() for p in str(v).split(sep_in) if str(p).strip()]
+                    converted, unknown = [], []
+                    for part in parts:
+                        key = next(
+                            (k for k in value_map if str(k).strip().lower() == part.lower()),
+                            None,
+                        )
+                        if key is None:
+                            unknown.append(part)
+                            converted.append(part)
+                        else:
+                            converted.append(value_map[key])
+                    out_row.append(sep_out.join(converted))
+                    if unknown:
+                        where = f" (for {ctx})" if ctx else ""
+                        notes.append(
+                            f"{target}: value(s) {unknown} not in value_map{where} -- "
+                            f"kept as-is, verify manually"
+                        )
+                        stats["lookup_unresolved"] += 1
+                    else:
+                        stats["lookup_ok"] += 1
             elif kind == "phone":
                 out_row.append(apply_phone_transform(v))
             elif kind == "pending":
@@ -1717,6 +1757,28 @@ def classify_cell(fdef, v, lookup_maps, reverse_maps, sheet_load_errors, row=Non
             return None, None
         return "info", f"Will be converted to '{result}'."
 
+    if kind == "multimap":
+        value_map, ctx = resolve_value_map(fdef, row)
+        sep_in = fdef.get("input_separator", ",")
+        sep_out = fdef.get("output_separator", ", ")
+        parts = [p.strip() for p in str(v).split(sep_in) if str(p).strip()]
+        converted, unknown = [], []
+        for part in parts:
+            key = next((k for k in value_map if str(k).strip().lower() == part.lower()), None)
+            if key is None:
+                unknown.append(part)
+                converted.append(part)
+            else:
+                converted.append(value_map[key])
+        if unknown:
+            where = f" when {ctx}" if ctx else ""
+            return "warning", (f"{', '.join(unknown)} -- not a valid value for this "
+                               f"multi-select{where}; check each code against the accepted list.")
+        result = sep_out.join(converted)
+        if result.strip() == str(v).strip():
+            return None, None
+        return "info", f"Will be converted to '{result}'."
+
     if kind == "yesno":
         key = str(v).strip().lower()
         if key in YES_VALUES or key in NO_VALUES:
@@ -1786,6 +1848,12 @@ def describe_field_transform(fdef):
             pairs = "; ".join(f"'{k}'->'{v}'" for k, v in items)
             return f"Converted to the exact Zoho picklist text: {pairs}."
         return f"Converted to the exact Zoho picklist text using a {len(items)}-entry table."
+
+    if kind == "multimap":
+        vm = fdef.get("value_map", {})
+        sep_out = fdef.get("output_separator", ", ")
+        return (f"Multi-select: each comma-separated code is converted to the exact Zoho "
+                f"choice text using a {len(vm)}-entry table, then re-joined with '{sep_out}'.")
 
     if kind == "lookup":
         sheet_name = fdef.get("hedb_sheet", "?")

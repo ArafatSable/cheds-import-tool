@@ -25,12 +25,15 @@ FORMS = {
     "15. Students - Enrollments":         "mappings/Students_Enrollments_mapping.json",
     "16. Students - Attrition":           "mappings/Student_Attrition_mapping.json",
     "17. Students - SOD":                 "mappings/Students_SOD_mapping.json",
-    "18. Students - Scholarship":         "mappings/Student_Scholarship_mapping.json"
+    "18. Students - Scholarship":         "mappings/Student_Scholarship_mapping.json",
+    "19. Institute - Research & Innovation Unit": "mappings/Institute_Research_Innovation_Unit_mapping.json"
 }
 
 # Forms with NO live push-to-CHEDS workflow in the .ds export yet --
 # both apps show a heads-up for these.
 UNVERIFIED_NO_WORKFLOW = {
-    "6. Institute - R&D / GERD",
+    # 2026-10-22: "6. Institute - R&D / GERD" removed from this set -- the .ds
+    # export (v32) now carries button.Institute_R_D_Function plus its form
+    # workflows, so it does have a live push path.
     "8. Institute - Financials",
 }
