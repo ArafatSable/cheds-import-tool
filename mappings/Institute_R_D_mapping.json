@@ -272,12 +272,6 @@
       "target_field": "Total_yearly_Expenses",
       "kind": "plain",
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Last_Updated",
-      "target_field": null,
-      "kind": "unmapped",
-      "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API. The Zoho form stamps Last_Updated_Time itself on a successful push."
     }
   ]
 }
