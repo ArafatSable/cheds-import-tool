@@ -1,0 +1,477 @@
+{
+  "_source": "HEDB Data Dictionary 202601, sheet 'Institute - Research Projects'",
+  "_zoho_form": "Institute_Research_Projects",
+  "_note": "New 2026-10-26, built against Zoho_To_CHEDS_ (34).ds. raw_column values are the dictionary's 'Database Field Name' column verbatim, including its misspellings and trailing spaces. Zoho stores the DISPLAY text for every dropdown; the push workflow converts each back to its CHEDS code via subString() or a Dropdown_Fields function. HEDB 202601 marks removals by filling the row red: MOU_Number, Impact_indicator and Impact_Assessment are all struck, so the latter two are omitted entirely and MOU_Number is carried as reference-only. Individual codes struck in red inside a description are noted on the field concerned.",
+  "fields": [
+    {
+      "raw_column": "Institution_Code",
+      "target_field": "Institution_Code",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Institutional Codes",
+      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Institutional Codes' reference list -- the Zoho lookup displays [Name] and is filtered to Code == \"141\"."
+    },
+    {
+      "raw_column": "Institution_Name",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- the Zoho form derives the name from the Institution Code lookup, so no column is written."
+    },
+    {
+      "raw_column": "Project_Title",
+      "target_field": "Project_Title",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Project_ID",
+      "target_field": "Project_ID",
+      "kind": "plain",
+      "_note": "No conversion. The Zoho field is marked UNIQUE -- a repeated Project ID will be rejected at import."
+    },
+    {
+      "raw_column": "project_summary",
+      "target_field": "Project_Summary",
+      "kind": "plain",
+      "_note": "No conversion. NOTE: CHEDS spells this header in lower case ('project_summary'), unlike every other column on this sheet."
+    },
+    {
+      "raw_column": "Project_keywords",
+      "target_field": "Keywords",
+      "kind": "plain",
+      "_note": "No conversion -- comma-separated keyword text is carried through as-is."
+    },
+    {
+      "raw_column": "Principal_Investigator",
+      "target_field": "Principal_Investigator",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "PI_ORCID",
+      "target_field": "ORC_ID",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Research_Department",
+      "target_field": "Department",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Research_College",
+      "target_field": "College",
+      "kind": "plain",
+      "_note": "No conversion. CHEDS expects the literal text 'NA' when not applicable."
+    },
+    {
+      "raw_column": "Rsearch_Center",
+      "target_field": "Research_Center",
+      "kind": "plain",
+      "_note": "No conversion. NOTE: CHEDS misspells this header as 'Rsearch_Center' (no 'e' after R) -- it must match character-for-character."
+    },
+    {
+      "raw_column": "Research_Year",
+      "target_field": "Year_field",
+      "kind": "plain",
+      "_note": "No conversion. Zoho field is 'Fiscal Year' (Year_field)."
+    },
+    {
+      "raw_column": "Funding_Amount",
+      "target_field": "Funding_Amount_Number",
+      "kind": "plain",
+      "_note": "No conversion. Value is AED; the Zoho field is a currency type, so send a bare number with no symbol or thousands separators."
+    },
+    {
+      "raw_column": "Funding_Entity",
+      "target_field": "Funding_Entity",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Funding_Source",
+      "target_field": "Funding_Source2",
+      "kind": "multimap",
+      "value_map": {
+        "G": "Government",
+        "BS": "Business Sector",
+        "HEI": "Higher Education Institutions",
+        "NO": "Nonprofit Organizations",
+        "IF": "International Funding",
+        "SF": "Self Funding"
+      },
+      "input_separator": ",",
+      "output_separator": ", ",
+      "_note": "Multi-select. Each comma-separated Funding Source Type code becomes the exact Zoho choice text, re-joined with ', ' (e.g. 'G, HEI' -> 'Government, Higher Education Institutions'). The push converts it back via Dropdown_Fields.Funding_source_type()."
+    },
+    {
+      "raw_column": "Partner_Name",
+      "target_field": "Partner_Names",
+      "kind": "plain",
+      "_note": "No conversion. CHEDS expects the literal text 'NONE' when the project has no external research partners."
+    },
+    {
+      "raw_column": "Research_Domain",
+      "target_field": "Field_of_RnD1",
+      "kind": "multimap",
+      "value_map": {
+        "1.1": "Mathematics",
+        "1.2": "Computer and Information Sciences",
+        "1.3": "Physical Sciences",
+        "1.4": "Chemical Sciences",
+        "1.5": "Earth and Related Environmental Sciences",
+        "1.6": "Biological Sciences",
+        "1.7": "Other Natural Sciences",
+        "2.1": "Civil Engineering",
+        "2.2": "Electrical, Electronic, and Information Engineering",
+        "2.3": "Mechanical Engineering",
+        "2.4": "Chemical Engineering",
+        "2.5": "Materials Engineering",
+        "2.6": "Medical Engineering",
+        "2.7": "Environmental Engineering",
+        "2.8": "Environmental Biotechnology",
+        "2.9": "Industrial Biotechnology",
+        "2.10": "Nanotechnology",
+        "2.11": "Nanotechnology",
+        "2.12": "Other Engineering and Technologies",
+        "3.1": "Basic Medicine",
+        "3.2": "Clinical Medicine",
+        "3.3": "Health Sciences",
+        "3.4": "Medical Biotechnology",
+        "3.5": "Other Medical Sciences",
+        "4.1": "Agriculture, Forestry, and Fisheries",
+        "4.2": "Animal and Dairy Science",
+        "4.3": "Veterinary Science",
+        "4.4": "Agricultural Biotechnology",
+        "4.5": "Other Agricultural Sciences",
+        "5.1": "Psychology",
+        "5.2": "Economics and Business",
+        "5.3": "Educational Sciences",
+        "5.4": "Sociology",
+        "5.5": "Law",
+        "5.6": "Political Science",
+        "5.7": "Social and Economic Geography",
+        "5.8": "Media and Communications",
+        "5.9": "Other Social Sciences",
+        "6.1": "History and Archaeology",
+        "6.2": "Languages and Literature",
+        "6.3": "Philosophy, Ethics, and Religion",
+        "6.4": "Arts (Performing and Visual)",
+        "6.5": "Other Humanities",
+        "9.9": "Not Applicable"
+      },
+      "input_separator": ",",
+      "output_separator": ", ",
+      "_note": "Multi-select. Each comma-separated Frascati Field-of-R&D code becomes the exact Zoho choice text (e.g. '2.1, 3.5' -> 'Civil Engineering, Other Medical Sciences'). WARNING: the HEDB 'Fields of R&D' sheet numbers Nanotechnology 2.11 in one column and 2.10 in the other, and Excel stores both as floats so 2.10 reads back as '2.1' -- which collides with Civil Engineering. Both codes are accepted here as Nanotechnology; confirm the intended code with CHEDS."
+    },
+    {
+      "raw_column": "Research_Priority",
+      "target_field": "National_R_D_Priority1",
+      "kind": "map",
+      "value_map": {
+        "E0": "E0 - Energy Transition",
+        "E1": "E1 - Solar Energy",
+        "E2": "E2 - Hydrogen Production and Storage",
+        "E3": "E3 - Carbon Dioxide Capture and Storage",
+        "H0": "H0 - Health and Human Prosperity",
+        "H1": "H1 - Cardiovascular Disorders and Metabolic Syndrome",
+        "H2": "H2 - Cancer",
+        "H3": "H3 - Human Prosperity",
+        "F0": "F0 - Food Security",
+        "F1": "F1 - Fishing and Aquaculture",
+        "F2": "F2 - Sustainable Production Technologies",
+        "W0": "W0 - Water Security",
+        "W1": "W1 - Sustainable Desalination",
+        "W2": "W2 - Water Reuse",
+        "D0": "D0 - Digital Technology and Cybersecurity",
+        "D1": "D1 - Data Science",
+        "D2": "D2 - Machine Learning and Artificial Intelligence",
+        "D3": "D3 - Cybersecurity",
+        "A0": "A0 - Advanced Materials and Manufacturing",
+        "A1": "A1 - Functional Materials",
+        "A2": "A2 - Smart Materials",
+        "A3": "A3 - 3D Printing"
+      },
+      "_note": "Raw R&D Priority code becomes the exact Zoho picklist text ('E0' -> 'E0 - Energy Transition'); the push sends .subString(0,2) to recover the code. WARNING: CHEDS says multiple priorities are permissible, but the Zoho field is single-select, so only one code per row can be carried."
+    },
+    {
+      "raw_column": "Research_Priority_Technology",
+      "target_field": "Priority_Technology",
+      "kind": "map",
+      "value_map": {
+        "CS": "CS - Cyber Security",
+        "AS": "AS - Autonomous systems",
+        "AM": "AM - Advanced Materials & Manufacturing",
+        "SS": "SS - Secure Systems",
+        "DE": "DE - Directed Energy",
+        "CR": "CR\t- Cryptography",
+        "QU": "QU\t- Quantum",
+        "AR": "AR\t- Alternative (including nuclear) & Renewable Energy Technologies",
+        "PR": "PR - Propulsion",
+        "BI": "BI - Biotech",
+        "BD": "BD - Big Data, Data Science & AI",
+        "OT": "OT - Other"
+      },
+      "_note": "Raw Priority Technology code becomes the exact Zoho picklist text; the push sends .subString(0,2). NOTE: three of the Zoho choices use a TAB instead of a space before the dash ('CR\\t- Cryptography', 'QU\\t- Quantum', 'AR\\t- Alternative ...') -- that is the live picklist text, not a typo here."
+    },
+    {
+      "raw_column": "Research_Type",
+      "target_field": "Type_of_Scholarly_Activity1",
+      "kind": "map",
+      "value_map": {
+        "BR": "Basic Research",
+        "AR": "Applied Research",
+        "ED": "Experimental Development"
+      },
+      "_note": "Raw Type of Research code becomes the exact Zoho picklist text: 'BR' -> 'Basic Research'; 'AR' -> 'Applied Research'; 'ED' -> 'Experimental Development'. The push converts it back via Dropdown_Fields.type_of_scholar_activity()."
+    },
+    {
+      "raw_column": "Research_TRL",
+      "target_field": "Technology_Readiness_Level1",
+      "kind": "map",
+      "value_map": {
+        "TRL-1": "Basic principles observed",
+        "TRL-2": "Technology concept formulated",
+        "TRL-3": "Experimental proof of concept",
+        "TRL-4": "Technology validated in lab. TRL 4 is also simplistically called a proof of concept (PoC).",
+        "TRL-5": "Technology validated in relevant environment.",
+        "TRL-6": "Technology demonstrated in relevant environment.",
+        "TRL-7": "System prototype demonstration in operational environment.",
+        "TRL-8": "System complete and qualified",
+        "TRL-9": "Actual system proven in operational environment."
+      },
+      "_note": "Raw TRL code becomes the exact Zoho picklist text (9 entries, 'TRL-1' -> 'Basic principles observed'). NOTE: the Zoho choices for TRL-5/6/7/9 are SHORTENED versions of the dictionary's wording -- the texts here are the live picklist's, which is what the import needs. The push converts back via Dropdown_Fields.Technology_Readiness_Level()."
+    },
+    {
+      "raw_column": "Research_timeTRL",
+      "target_field": "Time_of_TRL_4_to_7",
+      "kind": "plain",
+      "_note": "No conversion -- whole number of months, blank when not applicable."
+    },
+    {
+      "raw_column": "Start_Date",
+      "target_field": "Start_Date",
+      "kind": "date",
+      "_note": "Date-time values are trimmed to a plain date (time portion removed) and written as yyyy-mm-dd. CHEDS samples carry a '00:00:00' time that the Zoho Date field rejects."
+    },
+    {
+      "raw_column": "End_Date",
+      "target_field": "End_Date",
+      "kind": "date",
+      "_note": "Date-time values are trimmed to a plain date (time portion removed) and written as yyyy-mm-dd."
+    },
+    {
+      "raw_column": "Project_Status",
+      "target_field": "Status",
+      "kind": "map",
+      "value_map": {
+        "A": "Approved",
+        "O": "Ongoing",
+        "C": "Completed"
+      },
+      "_note": "Raw status code becomes the exact Zoho picklist text: 'A' -> 'Approved'; 'O' -> 'Ongoing'; 'C' -> 'Completed'. The push sends .subString(0,1) to recover the code."
+    },
+    {
+      "raw_column": "Joint_Industry_Indicator",
+      "target_field": "Joint_Industry_Research_Indicator",
+      "kind": "yesno",
+      "_note": "Raw Y/N is converted to the exact word 'Yes'/'No' that Zoho's picklist expects; the push sends .subString(0,1) to recover Y/N."
+    },
+    {
+      "raw_column": "Joint_Industry_partner",
+      "target_field": "Industrial_partner_name",
+      "kind": "plain",
+      "_note": "No conversion. CHEDS requires this when Joint Industry Research Indicator is 'Y'."
+    },
+    {
+      "raw_column": "Joint_Partner_type",
+      "target_field": "Partner_Type",
+      "kind": "map",
+      "value_map": {
+        "CP": "Corporation/Industry Partner",
+        "NO": "Nonprofit Organization",
+        "GA": "Government Agency",
+        "RC": "Research Center/Institution",
+        "EI": "Educational Institution",
+        "HC": "Healthcare Organization",
+        "CO": "Community Organization",
+        "FP": "Foundation or Philanthropic Organization",
+        "PA": "Professional Association",
+        "TP": "Technology Provider",
+        "CI": "Cultural Institution",
+        "CC": "Country"
+      },
+      "_note": "Raw Partner Type code becomes the exact Zoho picklist text (12 entries, 'CP' -> 'Corporation/Industry Partner'). The push converts it back via Dropdown_Fields.PartnerType()."
+    },
+    {
+      "raw_column": "Joint_contribution_type",
+      "target_field": "Type_of_industry_contribution1",
+      "kind": "map",
+      "value_map": {
+        "F": "Financial contribution",
+        "I": "Intellectual contribution",
+        "B": "Both (Financial and  Intellectual) contribution"
+      },
+      "_note": "Raw code becomes the exact Zoho picklist text: 'F' -> 'Financial contribution'; 'I' -> 'Intellectual contribution'; 'B' -> 'Both (Financial and  Intellectual) contribution' (the double space before 'Intellectual' is in the live picklist). The push sends .subString(0,1)."
+    },
+    {
+      "raw_column": "Joint_Partner_funds",
+      "target_field": "Partner_funding",
+      "kind": "plain",
+      "_note": "No conversion -- percentage as a bare number between 0 and 100, with no '%' sign."
+    },
+    {
+      "raw_column": "Joint_Intellectual",
+      "target_field": "Intellectual_Contribution1",
+      "kind": "map",
+      "value_map": {
+        "C": "Co-authorship",
+        "J": "Joint IP",
+        "S": "Spin-off Joint",
+        "O": "Other for institution to specify"
+      },
+      "_note": "Raw code becomes the exact Zoho picklist text: 'C' -> 'Co-authorship'; 'J' -> 'Joint IP'; 'S' -> 'Spin-off Joint'; 'O' -> 'Other for institution to specify'. The push sends .subString(0,1)."
+    },
+    {
+      "raw_column": "Intellectual Contribution_other ",
+      "target_field": "Intellectual_Contribution_other",
+      "kind": "plain",
+      "_note": "No conversion. NOTE: this CHEDS header contains a SPACE (not an underscore) after 'Intellectual' and a TRAILING SPACE at the end -- it must match character-for-character."
+    },
+    {
+      "raw_column": "International_Collabo_Indicator",
+      "target_field": "International_Research_Collaboration_Indicator",
+      "kind": "yesno",
+      "_note": "Raw Y/N is converted to the exact word 'Yes'/'No' that Zoho's picklist expects; the push sends .subString(0,1)."
+    },
+    {
+      "raw_column": "Joint_INTL_partner",
+      "target_field": "International_partner_name",
+      "kind": "plain",
+      "_note": "No conversion. CHEDS requires this when International Research Collaboration Indicator is 'Y'."
+    },
+    {
+      "raw_column": "Joint_INTLPartner_type",
+      "target_field": "International_Partner_Type",
+      "kind": "map",
+      "value_map": {
+        "CP": "Corporation/Industry Partner",
+        "NO": "Nonprofit Organization",
+        "GA": "Government Agency",
+        "RC": "Research Center/Institution",
+        "EI": "Educational Institution",
+        "HC": "Healthcare OrganizationCommunity Organization",
+        "CO": "Healthcare OrganizationCommunity Organization",
+        "FP": "Foundation or Philanthropic Organization",
+        "PA": "Professional Association",
+        "CI": "Cultural Institution",
+        "CC": "Country"
+      },
+      "_note": "Raw Partner Type code becomes the exact Zoho picklist text. WARNING: this picklist on the form is DAMAGED -- 'Healthcare Organization' and 'Community Organization' are glued into one choice ('Healthcare OrganizationCommunity Organization'), so HC and CO both resolve to it and cannot be told apart, and 'Technology Provider' (TP) is missing entirely, so a TP row will be flagged and left as-is. Fix the picklist on Institute_Research_Projects, then split these two entries and add TP."
+    },
+    {
+      "raw_column": "Joint_INTLcontribution_type",
+      "target_field": "Type_of_international_partner_contribution1",
+      "kind": "map",
+      "value_map": {
+        "F": "Financial contribution",
+        "I": "Intellectual contribution",
+        "B": "Both (Financial and  Intellectual) contribution"
+      },
+      "_note": "Raw code becomes the exact Zoho picklist text: 'F' -> 'Financial contribution'; 'I' -> 'Intellectual contribution'; 'B' -> 'Both (Financial and  Intellectual) contribution'. The push sends .subString(0,1)."
+    },
+    {
+      "raw_column": "Joint_INTLPartner_funds",
+      "target_field": "International_Partner_funding",
+      "kind": "plain",
+      "_note": "No conversion -- percentage as a bare number between 0 and 100, with no '%' sign."
+    },
+    {
+      "raw_column": "Joint_INTLIntellectual",
+      "target_field": "International_Partner_Intellectual_Contribution1",
+      "kind": "map",
+      "value_map": {
+        "C": "Co-authorship",
+        "J": "Joint IP",
+        "S": "Spin-off Joint",
+        "O": "Other for institution to specify"
+      },
+      "_note": "Raw code becomes the exact Zoho picklist text: 'C' -> 'Co-authorship'; 'J' -> 'Joint IP'; 'S' -> 'Spin-off Joint'; 'O' -> 'Other for institution to specify'. The push sends .subString(0,1)."
+    },
+    {
+      "raw_column": "Joint_INTLIntellectual_other",
+      "target_field": "International_Partner_Intellectual_Contribution_other",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Program_codes ",
+      "target_field": "Linked_Programs",
+      "kind": "plain",
+      "_note": "No conversion -- semicolon-separated program codes from the Program Master are carried through as text. NOTE: this CHEDS header has a TRAILING SPACE."
+    },
+    {
+      "raw_column": "MOU_Number",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- REMOVED in HEDB 202601. The dictionary row for Agreement/MOU Number is filled red (the same marking used for the 8 fields struck from Students - Research), and the Zoho form has no field for it. No column is written."
+    },
+    {
+      "raw_column": "Impact_funding",
+      "target_field": "Funding_attraction",
+      "kind": "map",
+      "value_map": {
+        "G": "Attracting grants or funding for minimum 50k AED",
+        "F": "research has resulted in both grants and revenues",
+        "NA": "no funding attraction"
+      },
+      "_note": "Raw code becomes the exact Zoho picklist text: 'G' -> 'Attracting grants or funding for minimum 50k AED'; 'F' -> 'research has resulted in both grants and revenues'; 'NA' -> 'no funding attraction'. NOTE: the Zoho picklist carries a fourth choice, 'Generating revenues of minimum 50k AED', which has no code in HEDB 202601 (that wording belongs to Commercialization 'R', which 202601 strikes) -- remove that choice from the picklist."
+    },
+    {
+      "raw_column": "Impact_Comm",
+      "target_field": "Commercialization",
+      "kind": "map",
+      "value_map": {
+        "S": "impact Resulting in spin-offs or licensing agreements",
+        "T": "impact Resulting in trademark",
+        "B": "research has resulted in spinoffs/lincenses and trademarks",
+        "R": "Generating revenues of minimum 50k AED",
+        "NA": "not applicable"
+      },
+      "_note": "Raw code becomes the exact Zoho picklist text ('S' -> 'impact Resulting in spin-offs or licensing agreements'; 'B' -> 'research has resulted in spinoffs/lincenses and trademarks' -- the misspelling is in the live picklist). WARNING: the dictionary strikes code 'R' (\"Generating revenues of minimum 50k AED\") in red, i.e. REMOVED in 202601. 'R' is still accepted here so legacy rows convert rather than fail, but once CHEDS confirms, drop 'R' from this value_map and remove that choice from the Zoho picklist."
+    },
+    {
+      "raw_column": "Impact_policy",
+      "target_field": "Public_policy_public_good",
+      "kind": "map",
+      "value_map": {
+        "C": "Citation in government or international organization policy documents",
+        "E": "impact in terms of Speaking events with government officials",
+        "A": "research covers all of these impacts",
+        "NA": "not applicable"
+      },
+      "_note": "Raw code becomes the exact Zoho picklist text: 'C' -> 'Citation in government or international organization policy documents'; 'E' -> 'impact in terms of Speaking events with government officials'; 'A' -> 'research covers all of these impacts'; 'NA' -> 'not applicable'."
+    },
+    {
+      "raw_column": "Impact_outreach ",
+      "target_field": "Public_outreach",
+      "kind": "map",
+      "value_map": {
+        "P": "P",
+        "E": "E",
+        "M": "M",
+        "A": "A",
+        "NA": "NA"
+      },
+      "_note": "Pass-through with validation: the Zoho picklist now stores the CHEDS CODE itself (P / E / M / A / NA), so the code is written unchanged and the push sends rec.Public_outreach directly -- Dropdown_Fields.Public_outreach() is no longer used. An identity value_map is used rather than kind 'plain' so anything outside the five live codes is flagged in the Report. Codes 'C' (competition/prize) and 'R' (educational material) are deliberately ABSENT: HEDB 202601 strikes both, and the picklist no longer offers them, so a legacy C or R is reported as an error to fix at source instead of being written into a value Zoho would reject. NOTE: this field tracks the DEVELOPMENT environment -- see the config's _warning."
+    },
+    {
+      "raw_column": "Last_Updated",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API. The Zoho form stamps lastUpdated itself on a successful push."
+    }
+  ],
+  "_warning": "ENVIRONMENT MISMATCH -- READ BEFORE BUILDING. The Public_outreach mapping above matches the DEVELOPMENT environment of zoho-to-cheds, where the picklist was changed on 2026-10-26 to store bare CHEDS codes (P/E/M/A/NA). Production still holds the long descriptive choices until dev is published. Do NOT import a sheet built from this config into production before that publish, or every Public outreach value will be rejected. Three other fields are the reverse case: dev has already fixed Commercialization (code R removed), Funding_attraction (orphan choice removed) and International_Partner_Type (Healthcare/Community split, Technology Provider restored), but this config still carries the PRODUCTION shape for those three so today's production imports keep working. Update them in the same pass as the publish."
+}
