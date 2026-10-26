@@ -32,14 +32,12 @@
       "_note": "Raw HEDB code is converted to a combined 'Code - Name' display value using the 'Degree or Program Level' reference list."
     },
     {
-      "raw_column": "SR_Mode_of_Study",
-      "target_field": "Mode_of_Study_FT_PT",
-      "kind": "map",
-      "value_map": {
-        "FT": "Student is taking full-time",
-        "PT": "Student is taking less than full-time"
-      },
-      "_note": "Raw short code is converted to the exact Zoho picklist text: 'FT' -> 'Student is taking full-time'; 'PT' -> 'Student is taking less than full-time'."
+      "raw_column": "SR_Program_Code",
+      "target_field": "Student_Program",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Program Master",
+      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Program Master' reference list. The Zoho lookup displays [Name]; the push workflow sends rec.Student_Program.Code."
     },
     {
       "raw_column": "SR_Type_of_Research ",
