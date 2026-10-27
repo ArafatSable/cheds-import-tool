@@ -1,7 +1,7 @@
 {
   "_source": "HEDB Data Dictionary 202601, sheet 'Institute - Research Projects'",
   "_zoho_form": "Institute_Research_Projects",
-  "_note": "New 2026-10-26, built against Zoho_To_CHEDS_ (34).ds. raw_column values are the dictionary's 'Database Field Name' column verbatim, including its misspellings and trailing spaces. Zoho stores the DISPLAY text for every dropdown; the push workflow converts each back to its CHEDS code via subString() or a Dropdown_Fields function. HEDB 202601 marks removals by filling the row red: MOU_Number, Impact_indicator and Impact_Assessment are all struck, so the latter two are omitted entirely and MOU_Number is carried as reference-only. Individual codes struck in red inside a description are noted on the field concerned.",
+  "_note": "Built 2026-10-26 against Zoho_To_CHEDS_ (34).ds and verified against the live form metadata. raw_column values are the HEDB 202601 'Database Field Name' column verbatim, including its misspellings and trailing spaces. Zoho stores the DISPLAY text for every dropdown except Public outreach, which stores the CHEDS code itself; the push workflow converts the rest back via subString() or a Dropdown_Fields function. HEDB 202601 marks removals by filling the row red: MOU_Number, Impact_indicator and Impact_Assessment are all struck, so the latter two are omitted and MOU_Number is reference-only. This config matches PRODUCTION as published on 2026-10-26.",
   "fields": [
     {
       "raw_column": "Institution_Code",
@@ -361,14 +361,15 @@
         "GA": "Government Agency",
         "RC": "Research Center/Institution",
         "EI": "Educational Institution",
-        "HC": "Healthcare OrganizationCommunity Organization",
-        "CO": "Healthcare OrganizationCommunity Organization",
+        "HC": "Healthcare Organization",
+        "CO": "Community Organization",
         "FP": "Foundation or Philanthropic Organization",
         "PA": "Professional Association",
+        "TP": "Technology Provider",
         "CI": "Cultural Institution",
         "CC": "Country"
       },
-      "_note": "Raw Partner Type code becomes the exact Zoho picklist text. WARNING: this picklist on the form is DAMAGED -- 'Healthcare Organization' and 'Community Organization' are glued into one choice ('Healthcare OrganizationCommunity Organization'), so HC and CO both resolve to it and cannot be told apart, and 'Technology Provider' (TP) is missing entirely, so a TP row will be flagged and left as-is. Fix the picklist on Institute_Research_Projects, then split these two entries and add TP."
+      "_note": "Raw Partner Type code becomes the exact Zoho picklist text (12 entries, 'CP' -> 'Corporation/Industry Partner'). The push converts it back via Dropdown_Fields.PartnerType(). The earlier defect on this picklist -- Healthcare and Community Organization glued into one choice, Technology Provider missing -- was fixed on the form and published, so all 12 codes now resolve distinctly."
     },
     {
       "raw_column": "Joint_INTLcontribution_type",
@@ -426,7 +427,7 @@
         "F": "research has resulted in both grants and revenues",
         "NA": "no funding attraction"
       },
-      "_note": "Raw code becomes the exact Zoho picklist text: 'G' -> 'Attracting grants or funding for minimum 50k AED'; 'F' -> 'research has resulted in both grants and revenues'; 'NA' -> 'no funding attraction'. NOTE: the Zoho picklist carries a fourth choice, 'Generating revenues of minimum 50k AED', which has no code in HEDB 202601 (that wording belongs to Commercialization 'R', which 202601 strikes) -- remove that choice from the picklist."
+      "_note": "Raw code becomes the exact Zoho picklist text: 'G' -> 'Attracting grants or funding for minimum 50k AED'; 'F' -> 'research has resulted in both grants and revenues'; 'NA' -> 'no funding attraction'. The orphan fourth choice ('Generating revenues of minimum 50k AED', which has no code in HEDB 202601) was removed from the form and published."
     },
     {
       "raw_column": "Impact_Comm",
@@ -436,10 +437,9 @@
         "S": "impact Resulting in spin-offs or licensing agreements",
         "T": "impact Resulting in trademark",
         "B": "research has resulted in spinoffs/lincenses and trademarks",
-        "R": "Generating revenues of minimum 50k AED",
         "NA": "not applicable"
       },
-      "_note": "Raw code becomes the exact Zoho picklist text ('S' -> 'impact Resulting in spin-offs or licensing agreements'; 'B' -> 'research has resulted in spinoffs/lincenses and trademarks' -- the misspelling is in the live picklist). WARNING: the dictionary strikes code 'R' (\"Generating revenues of minimum 50k AED\") in red, i.e. REMOVED in 202601. 'R' is still accepted here so legacy rows convert rather than fail, but once CHEDS confirms, drop 'R' from this value_map and remove that choice from the Zoho picklist."
+      "_note": "Raw code becomes the exact Zoho picklist text ('S' -> 'impact Resulting in spin-offs or licensing agreements'; 'B' -> 'research has resulted in spinoffs/lincenses and trademarks' -- the misspelling is in the live picklist). Code 'R' (\"Generating revenues of minimum 50k AED\") is ABSENT: HEDB 202601 strikes it and the choice was removed from the form, so a legacy R is reported as an error to fix at source."
     },
     {
       "raw_column": "Impact_policy",
@@ -464,7 +464,7 @@
         "A": "A",
         "NA": "NA"
       },
-      "_note": "Pass-through with validation: the Zoho picklist now stores the CHEDS CODE itself (P / E / M / A / NA), so the code is written unchanged and the push sends rec.Public_outreach directly -- Dropdown_Fields.Public_outreach() is no longer used. An identity value_map is used rather than kind 'plain' so anything outside the five live codes is flagged in the Report. Codes 'C' (competition/prize) and 'R' (educational material) are deliberately ABSENT: HEDB 202601 strikes both, and the picklist no longer offers them, so a legacy C or R is reported as an error to fix at source instead of being written into a value Zoho would reject. NOTE: this field tracks the DEVELOPMENT environment -- see the config's _warning."
+      "_note": "Pass-through with validation: the Zoho picklist stores the CHEDS CODE itself (P / E / M / A / NA), so the code is written unchanged and the push sends rec.Public_outreach directly -- Dropdown_Fields.Public_outreach() is no longer used. An identity value_map is used rather than kind 'plain' so anything outside the five live codes is flagged in the Report. Codes 'C' (competition/prize) and 'R' (educational material) are ABSENT: HEDB 202601 strikes both. Note the dictionary still prints the SAME description for E and R, so if the ministry ever rejects a value here, that duplicate is the first thing to raise with CHEDS."
     },
     {
       "raw_column": "Last_Updated",
@@ -472,6 +472,5 @@
       "kind": "unmapped",
       "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API. The Zoho form stamps lastUpdated itself on a successful push."
     }
-  ],
-  "_warning": "ENVIRONMENT MISMATCH -- READ BEFORE BUILDING. The Public_outreach mapping above matches the DEVELOPMENT environment of zoho-to-cheds, where the picklist was changed on 2026-10-26 to store bare CHEDS codes (P/E/M/A/NA). Production still holds the long descriptive choices until dev is published. Do NOT import a sheet built from this config into production before that publish, or every Public outreach value will be rejected. Three other fields are the reverse case: dev has already fixed Commercialization (code R removed), Funding_attraction (orphan choice removed) and International_Partner_Type (Healthcare/Community split, Technology Provider restored), but this config still carries the PRODUCTION shape for those three so today's production imports keep working. Update them in the same pass as the publish."
+  ]
 }

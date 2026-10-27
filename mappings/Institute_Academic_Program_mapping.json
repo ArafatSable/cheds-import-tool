@@ -1,48 +1,49 @@
 {
+  "_source": "HEDB Data Dictionary 202601, sheet 'Institute - Academic Programs'",
+  "_zoho_form": "Institute_Academic_Programs",
+  "_note": "Rebuilt 2026-10-27 against Zoho_To_CHEDS_ (34).ds. HEDB 202601 fills a removed field's row red: 13 fields were struck on this sheet (Major CIP Code, STEM indicator, Accredited by CAA, CAA Initial Accreditation Date, First-enrollment Year, Program Level/Degree, Area of Specialization, Number of Students, Program Faculty Members, Adjunct Faculty Members, Coordinator Email, Coordinator Mobile, Distance Learning indicator) and are omitted here; the Zoho form and push payload already drop them too. Prog_Program_Name is NEW in 202601 and carried as reference-only. raw_column values are the dictionary's 'Database Field Name' column verbatim.",
   "fields": [
     {
       "raw_column": "Prog_Institution_Code",
       "target_field": "Institution_code",
-      "kind": "plain",
-      "_note": "No conversion applied -- picklist is pre-filtered to Institution Code 141, so the raw code/name is passed through as-is."
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Institutional Codes",
+      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Institutional Codes' reference list -- the Zoho lookup displays [Name] and is filtered to Code == \"141\". (Previously 'plain', which wrote the bare code 141 into a field whose dropdown shows the institution NAME, so the lookup never resolved on import.)"
+    },
+    {
+      "raw_column": "Prog_Institution_Name",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- the Zoho form derives the name from the Institution code lookup, so no column is written."
     },
     {
       "raw_column": "Prog_Academic_Year",
       "target_field": "Academic_Year",
       "kind": "lookup",
-      "lookup_direction": "code_to_name",
+      "lookup_direction": "code_to_combo",
       "hedb_sheet": "Academic Year",
-      "_note": "Raw HEDB academic-year code (e.g. 202526) is converted to its descriptive Name (e.g. 'Academic Year 2025-2026') using the 'Academic Year' reference list, matched on 'Year Code'."
+      "_note": "Raw HEDB academic-year code (e.g. 202526) is converted to a combined 'Name - Code' display value using the 'Academic Year' reference list, because the Zoho lookup displays [Name + \" - \" + Code]. (Previously 'code_to_name', which produced only the name and so never matched the dropdown.) The push sends rec.Academic_Year.Code."
+    },
+    {
+      "raw_column": "Prog_Program_Name",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- NEW column in HEDB 202601. The Zoho 'Program Name' field is a lookup into Program_Code displaying [Name + \" - \" + Code], so it cannot be filled from the raw name text alone; it is resolved from Prog_Program_Code instead (next entry). The push sends rec.Program_Name.Name, which is what CHEDS receives as programName."
     },
     {
       "raw_column": "Prog_Program_Code",
       "target_field": "Program_Name",
       "kind": "lookup",
-      "lookup_direction": "code_to_name",
+      "lookup_direction": "code_to_combo",
       "hedb_sheet": "Program Master",
-      "_note": "Raw CAA Program Code is converted to the corresponding Program Name using the 'Program Master' reference list, matched on 'CAA Program Code' -> 'Program Name'."
+      "_note": "Raw CAA Program Code is converted to a combined 'Name - Code' display value using the 'Program Master' reference list, because the Zoho lookup displays [Name + \" - \" + Code]. (Previously 'code_to_name', which produced only the program name and so never matched the dropdown.)"
     },
     {
       "raw_column": "Prog_Program_Code",
       "target_field": "Program_Code",
       "kind": "plain",
-      "_note": "No conversion applied -- the raw CAA Program Code is passed through as-is (this picklist displays the Code directly)."
-    },
-    {
-      "raw_column": "Prog_Major_CIP",
-      "target_field": "Major_CIP_Code",
-      "kind": "plain",
-      "_note": "No conversion applied -- raw CIP code is passed through as-is; must match the CIP_Code already on file for this Program_Code record in Zoho."
-    },
-    {
-      "raw_column": "Prog_STEM_Indicator",
-      "target_field": "STEM_indicator",
-      "kind": "map",
-      "value_map": {
-        "Y": "Yes",
-        "N": "No"
-      },
-      "_note": "Raw 'Y'/'N' indicator is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'."
+      "_note": "No conversion -- this Zoho lookup displays [Code] only, so the raw CAA Program Code is already the exact display value. The same raw column also feeds Program_Name above."
     },
     {
       "raw_column": "Prog_College",
@@ -57,22 +58,6 @@
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "Prog_CAA_Accreditation_Status",
-      "target_field": "Accredited_by_CAA",
-      "kind": "map",
-      "value_map": {
-        "Y": "Yes",
-        "N": "No"
-      },
-      "_note": "Raw 'Y'/'N' indicator is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'."
-    },
-    {
-      "raw_column": "Prog_Initial_Accreditation_Date",
-      "target_field": "Date_of_CAA_Initial_Accreditation",
-      "kind": "date",
-      "_note": "Date-time values are trimmed to a plain date (time portion removed) and written as yyyy-mm-dd so Zoho's Date field accepts them."
-    },
-    {
       "raw_column": "Prog_Joint_Dual_Program",
       "target_field": "Joint_Dual_degree_program",
       "kind": "map",
@@ -80,21 +65,13 @@
         "Y": "Yes",
         "N": "No"
       },
-      "_note": "Raw 'Y'/'N' indicator is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'."
+      "_note": "Raw 'Y'/'N' indicator is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'. The push sends .subString(0,1) to recover the code."
     },
     {
       "raw_column": "Prog_Name_Of_Partner_University",
       "target_field": "Name_of_Partner_University",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Prog_Code_Of_Partner_University",
-      "target_field": "Code_of_the_partner_university",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Universities",
-      "_note": "Raw CHEDS University Code is converted to its descriptive Name using the 'Universities' reference list, matched on 'University Code' -> 'University Name'."
+      "_note": "No conversion. CHEDS requires this when Joint/Dual degree program is 'Y'. NOTE: the push does NOT send this field -- it sends rec.Code_of_the_partner_university.Name for the nameOfThePartnerUniversity key, so the ministry receives the name from the Universities list rather than this free-text value."
     },
     {
       "raw_column": "Prog_Country_Of_Partner_University",
@@ -102,15 +79,15 @@
       "kind": "lookup",
       "lookup_direction": "code_to_name",
       "hedb_sheet": "Country",
-      "_note": "Raw 2-letter nation code is converted to its descriptive Name using the 'Country' reference list."
+      "_note": "Raw 2-letter nation code is converted to its descriptive Name using the 'Country' reference list; the Zoho lookup displays [Name] and the push sends .Code back."
     },
     {
-      "raw_column": "Prog_First_Enroll_Year",
-      "target_field": "Academic_Year_of_first_student_Enrollment",
+      "raw_column": "Prog_Code_Of_Partner_University",
+      "target_field": "Code_of_the_partner_university",
       "kind": "lookup",
       "lookup_direction": "code_to_name",
-      "hedb_sheet": "Academic Year",
-      "_note": "Raw HEDB academic-year code (e.g. 201819) is converted to its descriptive Name using the 'Academic Year' reference list, matched on 'Year Code'."
+      "hedb_sheet": "Universities",
+      "_note": "Raw CHEDS University Code is converted to its descriptive Name using the 'Universities' reference list; the Zoho lookup displays [Name] and the push sends both .Code and .Name."
     },
     {
       "raw_column": "Prog_First_Graduation_Cohort_Year",
@@ -118,13 +95,7 @@
       "kind": "lookup",
       "lookup_direction": "code_to_name",
       "hedb_sheet": "Academic Year",
-      "_note": "Raw HEDB academic-year code is converted to its descriptive Name using the 'Academic Year' reference list, matched on 'Year Code'."
-    },
-    {
-      "raw_column": "Prog_Degree",
-      "target_field": "Program_Level_Degree_Code",
-      "kind": "plain",
-      "_note": "No conversion applied -- raw Degree Code is passed through as-is (this picklist displays the Code directly)."
+      "_note": "Raw HEDB academic-year code is converted to its descriptive Name using the 'Academic Year' reference list. This lookup displays [Name] only -- unlike Academic_Year above, which displays Name and Code."
     },
     {
       "raw_column": "Prog_Language",
@@ -133,54 +104,22 @@
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
     },
     {
-      "raw_column": "Prog_Area_Of_Specialization",
-      "target_field": "Area_of_Specialization",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Area of Specialization",
-      "_note": "Raw CIP Family code (e.g. 11) is converted to its descriptive Family Name using the 'Area of Specialization' reference list, matched on 'CIP Family CODE'."
-    },
-    {
       "raw_column": "Prog_Standard_Load",
       "target_field": "Program_Standard_Load_per_semester",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- number with up to two decimal places."
     },
     {
       "raw_column": "Prog_Required_Credit",
       "target_field": "Required_Credits_for_Graduation",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Prog_Number_Of_Students_Enroll",
-      "target_field": "Number_of_Students",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Prog_Number_Of_Faculty_FT",
-      "target_field": "Program_Faculty_Members",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file. NOTE: the Zoho form has a duplicate field also called 'Program Faculty Members' (internal name Program_Faculty_Members1) with the same display name and type -- this appears to be a form-design bug (duplicate field), and is left unmapped/blank below since there is no second distinct raw column for it."
-    },
-    {
-      "raw_column": null,
-      "target_field": "Program_Faculty_Members1",
-      "kind": "unmapped",
-      "_note": "This field is a duplicate of 'Program_Faculty_Members' in the Zoho form (same display name 'Program Faculty Members', same type). Likely a form-design bug rather than a real distinct field -- left unmapped. Flag to the app owner to confirm whether this should instead have been 'Number of Adjunct Faculty Members' or should be removed."
-    },
-    {
-      "raw_column": "Prog_Number_Of_Faculty_PT",
-      "target_field": "Number_of_Adjunct_Faculty_Members",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- number with up to two decimal places."
     },
     {
       "raw_column": "Prog_Fees",
       "target_field": "Program_Fees",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- number with up to two decimal places."
     },
     {
       "raw_column": "Prog_International_Accreditation_Eligibility",
@@ -190,7 +129,7 @@
         "Y": "Yes",
         "N": "No"
       },
-      "_note": "Raw 'Y'/'N' indicator is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'."
+      "_note": "Raw 'Y'/'N' indicator is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'. The push sends .subString(0,1) to recover the code."
     },
     {
       "raw_column": "Prog_International_Accreditation_Received",
@@ -200,13 +139,13 @@
         "Y": "Yes",
         "N": "No"
       },
-      "_note": "Raw 'Y'/'N' indicator is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'."
+      "_note": "Raw 'Y'/'N' indicator is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'. The push sends .subString(0,1) to recover the code."
     },
     {
       "raw_column": "Prog_International_Accreditation_Date",
       "target_field": "Date_of_current_Int_l_Accreditation",
       "kind": "date",
-      "_note": "HEDB specifies this as TEXT(8) in 'YYYY-MM' format (month precision only, no day) -- trimmed/formatted accordingly rather than a full yyyy-mm-dd date."
+      "_note": "HEDB specifies 'YYYY-MM' (month precision). The Zoho field is a Date, and the push re-formats it with .toString(\"yyyy-MM\"), so any day component is harmless but the time portion is stripped here."
     },
     {
       "raw_column": "Prog_International_Accreditation_Name",
@@ -218,19 +157,7 @@
       "raw_column": "Prog_International_Accreditation_Valid_Date",
       "target_field": "Int_l_Accreditation_valid_until",
       "kind": "date",
-      "_note": "HEDB specifies this as TEXT(8) in 'YYYY-MM' format (month precision only, no day) -- trimmed/formatted accordingly rather than a full yyyy-mm-dd date."
-    },
-    {
-      "raw_column": "Prog_Coordinator_Email",
-      "target_field": "Email_of_program_coordinator1",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Prog_Coordinator_Mobile",
-      "target_field": "Mobile_number_of_program_coordinator1",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "HEDB specifies 'YYYY-MM' (month precision). The push re-formats with .toString(\"yyyy-MM\")."
     },
     {
       "raw_column": "Prog_Program_Type",
@@ -242,17 +169,7 @@
         "U": "U - For undergraduate programs",
         "D": "D - Post-grad programs for which both professional and thesis options are available"
       },
-      "_note": "Raw single-letter code is converted to the exact Zoho picklist text (e.g. 'P' -> 'P - For graduate professional programs for which thesis is not required to graduate'). See value_map for the full list."
-    },
-    {
-      "raw_column": "Prog_Distance_Learning",
-      "target_field": "Distance_learning_program_indicator",
-      "kind": "map",
-      "value_map": {
-        "Y": "Yes",
-        "N": "No"
-      },
-      "_note": "Raw 'Y'/'N' indicator is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'."
+      "_note": "Raw single-letter code is converted to the exact Zoho picklist text; the push sends .subString(0,1). 202601 clarifies that post-grad programs offering both professional and thesis options use 'D'."
     },
     {
       "raw_column": "Prog_Internship",
@@ -262,7 +179,7 @@
         "Y": "Yes",
         "N": "No"
       },
-      "_note": "Raw 'Y'/'N' indicator is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'."
+      "_note": "Raw 'Y'/'N' indicator is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'. The push sends .subString(0,1) to recover the code."
     },
     {
       "raw_column": "Prog_Lab",
@@ -272,7 +189,7 @@
         "Y": "Yes",
         "N": "No"
       },
-      "_note": "Raw 'Y'/'N' indicator is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'."
+      "_note": "Raw 'Y'/'N' indicator is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'. The push sends .subString(0,1) to recover the code."
     },
     {
       "raw_column": "Prog_Mode_Delivery",
@@ -283,7 +200,7 @@
         "O": "Online: All courses are online",
         "B": "Blended: Some courses are in-person, some are online"
       },
-      "_note": "Raw single-letter code is converted to the exact Zoho picklist text: 'I' -> 'In-person: All courses are in-person'; 'O' -> 'Online: All courses are online'; 'B' -> 'Blended: Some courses are in-person, some are online'."
+      "_note": "Raw single-letter code is converted to the exact Zoho picklist text; the push converts it back via Dropdown_Fields.Mode_of_Delivery()."
     },
     {
       "raw_column": "Prog_Mode_of_Study",
@@ -293,109 +210,109 @@
         "FT": "FT - Full-Time",
         "PT": "PT - Part-Time"
       },
-      "_note": "Raw code is converted to the exact Zoho picklist text: 'FT' -> 'FT - Full-Time'; 'PT' -> 'PT - Part-Time'."
+      "_note": "Raw code is converted to the exact Zoho picklist text: 'FT' -> 'FT - Full-Time'; 'PT' -> 'PT - Part-Time'. The push sends .subString(0,2)."
     },
     {
       "raw_column": "Prog_one_year_program",
       "target_field": "One_Year_Program",
       "kind": "plain",
-      "_note": "No conversion applied -- target field is plain text (not a picklist) in Zoho, so raw 'Y'/'N' is passed through as-is."
+      "_note": "No conversion -- CHEDS expects 'Y' or 'N' and the Zoho field is plain TEXT (not a picklist), so the raw letter is written through unchanged."
     },
     {
       "raw_column": "Prog_Revenue_Private_Donation",
       "target_field": "Program_Revenue_Private_Entity_Donations",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- AED amount with up to two decimals, sent as a bare number."
     },
     {
       "raw_column": "Prog_Revenue_Local_Gov",
       "target_field": "Program_Revenue_Local_Government",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- AED amount with up to two decimals, sent as a bare number."
     },
     {
       "raw_column": "Prog_Revenue_Federal_Gov",
       "target_field": "Program_Revenue_Federal_Government",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- AED amount with up to two decimals, sent as a bare number."
     },
     {
       "raw_column": "Prog_Revenue_External_Research_Grants_Industry",
       "target_field": "Program_Revenue_External_Research_Grants_Industry",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- AED amount with up to two decimals, sent as a bare number."
     },
     {
       "raw_column": "Prog_Revenue_External_Research_Grants",
       "target_field": "Program_Revenue_External_Research_Grants1",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- AED amount with up to two decimals, sent as a bare number."
     },
     {
       "raw_column": "Prog_Revenue_Endowments",
       "target_field": "Program_Revenue_Endowments",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- AED amount with up to two decimals, sent as a bare number."
     },
     {
       "raw_column": "Prog_Revenue_Patents",
       "target_field": "Program_Revenue_Patents",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- AED amount with up to two decimals, sent as a bare number."
     },
     {
       "raw_column": "Prog_Revenue_joint_ventures",
       "target_field": "Program_Revenue_joint_ventures",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- AED amount with up to two decimals, sent as a bare number."
     },
     {
       "raw_column": "Prog_Revenue_Inkind",
       "target_field": "Program_Revenue_Inkind",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Prog_Revenue_Consult_Service",
-      "target_field": "Program_Revenue_Program_Revenues_from_Cooperations_Consultation_Services",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Prog_Revenue_Internal_Other",
-      "target_field": "Program_Revenue_Other_Internal_Program_Revenues",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Prog_Revenue_External_Other",
-      "target_field": "Program_Revenue_Other_External_Program_Revenues",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- AED amount with up to two decimals, sent as a bare number."
     },
     {
       "raw_column": "Prog_Revenue_Welfare_Service",
       "target_field": "Program_Revenue_Program_Revenues_Generated_By_Welfare_Services",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- AED amount with up to two decimals, sent as a bare number."
+    },
+    {
+      "raw_column": "Prog_Revenue_Consult_Service",
+      "target_field": "Program_Revenue_Program_Revenues_from_Cooperations_Consultation_Services",
+      "kind": "plain",
+      "_note": "No conversion -- AED amount with up to two decimals, sent as a bare number."
+    },
+    {
+      "raw_column": "Prog_Revenue_Internal_Other",
+      "target_field": "Program_Revenue_Other_Internal_Program_Revenues",
+      "kind": "plain",
+      "_note": "No conversion -- AED amount with up to two decimals, sent as a bare number."
+    },
+    {
+      "raw_column": "Prog_Revenue_External_Other",
+      "target_field": "Program_Revenue_Other_External_Program_Revenues",
+      "kind": "plain",
+      "_note": "No conversion -- AED amount with up to two decimals, sent as a bare number."
     },
     {
       "raw_column": "Prog_Branch_campus",
       "target_field": "International_Branch_Campus_Program_Accreditation",
       "kind": "plain",
-      "_note": "No conversion applied -- target field is plain text (not a picklist) in Zoho, so raw 'Y'/'N' is passed through as-is."
+      "_note": "No conversion -- CHEDS expects 'Y' or 'N' and the Zoho field is plain TEXT. NOTE: the push does NOT currently send this field."
     },
     {
       "raw_column": "Prog_Alumni",
       "target_field": "Graduates_with_entrepreneurial_accomplishments_per_program",
       "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+      "_note": "No conversion -- whole number. NOTE: the push does NOT currently send this field."
     },
     {
       "raw_column": "Last_Updated",
-      "target_field": "Last_Updated_Time",
-      "kind": "date",
-      "_note": "HEDB field 'Last Updated' (yyyy-mm-dd) maps to the Zoho datetime field 'Last_Updated_Time' -- date-only value is used; only relevant if submitting through the Master API rather than manual entry."
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API, and the push stamps lastUpdated with zoho.currenttime itself."
     }
   ]
 }

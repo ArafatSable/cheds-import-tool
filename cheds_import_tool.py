@@ -340,6 +340,11 @@ def cmd_extract_form(args):
 # ---------------------------------------------------------------------------
 LOOKUP_SHEET_REGISTRY = {
     "Institutional Codes":        {"header_row": 4, "code_col": 2, "name_col": 3},
+    # Academic Year has NO leading blank column and its header sits on row 2:
+    # Year Code in col 1, "Academic Year" name in col 2. Without this entry the
+    # generic fallback assumed row 4 / cols 2-3 and loaded an EMPTY map, so every
+    # Academic Year lookup silently resolved to nothing.
+    "Academic Year":              {"header_row": 2, "code_col": 1, "name_col": 2},
     "Academic Period":            {"header_row": 4, "code_col": 2, "name_col": 3},
     "Area of Specialization":     {"header_row": 4, "code_col": 2, "name_col": 3},
     "Degree or Program Level":    {"header_row": 4, "code_col": 2, "name_col": 3},
@@ -1404,6 +1409,12 @@ def parse_date_value(v):
             ("%Y-%m-%d", False),
             ("%m/%d/%Y", False),
             ("%d/%m/%Y", False),
+            # HEDB 202601 specifies a few fields at MONTH precision ("YYYY-MM"),
+            # e.g. Institute - Academic Programs' international-accreditation
+            # dates. The Zoho fields behind them are full Date fields, so the
+            # month is anchored to the 1st; the push workflow re-formats with
+            # .toString("yyyy-MM"), which discards the day again.
+            ("%Y-%m", False),
         ):
             try:
                 return True, datetime.datetime.strptime(v.strip(), fmt).date(), had_time
