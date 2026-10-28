@@ -17,11 +17,11 @@
     },
     {
       "raw_column": "Emp_Academic_Period",
-      "target_field": "Academic_Period1",
+      "target_field": "Academic_Period",
       "kind": "lookup",
       "lookup_direction": "code_to_name",
       "hedb_sheet": "Academic Period",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Academic Period' reference list (this form's displayformat = [Name] only -- no combined Name-Code combo, unlike the Applicants forms)."
+      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Academic Period' reference list -- this form's displayformat is [Name] only, unlike the Applicants forms which show a Name-Code combo. (Target was 'Academic_Period1', which is not a field on this form.)"
     },
     {
       "raw_column": "Emp_Employee_ID",
@@ -51,6 +51,12 @@
       "_note": "Raw short code is converted to the exact Zoho picklist text using a 7-entry table pulled from the Deluge Reason_why_Missing() dropdown function (e.g. 'GCC' -> 'GCC Resident with no Emirates ID'; 'VISITING' -> 'Visiting Student/Staff'; ...)."
     },
     {
+      "raw_column": "Enroll_Passport_Number",
+      "target_field": "Passport_Number",
+      "kind": "plain",
+      "_note": "NEW in HEDB 202601. No conversion -- imported exactly as provided. NOTE: CHEDS names this column 'Enroll_Passport_Number' with an 'Enroll_' prefix, not 'Emp_', on the Employee - Basic Details sheet; the header must match character-for-character. The push sends it as passportNumber only when non-blank."
+    },
+    {
       "raw_column": "Emp_Gender",
       "target_field": "Gender",
       "kind": "map",
@@ -74,10 +80,8 @@
     {
       "raw_column": "Emp_Nationality",
       "target_field": "Nationality",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Country",
-      "_note": "Raw HEDB country code is converted to its descriptive Name using the 'Country' reference list. Note the form's displayformat is [Code] (not Name) -- the push script reads input.Nationality.Code, so the Zoho lookup record just needs the correct Country matched by code; confirm your Countries lookup form's Code field is populated for this to resolve."
+      "kind": "plain",
+      "_note": "No conversion -- this Zoho lookup's displayformat is [Code], so the raw CHEDS code is already the exact display value and the push sends rec.Nationality.Code. (Was a 'Country' code_to_name lookup, which produced the descriptive name and so could never match the dropdown on import.)"
     },
     {
       "raw_column": "Emp_DOB",
@@ -90,18 +94,38 @@
       "target_field": "Campus",
       "kind": "map",
       "value_map": {
-        "AD": "Abu Dhabi", "DB": "Dubai", "SH": "Sharjah", "AJ": "Ajman", "RK": "Ras Al Khaimah",
-        "FJ": "Fujairah", "UQ": "Umm Al-Quwain", "AA": "Al Ain", "RW": "Ruwais", "MZ": "Madinat Zayed",
-        "KF": "Khorfakan", "DI": "Dibba", "KH": "Khalba", "DD": "Dhaid",
-        "AAM": "Al Ain Men\u2019s Campus", "AAW": "Al Ain Women\u2019s Campus",
-        "ADM": "Abu Dhabi Men\u2019s Campus", "ADW": "Abu Dhabi Women\u2019s Campus",
-        "MZM": "Madinat Zayed Men\u2019s Campus", "MZW": "Madinat Zayed Women\u2019s Campus",
-        "RUM": "Ruwais Men\u2019s Campus", "RUW": "Ruwais Women\u2019s Campus",
-        "DBM": "Dubai Men\u2019s Campus", "DBW": "Dubai Women\u2019s Campus",
-        "SJM": "Sharjah Men\u2019s Campus", "SJW": "Sharjah Women\u2019s Campus",
-        "FJM": "Fujairah Men\u2019s Campus", "FJW": "Fujairah Women\u2019s Campus",
-        "RKM": "Ras Al Khaimah Men\u2019s Campus", "RKW": "Ras Al Khaimah Women\u2019s Campus",
-        "MEL": "Melaha", "ON": "Online"
+        "AD": "Abu Dhabi",
+        "DB": "Dubai",
+        "SH": "Sharjah",
+        "AJ": "Ajman",
+        "RK": "Ras Al Khaimah",
+        "FJ": "Fujairah",
+        "UQ": "Umm Al-Quwain",
+        "AA": "Al Ain",
+        "RW": "Ruwais",
+        "MZ": "Madinat Zayed",
+        "KF": "Khorfakan",
+        "DI": "Dibba",
+        "KH": "Khalba",
+        "DD": "Dhaid",
+        "AAM": "Al Ain Men’s Campus",
+        "AAW": "Al Ain Women’s Campus",
+        "ADM": "Abu Dhabi Men’s Campus",
+        "ADW": "Abu Dhabi Women’s Campus",
+        "MZM": "Madinat Zayed Men’s Campus",
+        "MZW": "Madinat Zayed Women’s Campus",
+        "RUM": "Ruwais Men’s Campus",
+        "RUW": "Ruwais Women’s Campus",
+        "DBM": "Dubai Men’s Campus",
+        "DBW": "Dubai Women’s Campus",
+        "SJM": "Sharjah Men’s Campus",
+        "SJW": "Sharjah Women’s Campus",
+        "FJM": "Fujairah Men’s Campus",
+        "FJW": "Fujairah Women’s Campus",
+        "RKM": "Ras Al Khaimah Men’s Campus",
+        "RKW": "Ras Al Khaimah Women’s Campus",
+        "MEL": "Melaha",
+        "ON": "Online"
       },
       "_note": "Raw short code is converted to the exact Zoho picklist text using a 32-entry table pulled directly from the Deluge Campus() dropdown function, so this should match exactly (that function actually matches by 'name contains val' in reverse, i.e. code-to-name, when converting back for the API push)."
     },
@@ -142,26 +166,16 @@
       "_note": "No conversion applied -- value is imported exactly as provided in the raw file. HEDB says use 'NA' for non-academic staff."
     },
     {
-      "raw_column": "Emp_Last_Promotion_Date",
-      "target_field": "Last_Promotion_Date",
-      "kind": "date",
-      "_note": "Date-time values are trimmed to a plain date (time portion removed) and written as yyyy-mm-dd. HEDB allows this to be blank if not applicable."
-    },
-    {
       "raw_column": "Emp_Qualification",
       "target_field": "Qualification",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Degree or Program Level",
-      "_note": "Raw HEDB degree code is converted to its descriptive Name using the 'Degree or Program Level' reference list. Push script reads input.Qualification.Code, so confirm the Zoho lookup record's Code field matches the HEDB degree code exactly."
+      "kind": "plain",
+      "_note": "No conversion -- this Zoho lookup's displayformat is [Code], so the raw CHEDS code is already the exact display value and the push sends rec.Qualification.Code. (Was a 'Degree or Program Level' code_to_name lookup, which produced the descriptive name and so could never match the dropdown on import.)"
     },
     {
       "raw_column": "Emp_Qualification_Country",
       "target_field": "Qualification_Country",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Country",
-      "_note": "Raw HEDB country code is converted to its descriptive Name using the 'Country' reference list."
+      "kind": "plain",
+      "_note": "No conversion -- this Zoho lookup's displayformat is [Code], so the raw CHEDS code is already the exact display value and the push sends rec.Qualification_Country.Code. (Was a 'Country' code_to_name lookup, which produced the descriptive name and so could never match the dropdown on import.)"
     },
     {
       "raw_column": "Emp_Qualification_Institution_Name",
@@ -218,21 +232,50 @@
       "target_field": "Position_Title",
       "kind": "map",
       "value_map": {
-        "PRF": "Professor", "ACP": "Associate Professor", "ASP": "Assistant Professor", "INS": "Instructor",
-        "LEC": "Lecturer", "TAA": "Teaching Assistant", "RAS": "Research Assistant", "PDF": "PhD Fellow",
-        "ALT": "Assistant Lecturers", "PTL": "Part time lecturer", "PDC": "Post-Doc", "RES": "Researcher",
+        "PRF": "Professor",
+        "ACP": "Associate Professor",
+        "ASP": "Assistant Professor",
+        "INS": "Instructor",
+        "LEC": "Lecturer",
+        "TAA": "Teaching Assistant",
+        "RAS": "Research Assistant",
+        "PDF": "PhD Fellow",
+        "ALT": "Assistant Lecturers",
+        "PTL": "Part time lecturer",
+        "PDC": "Post-Doc",
+        "RES": "Researcher",
         "SRS": "Senior Researcher (post held at Associate Professor level)",
         "SRA": "Senior Research Adviser (assistant professor or above)",
-        "CEO": "Chancellor/President/CEO", "VCP": "Vice Chancellor /Vice President", "DEA": "Dean", "VDE": "Vice Deans",
-        "CIO": "Chief information officer", "CFO": "Chief Financial Office", "DIR": "Director", "ADR": "Assistant director",
-        "MGR": "Manager", "AMG": "Assistant Manager", "TEC": "Technician", "TRD": "Technician (R&D)",
-        "AAD": "Academic advisor", "CAD": "Career advisor", "LIB": "Librarian", "LAB": "Library Assistants",
-        "AAS": "Administrative Assistants/Secretary", "SWW": "Student welfare workers",
-        "ARS": "Admission & Registration staff", "RWH": "Residential wardens / Hostel supervisors",
-        "RDM": "Head/Director/Dean/Vice Dean of Research", "RMM": "Research Managers", "IT": "IT Staff",
-        "SSS": "Other Student Services Staff", "SPS": "Other Student Support Staff",
-        "ASS": "Other Academic Support Staff", "HOD": "Head of department", "Psyc": "Psychologist",
-        "SLI": "Sign language interpreter", "SENCO": "Special needs coordinator/ Accessibility Coordinator",
+        "CEO": "Chancellor/President/CEO",
+        "VCP": "Vice Chancellor /Vice President",
+        "DEA": "Dean",
+        "VDE": "Vice Deans",
+        "CIO": "Chief information officer",
+        "CFO": "Chief Financial Office",
+        "DIR": "Director",
+        "ADR": "Assistant director",
+        "MGR": "Manager",
+        "AMG": "Assistant Manager",
+        "TEC": "Technician",
+        "TRD": "Technician (R&D)",
+        "AAD": "Academic advisor",
+        "CAD": "Career advisor",
+        "LIB": "Librarian",
+        "LAB": "Library Assistants",
+        "AAS": "Administrative Assistants/Secretary",
+        "SWW": "Student welfare workers",
+        "ARS": "Admission & Registration staff",
+        "RWH": "Residential wardens / Hostel supervisors",
+        "RDM": "Head/Director/Dean/Vice Dean of Research",
+        "RMM": "Research Managers",
+        "IT": "IT Staff",
+        "SSS": "Other Student Services Staff",
+        "SPS": "Other Student Support Staff",
+        "ASS": "Other Academic Support Staff",
+        "HOD": "Head of department",
+        "Psyc": "Psychologist",
+        "SLI": "Sign language interpreter",
+        "SENCO": "Special needs coordinator/ Accessibility Coordinator",
         "OTH": "Others"
       },
       "_note": "Raw short code is converted to the exact Zoho picklist text using a 45-entry table pulled directly from the Deluge Position_Title() dropdown function."
@@ -273,9 +316,10 @@
     },
     {
       "raw_column": "Last_Updated",
-      "target_field": "LastUpdated",
-      "kind": "date",
-      "_note": "Date-time values are trimmed to a plain date (time portion removed) and written as yyyy-mm-dd. Note: the push script overwrites this field itself with zoho.currenttime on a successful add, so this raw value mostly matters for update-type re-imports."
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API, and the push stamps rec.LastUpdated with zoho.currenttime itself on success."
     }
-  ]
+  ],
+  "_note": "Updated 2026-10-28 against Zoho_To_CHEDS_ (34).ds and the HEDB 202601 dictionary. 202601 change on this sheet: Emp_Last_Promotion_Date REMOVED (row filled red) and Enroll_Passport_Number ADDED -- the .ds carries the same note on Employee_Basic_Details_Function. Value maps for Reason (7), Gender (3), Payroll (2), Campus (32), Equivalency Indicator (6), Position Title (45) and Employment Status (8) were re-checked character-for-character against the live picklists, including the curly apostrophes in the Campus names."
 }

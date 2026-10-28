@@ -27,7 +27,8 @@ FORMS = {
     "17. Students - SOD":                 "mappings/Students_SOD_mapping.json",
     "18. Students - Scholarship":         "mappings/Student_Scholarship_mapping.json",
     "19. Institute - Research & Innovation Unit": "mappings/Institute_Research_Innovation_Unit_mapping.json",
-    "20. Institute - Research Projects":  "mappings/Institute_Research_Projects_mapping.json"
+    "20. Institute - Research Projects":  "mappings/Institute_Research_Projects_mapping.json",
+    "21. Employee - Workload":            "mappings/Employee_Workload_mapping.json"
 }
 
 # Forms with NO live push-to-CHEDS workflow in the .ds export yet --
