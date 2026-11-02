@@ -4,18 +4,25 @@ Registry of the CHEDS forms this app can build an import-ready sheet for.
 Shared by app_streamlit.py and app_cli.py.
 
 Each entry: display name -> mapping config JSON path (relative to this folder).
-To add a form: drop its .json into mappings/ and add one line below.
+To add a form: drop its .json into mappings/ and add one line to ALL_FORMS below.
 
 2026-11-02 -- HEDB 202601 pass. Every mapping was re-checked field by field
 against the HEDB 202601 dictionary ("Database Field Name" column) and the
 Zoho_To_CHEDS_ (35).ds export. 19 datasets that previously had no mapping were
-added (entries 23-41), and the three mappings that still carried fields the
-Ministry removed in 202601 (Graduates, Graduate Licensure, SOD Applicants) were
-rebuilt. Institute - Financials was rebuilt as well: its old raw_column names
-were Zoho field names (IF_*), not the HEDB export headers (Finance_*).
+added, and the three mappings that still carried fields the Ministry removed in
+202601 (Graduates, Graduate Licensure, SOD Applicants) were rebuilt.
+Institute - Financials was rebuilt as well: its old raw_column names were Zoho
+field names (IF_*), not the HEDB export headers (Finance_*).
+
+2026-11-02 -- VISIBILITY GATE. 20 datasets are withheld from the app until SIU
+Dubai approves them. They are listed in HIDDEN below. Their mapping JSONs stay
+in mappings/ and are fully working -- they are simply not offered in the form
+picker, so nobody outside the team can run them. To release one, delete (or
+comment out) its line in HIDDEN; nothing else needs to change.
 """
 
-FORMS = {
+# --- every dataset the tool can build, whether or not it is currently offered ---
+ALL_FORMS = {
     "1. Program Learning Outcomes":       "mappings/Program_learning_outcomes_mapping.json",
     "2. Course Learning Outcomes":        "mappings/Course_Learning_outcomes_mapping.json",
     "3. Program Skills":                  "mappings/Program_Skills_mapping.json",
@@ -59,6 +66,43 @@ FORMS = {
     "40. Institute - Startups & Spinoffs": "mappings/Institute_Startup_Spinoffs_mapping.json",
 }
 
+# --- withheld until SIU Dubai approves them (2026-11-02) ---------------------
+# Delete a line to release that dataset into the app. The mapping JSON is
+# already in mappings/ and verified against HEDB 202601, so nothing else has to
+# change -- the entry reappears in the picker on the next app reload.
+HIDDEN = {
+    "10. Graduates",
+    "9. Graduate Licensure",
+    "22. Students - Internship",
+    "17. Students - SOD",
+    "23. Courses",
+    "24. Course Faculty",
+    "2. Course Learning Outcomes",
+    "1. Program Learning Outcomes",
+    "3. Program Skills",
+    "30. Institute - Events",
+    "32. Institute - Overview",
+    "34. Institute - Partnerships",
+    "35. Institute - Employers",
+    "8. Institute - Financials",
+    "33. Institute - Leadership Contact Information",
+    "38. Institute - Publications",
+    "40. Institute - Startups & Spinoffs",
+    "37. Institute - Intellectual Property",
+    "39. Institute - R&D Classified Expenditures",
+    "29. OBF Self Report",
+}
+
+# Guard against a typo in HIDDEN silently hiding nothing.
+_unknown = HIDDEN - set(ALL_FORMS)
+if _unknown:
+    raise ValueError(
+        "cheds_forms.HIDDEN lists names that are not in ALL_FORMS: %s" % sorted(_unknown)
+    )
+
+# What app_streamlit.py and app_cli.py actually offer.
+FORMS = {k: v for k, v in ALL_FORMS.items() if k not in HIDDEN}
+
 # Forms with NO live push-to-CHEDS workflow in the .ds export yet --
 # both apps show a heads-up for these.
 UNVERIFIED_NO_WORKFLOW = {
@@ -68,11 +112,11 @@ UNVERIFIED_NO_WORKFLOW = {
     #
     # 2026-11-02: "8. Institute - Financials" removed as well -- v35 carries
     # button.Institute_Financials_Function / _Delete_Function and the form
-    # workflow Push_Api_Production36. Every form in FORMS above now has a
+    # workflow Push_Api_Production36. Every dataset in ALL_FORMS now has a
     # production push function in the .ds export, so this set is empty.
 }
 
-# Datasets in the HEDB 202601 dictionary that deliberately have NO entry above.
+# Datasets in the HEDB 202601 dictionary that deliberately have NO mapping.
 #   Student - Funding, Student - Funding Planning -- confirmed out of scope for SIUD.
 #   Students - Licensures                         -- no Zoho form exists yet.
 #   Institute - Surveys                           -- the dictionary sheet carries no
