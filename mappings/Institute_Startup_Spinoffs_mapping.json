@@ -1,0 +1,71 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production23 + HEDB Data Dictionary 202601 sheet 'Institute - StartupsSpinoffs'.",
+ "_zoho_form": "Institute_Startup_Spinoffs",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "kind": "plain",
+   "raw_column": "Startup_Inst_Code",
+   "target_field": "Institutional_Codes"
+  },
+  {
+   "raw_column": "Startup_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "Startup_Academic_Year",
+   "target_field": "Academic_Year",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Academic Year",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Startup_Year",
+   "target_field": "Year_field",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Startup_Name",
+   "target_field": "Start_up_name",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Startup_Trade_License",
+   "target_field": "Trade_license",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Startup_Status",
+   "target_field": "Status",
+   "kind": "plain",
+   "_note": "Literal picklist choices = ['Start-up', 'Spinoff', 'Company'] -- raw data must match one exactly."
+  },
+  {
+   "raw_column": "Startup_Founders_Ids",
+   "target_field": "Founders_IDs",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Startup_Std_Prog_code",
+   "target_field": "Student_Program_Code",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Program Master",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Startup_fac_research_title",
+   "target_field": "Faculty_Research_Title",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

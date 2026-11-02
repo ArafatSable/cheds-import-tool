@@ -1,400 +1,343 @@
 {
-  "fields": [
-    {
-      "raw_column": "App_Institution_CODE",
-      "target_field": "Institutional_Name",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Institutional Codes",
-      "_note": "FIXED: was keyed off Ap_Institution_Name (a name, not a code) so the code->name lookup could never match. Now 141 -> institution Name; form displayformat = [Name]."
-    },
-    {
-      "raw_column": "Ap_Institution_Name",
-      "target_field": null,
-      "kind": "unmapped",
-      "_note": "Redundant with App_Institution_CODE. Not imported."
-    },
-    {
-      "raw_column": "App_Academic_period",
-      "target_field": "Academic_Period_Code",
-      "kind": "lookup",
-      "lookup_direction": "code_to_combo",
-      "combo_order": "name_code",
-      "combo_separator": " - ",
-      "hedb_sheet": "Academic Period",
-      "_note": "Form displayformat = [\" \" + Name + \" - \" + Code] -> e.g. '2026-2027 : Fall - 202601'. Zoho's display adds a leading space; if the import doesn't match, prefix one space."
-    },
-    {
-      "raw_column": "App_Applicant_ID",
-      "target_field": "Applicant_ID",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Admission_Offered",
-      "target_field": "Admission_Offered",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Admission_Accepted",
-      "target_field": "Admission_Accepted_by_student",
-      "kind": "yesno",
-      "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
-    },
-    {
-      "raw_column": "App_Student_ID",
-      "target_field": "Student_ID",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Emirates_ID",
-      "target_field": "Emirates_ID",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Passport_Number",
-      "target_field": "Passport_Number",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Passport_Unified_Number",
-      "target_field": "Passport_Unified_Number",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Family_ID",
-      "target_field": "Family_ID",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Gender",
-      "target_field": "Gender",
-      "kind": "map",
-      "value_map": {
-        "M": "Male",
-        "F": "Female",
-        "U": "Unreported due to privacy laws applicable (e.g. GDPR , FERPA)"
-      },
-      "_note": "Raw short code is converted to the exact Zoho picklist text: 'M' -> 'Male'; 'F' -> 'Female'; 'U' -> 'Unreported due to privacy laws applicable (e.g. GDPR , FERPA)'."
-    },
-    {
-      "raw_column": "App_Health_Fitness_Certificate",
-      "target_field": "People_of_Determination",
-      "kind": "map",
-      "value_map": {
-        "Y": "Yes",
-        "N": "No",
-        "U": "Unknown/ Undeclared"
-      },
-      "_note": "Raw short code is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'; 'U' -> 'Unknown/ Undeclared'."
-    },
-    {
-      "raw_column": "App_Nationality",
-      "target_field": "Nationality_CODE",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Country",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Country' reference list."
-    },
-    {
-      "raw_column": "App_Email_Address",
-      "target_field": "Applicant_Email_Address",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Mobile_Number",
-      "target_field": "Applicant_Mobile_Number",
-      "kind": "phone",
-      "_note": "Phone number is cleaned to digits only (plus a leading '+' if present) -- dashes, spaces, and other punctuation are stripped, e.g. '+971-50-1203650' -> '+971501203650'."
-    },
-    {
-      "raw_column": "App_Home_Number",
-      "target_field": "Applicant_Home_Number",
-      "kind": "phone",
-      "_note": "Phone number is cleaned to digits only (plus a leading '+' if present) -- dashes, spaces, and other punctuation are stripped, e.g. '+971-50-1203650' -> '+971501203650'."
-    },
-    {
-      "raw_column": "App_DOB",
-      "target_field": "Applicant_DOB",
-      "kind": "date",
-      "_note": "Date-time values are trimmed to a plain date (time portion removed) and written as yyyy-mm-dd so Zoho's Date field accepts them."
-    },
-    {
-      "raw_column": "App_Name_English",
-      "target_field": "Applicant_Name_English",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Name_Arabic",
-      "target_field": "Applicant_Name_Arabic",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Home_Emirate",
-      "target_field": "Home_Emirate",
-      "kind": "map",
-      "value_map": {
-        "AD": "Abu Dhabi",
-        "DB": "Dubai",
-        "SH": "Sharjah",
-        "AJ": "Ajman",
-        "RK": "Ras Al Khaimah",
-        "FJ": "Fujairah",
-        "UQ": "Umm Al-Quwain",
-        "UN": "Use in case of GCC students who do not have addresses within UAE",
-        "ON": "Online Study/Teaching/Work",
-        "NA": "NA"
-      },
-      "_note": "Raw short code is converted to the exact Zoho picklist text using a 10-entry table (e.g. 'AD' -> 'Abu Dhabi'; 'DB' -> 'Dubai'; 'SH' -> 'Sharjah'; 'AJ' -> 'Ajman'; ...). See value_map for the full list."
-    },
-    {
-      "raw_column": "App_Country",
-      "target_field": "Country",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Country",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Country' reference list."
-    },
-    {
-      "raw_column": "App_Campus",
-      "target_field": "Applicant_Campus",
-      "kind": "map",
-      "value_map": {
-        "AD": "Abu Dhabi",
-        "DB": "Dubai",
-        "SH": "Sharjah",
-        "AJ": "Ajman",
-        "RK": "Ras Al Khaimah",
-        "FJ": "Fujairah",
-        "UQ": "Umm Al-Quwain",
-        "AA": "Al Ain",
-        "RW": "Ruwais",
-        "MZ": "Madinat Zayed",
-        "KF": "Khorfakan",
-        "DI": "Dibba",
-        "KH": "Khalba",
-        "DD": "Dhaid",
-        "AAM": "Al Ain Men’s Campus",
-        "AAW": "Al Ain Women’s Campus",
-        "ADM": "Abu Dhabi Men’s Campus",
-        "ADW": "Abu Dhabi Women’s Campus",
-        "MZM": "Madinat Zayed Men’s Campus",
-        "MZW": "Madinat Zayed Women’s Campus",
-        "RUM": "Ruwais Men’s Campus",
-        "RUW": "Ruwais Women’s Campus",
-        "DBM": "Dubai Men’s Campus",
-        "DBW": "Dubai Women’s Campus",
-        "SJM": "Sharjah Men’s Campus",
-        "SJW": "Sharjah Women’s Campus",
-        "FJM": "Fujairah Men’s Campus",
-        "FJW": "Fujairah Women’s Campus",
-        "RKM": "Ras Al Khaimah Men’s Campus",
-        "RKW": "Ras Al Khaimah Women’s Campus",
-        "MEL": "Melaha",
-        "ON": "Online"
-      },
-      "_note": "Raw short code is converted to the exact Zoho picklist text using a 32-entry table (e.g. 'AD' -> 'Abu Dhabi'; 'DB' -> 'Dubai'; 'SH' -> 'Sharjah'; 'AJ' -> 'Ajman'; ...). See value_map for the full list."
-    },
-    {
-      "raw_column": "App_Employment_Status",
-      "target_field": "Employment_Status",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_High_School_Country",
-      "target_field": "High_School_Country_Code",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Country",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Country' reference list."
-    },
-    {
-      "raw_column": "App_High_School_System",
-      "target_field": "High_School_System",
-      "kind": "map",
-      "value_map": {
-        "AG": "Algerian Baccalaureate",
-        "AM": "American",
-        "AP": "American - Advacned placement",
-        "AS": "Australian",
-        "BN": "Bangladeshi",
-        "BR": "British",
-        "CA": "Canadian",
-        "CH": "Chinese Curriculum",
-        "CB": "CBSE-INDIAN",
-        "EG": "Egypt",
-        "EN": "English National Curriculum",
-        "ET": "Ethiopian National Curriculum",
-        "FR": "French",
-        "GR": "German",
-        "IN": "Indian (other than CBSE)",
-        "IB": "International Baccalaureate",
-        "IR": "Iranian",
-        "JA": "Japanese",
-        "JR": "Jordanian",
-        "LB": "Lebanese Baccalaureate",
-        "MA": "Mali",
-        "MO": "MOE (UAE)",
-        "MR": "Morrocco",
-        "NR": "Niger",
-        "NG": "NECO (Nigerian National Curriculum)",
-        "PK": "Pakistani",
-        "PH": "Philippines",
-        "RU": "Russian",
-        "SA": "SABIS",
-        "SE": "Senegal",
-        "SI": "Singapore",
-        "SR": "SriLanka",
-        "SY": "Syrian Baccalaureate",
-        "OT": "Other"
-      },
-      "_note": "FIXED: rebuilt from HEDB 'High School System' sheet. Previous map had 9 wrong codes (AB/AU/BA/GE/JO/NI/NE/PA/SL vs HEDB AG/AS/BN/GR/JR/NR/NG/PK/SR) and 2 labels that don't exist on the form ('American - Advanced Placement', 'Morocco' vs form 'American - Advacned placement', 'Morrocco')."
-    },
-    {
-      "raw_column": "App_High_School_Score",
-      "target_field": "High_School_Exit_Score",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_High_School_Name ",
-      "target_field": "High_School_Name",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_High_School_Year",
-      "target_field": "High_School_Exit_Year",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Academic Year",
-      "_note": "FIXED: 'Academic Year' sheet has Code in col 1 and Name in col 2 (data from row 4) -- the default col 2/3 read nothing. 201718 -> 'Academic Year 2017-2018' (matches Zoho Academic_Year Name).",
-      "header_row": 3,
-      "code_col": 1,
-      "name_col": 2
-    },
-    {
-      "raw_column": "App_Qual_institution_Name",
-      "target_field": "Qualifying_institution_Name",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Qual_institution_ Country",
-      "target_field": "Qualifying_institution_s_Country",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Country",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Country' reference list."
-    },
-    {
-      "raw_column": "App_Last_completed_HE_Degree",
-      "target_field": "Last_completed_higher_Education_Degree",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Degree or Program Level",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Degree or Program Level' reference list."
-    },
-    {
-      "raw_column": "App_Last_completed_HE_CGPA",
-      "target_field": "Last_completed_higher_Education_Degree_CGPA",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Last_qualification_Year",
-      "target_field": "Last_qualification_Completion_Year_Academic_Year",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Academic Year",
-      "_note": "FIXED: 'Academic Year' sheet has Code in col 1 and Name in col 2 (data from row 4) -- the default col 2/3 read nothing. 201718 -> 'Academic Year 2017-2018' (matches Zoho Academic_Year Name).",
-      "header_row": 3,
-      "code_col": 1,
-      "name_col": 2
-    },
-    {
-      "raw_column": "App_Language_Test_Name1",
-      "target_field": "Language_Test_Name1",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Acad Proficiency Test",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Acad Proficiency Test' reference list."
-    },
-    {
-      "raw_column": "App_Language_Test_Score1",
-      "target_field": "Language_Test_Score1",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Language_Test_Name2",
-      "target_field": "Language_Test_Name2",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Acad Proficiency Test",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Acad Proficiency Test' reference list."
-    },
-    {
-      "raw_column": "App_Language_Test_Score2",
-      "target_field": "Language_Test_Score2",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Target_Degree_Level",
-      "target_field": "Target_Degree_Level",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Degree or Program Level",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Degree or Program Level' reference list."
-    },
-    {
-      "raw_column": "App_Area_of_Specialization",
-      "target_field": null,
-      "kind": "unmapped",
-      "_note": "NOT imported. Zoho fills this automatically from Student_program (on validate: Area = same Program_Code record), so the push always sends that program's CIP_Family_Code -- incl. 99. Importing it by CIP_Family_Name would risk matching the wrong Program_Code record (many share a name) and 'Not listed' isn't a choice. Keep the column in the raw file for reference only."
-    },
-    {
-      "raw_column": "App_Student_Major",
-      "target_field": "Student_Major",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "App_Target_Major_CIP",
-      "target_field": "Student_program",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Program Master",
-      "code_col": 9,
-      "name_col": 5,
-      "_note": "CIP code -> Program Name (Program_Code displayformat [Name]), SIUD (141) rows only. Programs with a unique official CIP resolve directly. 52.0201 (MBA/BBA): resolved by App_Student_Major if it equals the program name, else by App_Target_Degree_Level (MB/MS -> MASTER, BA -> BACHELOR). Catch-all codes ending .9999 (all newer programs) can't be resolved from the CIP -- App_Student_Major must hold the exact program name (e.g. 'BACHELOR OF COMMERCE'); otherwise the row is flagged. Never blanked, because Student_program is mandatory.",
-      "filter_col": 1,
-      "filter_value": "141",
-      "disambiguate_by": {
-        "raw_column": "App_Target_Degree_Level",
-        "contains": {
-          "MB": "MASTER",
-          "MS": "MASTER",
-          "GD": "MASTER",
-          "BA": "BACHELOR"
-        }
-      },
-      "fallback_name_column": "App_Student_Major",
-      "fallback_on_suffixes": [
-        ".9999"
-      ]
-    }
-  ],
-  "_form_note": "Students_SOD_Applicants (Zoho form 'Students – SOD Applicants'). Verified against form field definitions + push workflow 'push_api_production26' in Zoho_To_CHEDS_(23).ds. Raw column names = HEDB 'SOD Applicants' Database Field Names. Workflow hardcodes institutionCode=141."
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production26 + HEDB Data Dictionary 202601 sheet 'SOD Applicants '.",
+ "_zoho_form": "Students_SOD_Applicants",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "App_Institution_CODE",
+   "target_field": "Qualifying_institution_s_Country",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Country",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Ap_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "App_Academic_period",
+   "target_field": "Academic_Period_Code",
+   "kind": "lookup",
+   "lookup_direction": "code_to_combo",
+   "combo_order": "name_code",
+   "combo_separator": " - ",
+   "hedb_sheet": "Academic Period",
+   "_note": "displayformat = [\" \" + Name + \" - \" + Code] confirmed in .ds export -- combo order 'name_code', separator ' - '. Extra literal text also present in the format string ([' ']) -- double check it's cosmetic and not required in the imported value."
+  },
+  {
+   "raw_column": "App_Applicant_ID",
+   "target_field": "Applicant_ID",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_Admission_Offered",
+   "target_field": "Admission_Offered",
+   "kind": "plain",
+   "_note": "Literal picklist choices = ['Y', 'N'] -- raw data must match one exactly."
+  },
+  {
+   "raw_column": "App_Admission_Accepted",
+   "target_field": "Admission_Accepted_by_student",
+   "kind": "yesno",
+   "_note": "Picklist choices = ['Yes', 'No']; workflow does .subString(0,1) for the API. Using 'yesno' for flexible Y/N/true/false/1/0 raw input."
+  },
+  {
+   "raw_column": "App_Student_ID",
+   "target_field": "Student_ID",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_Emirates_ID",
+   "target_field": "Emirates_ID",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_Passport_Number",
+   "target_field": "Passport_Number",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_Passport_Unified_Number",
+   "target_field": "Passport_Unified_Number",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_Family_ID",
+   "target_field": "Family_ID",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_Gender",
+   "target_field": "Gender",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Gender() (workflow push_api_production26).",
+   "value_map": {
+    "M": "Male",
+    "F": "Female",
+    "U": "Unreported due to privacy laws applicable (e.g. GDPR , FERPA)"
+   }
+  },
+  {
+   "raw_column": "App_Health_Fitness_Certificate",
+   "target_field": "People_of_Determination",
+   "kind": "map",
+   "value_map": {
+    "Y": "Yes",
+    "N": "No",
+    "U": "Unknown/ Undeclared"
+   },
+   "_note": "Picklist choices = ['Yes', 'No', 'Unknown/ Undeclared']; workflow does .subString(0,1) to get a 1-char code for the API. value_map assumes raw data holds that short code -- if raw already has the full literal text, switch this field to kind:'plain' instead."
+  },
+  {
+   "raw_column": "App_Nationality",
+   "target_field": "Nationality_CODE",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Country",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "App_Email_Address",
+   "target_field": "Applicant_Email_Address",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_Mobile_Number",
+   "target_field": "Applicant_Mobile_Number",
+   "kind": "phone",
+   "_note": "type = phonenumber -- raw digits/dashes/spaces will be stripped to a bare '+countrycode+number' string (e.g. '+971-50-1203650' -> '+971501203650') to match Zoho's expected format."
+  },
+  {
+   "raw_column": "App_Home_Number",
+   "target_field": "Applicant_Home_Number",
+   "kind": "phone",
+   "_note": "type = phonenumber -- raw digits/dashes/spaces will be stripped to a bare '+countrycode+number' string (e.g. '+971-50-1203650' -> '+971501203650') to match Zoho's expected format."
+  },
+  {
+   "raw_column": "App_DOB",
+   "target_field": "Applicant_DOB",
+   "kind": "date"
+  },
+  {
+   "raw_column": "App_Name_English",
+   "target_field": "Applicant_Name_English",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_Name_Arabic",
+   "target_field": "Applicant_Name_Arabic",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_Home_Emirate",
+   "target_field": "Home_Emirate",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Emirates_code() (workflow push_api_production26).",
+   "value_map": {
+    "AD": "Abu Dhabi",
+    "DB": "Dubai",
+    "SH": "Sharjah",
+    "AJ": "Ajman",
+    "RK": "Ras Al Khaimah",
+    "FJ": "Fujairah",
+    "UQ": "Umm Al-Quwain",
+    "UN": "Use in case of GCC students who do not have addresses within UAE",
+    "ON": "Online Study/Teaching/Work"
+   }
+  },
+  {
+   "raw_column": "App_Country",
+   "target_field": "Country",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Country",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "App_Campus",
+   "target_field": "Applicant_Campus",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Campus() (workflow push_api_production26).",
+   "value_map": {
+    "AD": "Abu Dhabi",
+    "DB": "Dubai",
+    "SH": "Sharjah",
+    "AJ": "Ajman",
+    "RK": "Ras Al Khaimah",
+    "FJ": "Fujairah",
+    "UQ": "Umm Al-Quwain",
+    "AA": "Al Ain",
+    "RW": "Ruwais",
+    "MZ": "Madinat Zayed",
+    "KF": "Khorfakan",
+    "DI": "Dibba",
+    "KH": "Khalba",
+    "DD": "Dhaid",
+    "AAM": "Al Ain Men's Campus",
+    "AAW": "Al Ain Women's Campus",
+    "ADM": "Abu Dhabi Men's Campus",
+    "ADW": "Abu Dhabi Women's Campus",
+    "MZM": "Madinat Zayed Men's Campus",
+    "MZW": "Madinat Zayed Women's Campus",
+    "RUM": "Ruwais Men's Campus",
+    "RUW": "Ruwais Women's Campus",
+    "DBM": "Dubai Men's Campus",
+    "DBW": "Dubai Women's Campus",
+    "SJM": "Sharjah Men's Campus",
+    "SJW": "Sharjah Women's Campus",
+    "FJM": "Fujairah Men's Campus",
+    "FJW": "Fujairah Women's Campus",
+    "RKM": "Ras Al Khaimah Men's Campus",
+    "RKW": "Ras Al Khaimah Women's Campus",
+    "MEL": "Melaha",
+    "ON": "Online"
+   }
+  },
+  {
+   "raw_column": "App_Employment_Status",
+   "target_field": "Employment_Status",
+   "kind": "plain",
+   "_note": "Literal picklist choices = ['Y', 'N', 'U'] -- raw data must match one exactly."
+  },
+  {
+   "raw_column": "App_High_School_System",
+   "target_field": "High_School_System",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.High_School_System() (workflow push_api_production26).",
+   "value_map": {
+    "AG": "Algerian Baccalaureate",
+    "AM": "American",
+    "AP": "American - Advacned placement",
+    "AS": "Australian",
+    "BN": "Bangladeshi",
+    "BR": "British",
+    "CA": "Canadian",
+    "CH": "Chinese Curriculum",
+    "CB": "CBSE-INDIAN",
+    "EG": "Egypt",
+    "EN": "English National Curriculum",
+    "ET": "Ethiopian National Curriculum",
+    "FR": "French",
+    "GR": "German",
+    "IN": "Indian (other than CBSE)",
+    "IB": "International Baccalaureate",
+    "IR": "Iranian",
+    "JA": "Japanese",
+    "JR": "Jordanian",
+    "LB": "Lebanese Baccalaureate",
+    "MA": "Mali",
+    "MO": "MOE (UAE)",
+    "MR": "Morrocco",
+    "NR": "Niger",
+    "NG": "NECO (Nigerian National Curriculum)",
+    "PK": "Pakistani",
+    "PH": "Philippines",
+    "RU": "Russian",
+    "SA": "SABIS",
+    "SE": "Senegal",
+    "SI": "Singapore",
+    "SR": "SriLanka",
+    "SY": "Syrian Baccalaureate",
+    "OT": "Other"
+   }
+  },
+  {
+   "raw_column": "App_High_School_Score",
+   "target_field": "High_School_Exit_Score",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_High_School_Name",
+   "target_field": "High_School_Name",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_High_School_Year",
+   "target_field": "High_School_Exit_Year",
+   "kind": "plain",
+   "hedb_sheet": null,
+   "_note": "displayformat = [Name] confirmed in .ds export. Lookup sheet could not be resolved from the 202601 dictionary; downgraded to plain."
+  },
+  {
+   "raw_column": "App_Last_completed_HE_Degree",
+   "target_field": "Last_completed_higher_Education_Degree",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Degree or Program Level",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "App_Last_completed_HE_CGPA",
+   "target_field": "Last_completed_higher_Education_Degree_CGPA",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_Last_qualification_Year",
+   "target_field": "Last_qualification_Completion_Year_Academic_Year",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Academic Year",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "App_Language_Test_Name1",
+   "target_field": "Language_Test_Name1",
+   "kind": "plain",
+   "hedb_sheet": null,
+   "_note": "displayformat = [Name] confirmed in .ds export. Lookup sheet could not be resolved from the 202601 dictionary; downgraded to plain."
+  },
+  {
+   "raw_column": "App_Language_Test_Score1",
+   "target_field": "Language_Test_Score1",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_Language_Test_Name2",
+   "target_field": "Language_Test_Name2",
+   "kind": "plain",
+   "hedb_sheet": null,
+   "_note": "displayformat = [Name] confirmed in .ds export. Lookup sheet could not be resolved from the 202601 dictionary; downgraded to plain."
+  },
+  {
+   "raw_column": "App_Language_Test_Score2",
+   "target_field": "Language_Test_Score2",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_Target_Degree_Level",
+   "target_field": "Target_Degree_Level",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Degree or Program Level",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "App_Area_of_Specialization",
+   "kind": "unmapped",
+   "target_field": null,
+   "_note": "NOT imported. Zoho fills this automatically from Student_program (on validate: Area = the same Program_Code record), so the push always sends that program's CIP_Family_Code, incl. 99. Importing it by CIP_Family_Name would risk matching the wrong Program_Code record. Keep the column in the raw file for reference only."
+  },
+  {
+   "raw_column": "App_Student_Major",
+   "target_field": "Student_Major",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "App_Target_Major_CIP",
+   "target_field": "Student_program",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Program Master",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
 }

@@ -1,0 +1,175 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production17 + HEDB Data Dictionary 202601 sheet 'Courses'.",
+ "_zoho_form": "Institute_Courses",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "Course_Institution_Code",
+   "target_field": "Institutional_Codes",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "displayformat = [Name] confirmed in .ds export. Not referenced anywhere in the push workflow script -- likely hardcoded elsewhere (check for a literal value near institutionCode) or simply unused. May still need a valid value to save the Zoho record."
+  },
+  {
+   "raw_column": "Course_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "Course_Program_Name",
+   "target_field": "Program_Code",
+   "kind": "plain",
+   "_note": "No conversion -- despite the column name this HEDB field is the CAA Program Code, and the Zoho 'Program Code' lookup displays [Code] only, so the raw code is already the exact display value."
+  },
+  {
+   "raw_column": "Course_Academic_Period",
+   "target_field": "Academic_Period",
+   "kind": "lookup",
+   "lookup_direction": "code_to_combo",
+   "combo_order": "name_code",
+   "combo_separator": " - ",
+   "hedb_sheet": "Academic Period",
+   "_note": "displayformat = [\" \" + Name + \" - \" + Code] confirmed in .ds export -- combo order 'name_code', separator ' - '. Extra literal text also present in the format string ([' ']) -- double check it's cosmetic and not required in the imported value."
+  },
+  {
+   "raw_column": "Course_Name",
+   "target_field": "Course_Name",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_code",
+   "target_field": "Course_code",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_CRN",
+   "target_field": "Course_Ref_Number",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_desc",
+   "target_field": "Course_description",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_Degree",
+   "target_field": "Course_level",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Degree or Program Level",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Course_credit",
+   "target_field": "Course_type",
+   "kind": "map",
+   "value_map": {
+    "CR": "CR- Credit Courses",
+    "NC": "NC- Non Credit"
+   },
+   "_note": "Picklist choices = ['CR- Credit Courses', 'NC- Non Credit']; workflow does .subString(0,2) to get a 2-char code for the API. value_map assumes raw data holds that short code -- if raw already has the full literal text, switch this field to kind:'plain' instead."
+  },
+  {
+   "raw_column": "Course_mandatory",
+   "target_field": "Mandatory_Optional",
+   "kind": "map",
+   "value_map": {
+    "M": "Mandatory",
+    "O": "Optional"
+   },
+   "_note": "Picklist choices = ['Mandatory', 'Optional']; workflow does .subString(0,1) to get a 1-char code for the API. value_map assumes raw data holds that short code -- if raw already has the full literal text, switch this field to kind:'plain' instead."
+  },
+  {
+   "raw_column": "Course_credit_hours",
+   "target_field": "Credit_hours",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_contact_hours",
+   "target_field": "Contact_Hours",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_lab",
+   "target_field": "Lab_hours_required",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_mode",
+   "target_field": "Method_of_instruction",
+   "kind": "map",
+   "value_map": {
+    "ON": "ON- Online",
+    "IC": "IC- In Class",
+    "BL": "BL- Blended"
+   },
+   "_note": "Picklist choices = ['ON- Online', 'IC- In Class', 'BL- Blended']; workflow does .subString(0,2) to get a 2-char code for the API. value_map assumes raw data holds that short code -- if raw already has the full literal text, switch this field to kind:'plain' instead."
+  },
+  {
+   "raw_column": "Course_Grade",
+   "target_field": "Grading_Type_pass_fail_or_grades",
+   "kind": "map",
+   "value_map": {
+    "P": "Pass/fail",
+    "G": "Graded"
+   },
+   "_note": "Picklist choices = ['Pass/fail', 'Graded']; workflow does .subString(0,1) to get a 1-char code for the API. value_map assumes raw data holds that short code -- if raw already has the full literal text, switch this field to kind:'plain' instead."
+  },
+  {
+   "raw_column": "Course_Faculty_member",
+   "target_field": "Number_of_faculty_members",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_CoDev",
+   "target_field": "Co_developed_course",
+   "kind": "yesno",
+   "_note": "Picklist choices = ['Yes', 'No']; workflow does .subString(0,1) for the API. Using 'yesno' for flexible Y/N/true/false/1/0 raw input."
+  },
+  {
+   "raw_column": "Course_CoDev_Percent",
+   "target_field": "Percentage_of_Co_developed_course",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_CoDeliver",
+   "target_field": "Co_delivered_course",
+   "kind": "yesno",
+   "_note": "Picklist choices = ['Yes', 'No']; workflow does .subString(0,1) for the API. Using 'yesno' for flexible Y/N/true/false/1/0 raw input."
+  },
+  {
+   "raw_column": "Course_CoDeliver_percent",
+   "target_field": "Percentage_of_Co_delivered_course",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_eval_score",
+   "target_field": "Course_evaluations_score",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Student_Numbers",
+   "target_field": "Student_Numbers",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_EMS_flag",
+   "target_field": "EMS_flag",
+   "kind": "yesno",
+   "_note": "Picklist choices = ['Yes', 'No']; workflow does .subString(0,1) for the API. Using 'yesno' for flexible Y/N/true/false/1/0 raw input."
+  },
+  {
+   "raw_column": "Course_CoSessions",
+   "target_field": "Number_of_Industry_Led_Sessions",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

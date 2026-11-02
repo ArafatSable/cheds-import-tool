@@ -1,0 +1,203 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production8 + HEDB Data Dictionary 202601 sheet 'Institute - Partnerships'.",
+ "_zoho_form": "Institute_Partnerships",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "Partnership_Department",
+   "target_field": "Department",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Partnership_College",
+   "target_field": "College",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Partnership_Year",
+   "target_field": "Year_field",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Partnership_ID",
+   "target_field": "Partnership_ID",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Partner_Name",
+   "target_field": "Partner_Name",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Partner_Type",
+   "target_field": "PartnerType",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.PartnerType() (workflow push_api_production8).",
+   "value_map": {
+    "CP": "Corporation/Industry Partner: A business or corporate entity, often focused on industry-related collaborations",
+    "NO": "Nonprofit Organization: An organization dedicated to addressing social, cultural, environmental, or educational issues. Do not include federal ministries and other public enitities.",
+    "GA": "Government Agency: A federal, or local government entity such as ministries.",
+    "RC": "Research Center/Institution: An organization, either public or private, exclusively dedicated to research and development",
+    "EI": "Educational Institution: educational entity, such as a college, university, K-12 school, or technical institute,",
+    "HC": "Healthcare Organization: A hospital, clinic, or healthcare provider ",
+    "CO": "Community Organization: Focused on addressing the needs, interests, and well-being of a specific community (geographical, demographic, or shared interest) May include social services, advocacy, education, public health, or other initiatives to enhance the quality of life for members of the community..Such as Neighborhood associations, food banks, community centers, volunteer organizations, Youth programs or mentorship initiatives",
+    "FP": "Foundation or Philanthropic Organization: are entities that aim to promote the welfare of others, typically through charitable donations, grants, or social initiatives. Their primary focus is on addressing societal challenges and contributing to the greater good.",
+    "PA": "Professional Association: Organizations representing a specific industry or profession, such as engineering societies, medical boards, or law associations,",
+    "TP": "Technology Provider: Companies that specialize in digital solutions, software, or technology services and products. Do not list the companies which are providing teachonoly to the HEI as vendors but those with whom HEI has joint technology development partnership. For example developing AI tutors with Microsoft.",
+    "CI": "Cultural Institution: Centered on preserving, promoting, or celebrating cultural heritage, art, traditions, and creativity. May include performances, exhibitions, cultural festivals, language preservation, or promoting art and creativity. Museums, art galleries, theaters, and heritage preservation societies, other cultural organizations",
+    "CC": "Country: an HEI can be a part of G-G partnerships/projects. Or it can have direct partnership per the applicable laws"
+   }
+  },
+  {
+   "raw_column": "Partner_Category",
+   "target_field": "Partnership_Category",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.EventsCategory() (workflow push_api_production8).",
+   "value_map": {
+    "AC": "Academic: Events focused on educational content, knowledge sharing, and intellectual engagement",
+    "RI": "Research and Innovation: Events dedicated to showcasing research, sharing advancements, and promoting innovation",
+    "CE": "Community Engagement and Outreach: Events designed to engage with the broader community outside the university, including charity events, volunteer opportunities, and public workshops that promote community service and social responsibility.",
+    "PD": "Professional Development: Events aimed at building skills, competencies, and career readiness",
+    "IN": "Industry and Career Connections: Events designed to bridge the gap between academia and industry, providing students and faculty with opportunities to connect with professionals and learn about industry trends.",
+    "HW": "Health and Wellness: Events promoting physical (sport) and mental well-being, supporting a healthy campus environment."
+   }
+  },
+  {
+   "raw_column": "Partnership_Type",
+   "target_field": "Partnership_Type",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.PartnershipType() (workflow push_api_production8).",
+   "value_map": {
+    "RC": "Research Collaboration: Partnerships focused on conducting joint research projects, sharing expertise, and co-publishing findings. These collaborations often involve shared funding, resources, and personnel to advance scientific knowledge or technological innovation.",
+    "SI": "Student Internship and Placement: Partnerships that provide students with real-world experience through internships, externships, or placements at partner organizations. These partnerships are designed to enhance students’ skills, improve employability, and create pathways to professional careers.",
+    "JP": "Joint Academic Program: Partnerships with other educational institutions or industry partners to offer dual degree programs, exchange programs, or joint courses. These programs allow students to benefit from diverse expertise, curricula, and learning environments.",
+    "CE": "Community Engagement: Collaborations focused on serving the local or regional community, such as volunteer projects, educational outreach, and health and wellness programs. These partnerships often aim to promote social impact and address community needs.",
+    "SF": "Sponsorship and Funding Support: Partnerships in which an external entity provides financial resources or sponsorships for university projects, research, events, or student support. These partnerships help to fund academic and extracurricular activities.",
+    "GR": "Grants: Partnerships in which an external entity provides financial support specifically for research projects, infrastructure development, or academic programs. These partnerships typically involve grant funding from government agencies, foundations, or corporations, supporting projects with specific goals or deliverables, such as scientific research, innovation, or community development. Grants are often awarded based on competitive applications and come with reporting requirements.",
+    "SC": "Scholarships: Partnerships aimed at providing financial assistance directly to students in the form of scholarships or fellowships. These partnerships may involve external sponsors, such as corporations, nonprofit organizations, or philanthropic foundations, that fund scholarships to support students’ academic pursuits, reduce financial barriers, and enhance access to higher education. Scholarships can be need-based, merit-based, or targeted at specific groups, fields of study, or demographic criteria.",
+    "IE": "Innovation and Entrepreneurship: Partnerships that support entrepreneurial activities, such as startup incubators, business accelerators, and innovation hubs. These collaborations provide students and faculty with resources, mentorship, and funding to foster innovation and create new ventures.",
+    "TD": "Training and Development: Collaborations that focus on developing skills and competencies in students, faculty, or staff through training programs, certifications, or workshops. Industry partners often provide hands-on learning experiences, industry certifications, and up-to-date training resources.",
+    "FR": "Facilities and Resource Sharing: Partnerships that involve the shared use of facilities, equipment, or technology resources. For example, a university might share lab space with a research institution or provide access to specialized equipment to support collaborative projects.",
+    "CD": "Curriculum Development: Partnerships where external experts work with the university to design or enhance academic programs and curricula, often to meet industry standards or emerging field requirements. This collaboration ensures that academic content remains relevant and aligned with real-world needs.",
+    "PP": "Public Policy : Collaborations with government to research, inform, or influence public policy. These partnerships often involve studies, reports, and public forums that support evidence-based policy-making on social, environmental, or economic issues.",
+    "ES": "Environmental and Sustainability Initiatives: Partnerships that focus on promoting sustainability and environmental stewardship, such as projects on renewable energy, conservation, waste reduction, or climate action. These partnerships often aim to address global environmental challenges.",
+    "HW": "Health and Wellness Programs (including sports): Partnerships with healthcare organizations or public health agencies to provide wellness resources, clinical placements, or health-related research. These collaborations may support mental health, physical fitness, and community health education.",
+    "IG": "International Exchange and Global Collaboration: Partnerships that facilitate international student exchange, research collaboration, and cultural exchange. These initiatives promote cross-cultural understanding and global perspectives within the academic environment."
+   }
+  },
+  {
+   "raw_column": "Partner_Industry",
+   "target_field": "Partner_Industry1",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Patner_industry() (workflow push_api_production8).",
+   "value_map": {
+    "1": "Agriculture, Forestry and Fishing",
+    "2": "Mining and Quarrying",
+    "3": "Manufacturing",
+    "4": "Electricity, Gas, Steam and Air Conditioning Supply",
+    "5": "Water Supply; Sewerage, Waste Management and Remediation Activities",
+    "6": "Construction",
+    "7": "Wholesale and Retail Trade; Repair of Motor Vehicles and Motorcycles",
+    "8": "Transportation and Storage",
+    "9": "Accommodation and Food Service Activities",
+    "10": "Information and Communication",
+    "11": "Financial and Insurance Activities",
+    "12": "Real Estate Activities",
+    "13": "Professional, Scientific and Technical Activities",
+    "14": "Administrative and Support Service Activities",
+    "15": "Public Administration and Defence; Compulsory Social Security",
+    "16": "Education",
+    "17": "Human Health and Social Work Activities",
+    "18": "Arts, Entertainment and Recreation",
+    "19": "Other"
+   }
+  },
+  {
+   "raw_column": "Partner_Country",
+   "target_field": "Country",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Country",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Partner_Website",
+   "target_field": "Partner_Website",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Partnership_Agreement",
+   "target_field": "Agreement_type",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.AgreementType() (workflow push_api_production8).",
+   "value_map": {
+    "MOU": "Memorandum of Understanding (MOU): A non-binding agreement that outlines the general terms of collaboration and establishes a mutual understanding between the university and the partner. MOUs often serve as a preliminary step to a more detailed contract, specifying shared goals and the scope of cooperation without formal legal obligations.",
+    "CRT": "Contract: A legally binding agreement that specifies the roles, responsibilities, and deliverables for each party. Contracts often include details on funding, intellectual property rights, timelines, and specific outcomes. They are commonly used when financial transactions, resource sharing, or specific services are involved."
+   }
+  },
+  {
+   "raw_column": "Partnership_CIPC",
+   "target_field": "Area_of_Specialization",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Area of Specialization",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Partnership_StartDate",
+   "target_field": "Start_Date",
+   "kind": "date"
+  },
+  {
+   "raw_column": "Partnership_EndDate",
+   "target_field": "End_Date",
+   "kind": "date"
+  },
+  {
+   "raw_column": "Partner_contribution",
+   "target_field": "Partner_contribution",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.partner_contribution() (workflow push_api_production8).",
+   "value_map": {
+    "F": "Financially",
+    "I": "I kind",
+    "B": "Both Ikind and Finds",
+    "NA": "Not Applicable"
+   }
+  },
+  {
+   "raw_column": "Partnership_value",
+   "target_field": "Value_Of_Partner_Contribution_Towards_Partnership",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "HEI_Contribution",
+   "target_field": "HEI_Contribution1",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.HEI_Contribution() (workflow push_api_production8).",
+   "value_map": {
+    "F": "Financially",
+    "I": "I kind",
+    "B": "Both Ikind and Finds",
+    "NA": "Not Applicable"
+   }
+  },
+  {
+   "raw_column": "HEI_Value",
+   "target_field": "Value_Of_University_Contribution_Towards_Partnership",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

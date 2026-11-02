@@ -1,0 +1,119 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow Push_Api_Production39 + HEDB Data Dictionary 202601 sheet 'Institute - Publications'.",
+ "_zoho_form": "Institute_Publications",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "Pub_Inst_Code",
+   "target_field": "Institutional_Codes",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Pub_Institution",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "Pub_Year",
+   "target_field": "Year_field",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Pub_Faculty_Id",
+   "target_field": "Faculty_Employee_ID",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Pub_Researcher_Type",
+   "target_field": "Researcher_Type_Researcher_Code",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Researcher_Type() (workflow Push_Api_Production39).",
+   "value_map": {
+    "SN": "Single author (PI)",
+    "CP": "PI with Co-Authors from within institution ",
+    "CO": "PI with Co-Authors from outside of the institution",
+    "IH": "Co-Authored from within the institution and this faculty member is not the PI ",
+    "OS": "Co-Authored with faculty from another institution and the reporting faculty is not the PI",
+    "OT": "Other"
+   }
+  },
+  {
+   "raw_column": "Pub_Number_Of_Auth",
+   "target_field": "Number_of_Authors",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Pub_Published_Work",
+   "target_field": "Title_of_Published_Work",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Pub_Total_Citations",
+   "target_field": "Total_citations",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Pub_Year_Publication",
+   "target_field": "Year_of_Publication",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Pub_Publication_Type",
+   "target_field": "Type_of_Publication_Publication_Code",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.type_of_Publication() (workflow Push_Api_Production39).",
+   "value_map": {
+    "JR": "Journal Article",
+    "AR": "Non- Journal Article",
+    "EB": "Book",
+    "CB": "Chapter of a Book",
+    "ED": "Editorial",
+    "CF": "Conference Paper ",
+    "AP": "Awarded Patent",
+    "FP": "Filed Patent",
+    "NT": "Note, discussion or commentary",
+    "CW": "Creative Work (Art specialization: Design, Architecture , Painting, etc.)"
+   }
+  },
+  {
+   "raw_column": "Pub_Publication_Area",
+   "target_field": "Research_area_of_publication",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Area of Specialization",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Pub_Publisher_Name",
+   "target_field": "Publisher",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Pub_Referee_Indicator",
+   "target_field": "Referee_Indicator",
+   "kind": "yesno",
+   "_note": "Picklist choices = ['Yes', 'No']; workflow does .subString(0,1) for the API. Using 'yesno' for flexible Y/N/true/false/1/0 raw input."
+  },
+  {
+   "raw_column": "Pub_scopus_Indicator",
+   "target_field": "Reasons_for_NON_SCOPUS_entries",
+   "kind": "map",
+   "value_map": {
+    "A": "A- Arabic publications not listed on SCOPUS",
+    "B": "B- Validated local campus affiliation that does not appear in SCOPUS",
+    "C": "C- Creative output"
+   },
+   "_note": "Picklist choices = ['A- Arabic publications not listed on SCOPUS', 'B- Validated local campus affiliation that does not appear in SCOPUS', 'C- Creative output']; workflow does .subString(0,1) to get a 1-char code for the API. value_map assumes raw data holds that short code -- if raw already has the full literal text, switch this field to kind:'plain' instead."
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

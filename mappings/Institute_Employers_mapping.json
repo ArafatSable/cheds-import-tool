@@ -1,0 +1,127 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production31 + HEDB Data Dictionary 202601 sheet 'Institute - Employers'.",
+ "_zoho_form": "Institute_Employers",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "EC_Institution_Code",
+   "target_field": "Institution_code",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "displayformat = [Name] confirmed in .ds export. Not referenced anywhere in the push workflow script -- likely hardcoded elsewhere (check for a literal value near institutionCode) or simply unused. May still need a valid value to save the Zoho record."
+  },
+  {
+   "raw_column": "EC_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "EC_Academic_Year",
+   "target_field": "Academic_Year",
+   "kind": "lookup",
+   "lookup_direction": "code_to_combo",
+   "combo_order": "name_code",
+   "combo_separator": " - ",
+   "hedb_sheet": "Academic Year",
+   "_note": "displayformat = [Name + \" - \" + Code] confirmed in .ds export -- combo order 'name_code', separator ' - '."
+  },
+  {
+   "raw_column": "EC_Name_Employer",
+   "target_field": "Name_of_the_employer",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "EC_Position",
+   "target_field": "Position",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "EC_Sector",
+   "target_field": "Sector",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Employment_Sector() (workflow push_api_production31).",
+   "value_map": {
+    "Private": "Private Sector",
+    "Local": "Local Government",
+    "Federal": "Federal Government",
+    "Semi": "Semi-Government"
+   }
+  },
+  {
+   "raw_column": "EC_Industry",
+   "target_field": "Industry",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Employment_Industries() (workflow push_api_production31).",
+   "value_map": {
+    "1": "AGRICULTURE, FORESTRY AND FISHING",
+    "2": "MINING AND QUARRYING",
+    "3": "MANUFACTURING",
+    "4": "ELECTRICITY, GAS, STEAM AND AIR CONDITIONING SUPPLY",
+    "5": "WATER SUPPLY; SEWERAGE, WASTE MANAGEMENT AND REMEDIATION ACTIVITIES",
+    "6": "CONSTRUCTION",
+    "7": "WHOLESALE AND RETAIL TRADE; REPAIR OF MOTOR VEHICLES AND MOTORCYCLES",
+    "8": "TRANSPORTATION AND STORAGE",
+    "9": "ACCOMMODATION AND FOOD SERVICE ACTIVITIES",
+    "10": "INFORMATION AND COMMUNICATION",
+    "11": "FINANCIAL AND INSURANCE ACTIVITIES",
+    "12": "REAL ESTATE ACTIVITIES",
+    "13": "PROFESSIONAL, SCIENTIFIC AND TECHNICAL ACTIVITIES",
+    "14": "ADMINISTRATIVE AND SUPPORT SERVICE ACTIVITIES",
+    "15": "PUBLIC ADMINISTRATION AND DEFENCE; COMPULSORY SOCIAL SECURITY",
+    "16": "EDUCATION",
+    "17": "HUMAN HEALTH AND SOCIAL WORK ACTIVITIES",
+    "18": "ARTS, ENTERTAINMENT AND RECREATION",
+    "19": "OTHER"
+   }
+  },
+  {
+   "raw_column": "EC_Company_Name",
+   "target_field": "Company_Name",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "EC_Location_Country",
+   "target_field": "Location_Country",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Country",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "EC_Location_Emirate",
+   "target_field": "Location_Emirates",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Emirates_code() (workflow push_api_production31).",
+   "value_map": {
+    "AD": "Abu Dhabi",
+    "DB": "Dubai",
+    "SH": "Sharjah",
+    "AJ": "Ajman",
+    "RK": "Ras Al Khaimah",
+    "FJ": "Fujairah",
+    "UQ": "Umm Al-Quwain",
+    "UN": "Use in case of GCC students who do not have addresses within UAE",
+    "ON": "Online Study/Teaching/Work"
+   }
+  },
+  {
+   "raw_column": "EC_Email",
+   "target_field": "Email",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "EC_Phone",
+   "target_field": "Phone_Number",
+   "kind": "phone",
+   "_note": "type = phonenumber -- raw digits/dashes/spaces will be stripped to a bare '+countrycode+number' string (e.g. '+971-50-1203650' -> '+971501203650') to match Zoho's expected format."
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

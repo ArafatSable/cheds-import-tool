@@ -1,0 +1,277 @@
+{
+  "_source": "HEDB Data Dictionary 202601, sheet 'Students - Internship'",
+  "_zoho_form": "Student_Internship",
+  "_note": "New 2026-10-28, built against Zoho_To_CHEDS_ (34).ds. HEDB 202601 removes EIGHT fields on this sheet (Emirates ID, Passport Number, Student Name English, Student Name Arabic, Gender, Student DOB, Nationality, Area of Specialization -- all filled red) and the .ds carries the same note on Student_Internship_Function; none appear here. raw_column values are the dictionary's 'Database Field Name' column verbatim, including the trailing space on Internship_satisfaction. The Zoho form also has an Internship_Duration field that the push sends as internshipDuration, but HEDB 202601 has NO column for it, so nothing is mapped to it and it stays blank on import.",
+  "fields": [
+    {
+      "raw_column": "Internship_Institution_Code",
+      "target_field": "Institution_Code",
+      "kind": "plain",
+      "_note": "No conversion -- this Zoho lookup's displayformat is [Code], so the raw CHEDS code (141) is already the exact display value. The list is filtered to Code == \"141\" and the push hardcodes institutionCode = 141."
+    },
+    {
+      "raw_column": "Internship_Institution_Name",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- the Zoho form derives the name from the institution code lookup."
+    },
+    {
+      "raw_column": "Internship_Academic_Period",
+      "target_field": "Academic_Period",
+      "kind": "plain",
+      "_note": "No conversion -- on THIS form the Academic Period lookup displays [Code] only, so the raw semester code is the exact display value. (Most other forms in this app display Name or a Name-Code combo, so do not copy a lookup entry across from them.) The push sends rec.Academic_Period.Code."
+    },
+    {
+      "raw_column": "Internship_Student_ID",
+      "target_field": "Student_ID",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Internship_Student_Level",
+      "target_field": "Student_Level",
+      "kind": "map",
+      "value_map": {
+        "FN": "Foundation",
+        "RM": "Remedial program (pre Masters).",
+        "FR": "Freshman: e.g. Less than 1/4th of the total credit hours completed",
+        "SP": "Sophomore: e.g. At least (=) 1/4th and less than half of the credits required for graduation",
+        "JR": "Junior: e.g. At least 1/2 of total required credits and less than 3/4th of total required",
+        "SR": "Senior: e.g. At 3/4th of total required credit hours completed OR student who has completed",
+        "M1": "Masters - Year1",
+        "M2": "Masters - Year2 ( 50% or more of required credits completed)",
+        "M3": "Masters - Year3",
+        "D1": "Doctorate 1: Not advanced to candidacy",
+        "D2": "Doctorate 2: Advanced to candidacy",
+        "PD": "Post-doctorate",
+        "PF": "Professional Education",
+        "CR": "Certificate/Credential",
+        "DP": "Diploma",
+        "HD": "Higher Diploma",
+        "P1": "Phase A :Year 1 or 2 or 3 (MBBS), Year 1 (JD or MD), Year 1,2, 3 of DD (Dentistry)",
+        "P2": "Phase B: Year 4, 5, 6 (MBBS), Year 2 (JD or MD), Year 4,5 of DD (Dentistry)",
+        "P3": "Medical residency and training (above year 5) , Year 3 and above (JD or MD)",
+        "PG": "Post graduate diploma",
+        "MC": "Microcredential"
+      },
+      "_note": "Raw Student Level code is converted to the exact Zoho picklist text using a 21-entry table. NOTE: this form spells the levels out in full ('Freshman: e.g. Less than 1/4th of the total credit hours completed'), unlike Students - Research which uses the short names -- the two value maps are NOT interchangeable. The push converts back via Dropdown_Fields.Student_Level_Code()."
+    },
+    {
+      "raw_column": "Internship_Program_Code",
+      "target_field": "Program_Program_Code",
+      "kind": "plain",
+      "_note": "No conversion -- this lookup displays [Code] and is filtered to codes starting with \"141\". The push sends rec.Program_Program_Code.Code."
+    },
+    {
+      "raw_column": "Internship_Organization",
+      "target_field": "Internship_Organization",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Internship_Sector",
+      "target_field": "Internship_Sector",
+      "kind": "map",
+      "value_map": {
+        "Private": "Private Sector",
+        "Local": "Local Government",
+        "Federal": "Federal Government",
+        "Semi": "Semi-Government"
+      },
+      "_note": "Raw Employment Sector code is converted to the exact Zoho picklist text: 'Private' -> 'Private Sector'; 'Local' -> 'Local Government'; 'Federal' -> 'Federal Government'; 'Semi' -> 'Semi-Government'. NOTE: the CHEDS codes here are words, not short letters. The push converts back via Dropdown_Fields.Employment_Sector()."
+    },
+    {
+      "raw_column": "Internship_Industry",
+      "target_field": "Internship_Industry",
+      "kind": "map",
+      "value_map": {
+        "1": "AGRICULTURE, FORESTRY AND FISHING",
+        "2": "MINING AND QUARRYING",
+        "3": "MANUFACTURING",
+        "4": "ELECTRICITY, GAS, STEAM AND AIR CONDITIONING SUPPLY",
+        "5": "WATER SUPPLY; SEWERAGE, WASTE MANAGEMENT AND REMEDIATION ACTIVITIES",
+        "6": "CONSTRUCTION",
+        "7": "WHOLESALE AND RETAIL TRADE; REPAIR OF MOTOR VEHICLES AND MOTORCYCLES",
+        "8": "TRANSPORTATION AND STORAGE",
+        "9": "ACCOMMODATION AND FOOD SERVICE ACTIVITIES",
+        "10": "INFORMATION AND COMMUNICATION",
+        "11": "FINANCIAL AND INSURANCE ACTIVITIES",
+        "12": "REAL ESTATE ACTIVITIES",
+        "13": "PROFESSIONAL, SCIENTIFIC AND TECHNICAL ACTIVITIES",
+        "14": "ADMINISTRATIVE AND SUPPORT SERVICE ACTIVITIES",
+        "15": "PUBLIC ADMINISTRATION AND DEFENCE; COMPULSORY SOCIAL SECURITY",
+        "16": "EDUCATION",
+        "17": "HUMAN HEALTH AND SOCIAL WORK ACTIVITIES",
+        "18": "ARTS, ENTERTAINMENT AND RECREATION",
+        "19": "OTHER"
+      },
+      "_note": "Raw Employment Industry code (1-19) is converted to the exact Zoho picklist text (e.g. '3' -> 'MANUFACTURING'; '16' -> 'EDUCATION'). The push converts back via Dropdown_Fields.Employment_Industries(). CHEDS warns that choosing 19 (OTHER) lowers the institution's data-accuracy score."
+    },
+    {
+      "raw_column": "Internship_time",
+      "target_field": "Internship_time_per_week",
+      "kind": "plain",
+      "_note": "No conversion -- hours per week, numbers only."
+    },
+    {
+      "raw_column": "Internship_type",
+      "target_field": "Intership_type",
+      "kind": "map",
+      "value_map": {
+        "IN": "IN-Internship",
+        "SP": "SP-Semester/Part-time",
+        "CO": "CO-Apprenticeship / Co-op Internship",
+        "RI": "RI-Research Internship",
+        "PP": "PP-Pre-professional",
+        "SL": "SL-Service Learning/Non-profit/NGO",
+        "RT": "RT-Returnship",
+        "EI": "EI-Externship"
+      },
+      "_note": "Raw Internship Type code is converted to the exact Zoho picklist text ('IN' -> 'IN-Internship'); the push sends .subString(0,2) to recover the code. NOTE: the Zoho field link name misspells 'Internship' as 'Intership' -- that is the live link name, not a typo here."
+    },
+    {
+      "raw_column": "Internship_pay",
+      "target_field": "Paid_Unpaid",
+      "kind": "map",
+      "value_map": {
+        "P": "Paid",
+        "NP": "Unpaid"
+      },
+      "_note": "Raw code is converted to the exact Zoho picklist text: 'P' -> 'Paid'; 'NP' -> 'Unpaid'. WARNING: the push uses if(rec.Paid_Unpaid == \"Unpaid\",\"NP\",\"P\"), so a BLANK value silently reports as 'P' (Paid) to the ministry. Make sure this column is never left empty."
+    },
+    {
+      "raw_column": "Internship_country",
+      "target_field": "National_Outof_Country_Online",
+      "kind": "plain",
+      "_note": "No conversion -- this Countries lookup displays [Code], so the raw 2-letter country code is the exact display value and the push sends .Code. WARNING: CHEDS says to use 'ON' for an online/remote placement, but 'ON' is not a country, so it only resolves if an 'ON' record exists in the Countries form -- confirm before importing online internships."
+    },
+    {
+      "raw_column": "Internship_credits",
+      "target_field": "Internship_Credits",
+      "kind": "map",
+      "value_map": {
+        "FC": "FC = For Credit",
+        "NC": "NC = For Non credits but required by program",
+        "VL": "VL =Non-Credit, Not required by program"
+      },
+      "_note": "Raw code is converted to the exact Zoho picklist text; the push sends .subString(0,2). NOTE the spacing is inconsistent in the live picklist ('FC = ', 'NC = ' but 'VL =') -- reproduced verbatim."
+    },
+    {
+      "raw_column": "Internship_satisfaction ",
+      "target_field": "Employer_satisfcation",
+      "kind": "plain",
+      "_note": "No conversion -- employer placement survey score out of 5 (0-5). CHEDS says to leave it blank if the survey has not been run or the internship is ongoing/planned. NOTE: the CHEDS header has a TRAILING SPACE, and the Zoho field link name misspells 'satisfaction' as 'satisfcation'."
+    },
+    {
+      "raw_column": "Internship_Course_Code",
+      "target_field": "Course_Code",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Internship_Start_Date",
+      "target_field": "Start_Date",
+      "kind": "date",
+      "_note": "Date-time values are trimmed to a plain date and written as yyyy-mm-dd; the push re-formats with .toString(\"yyyy-MM-dd\")."
+    },
+    {
+      "raw_column": "Internship_End_Date",
+      "target_field": "End_Date",
+      "kind": "date",
+      "_note": "Date-time values are trimmed to a plain date and written as yyyy-mm-dd."
+    },
+    {
+      "raw_column": "Internship_Training_Entity_Supervisor_Name",
+      "target_field": "Supervisor_Name_Organization",
+      "kind": "plain",
+      "_note": "No conversion here. NOTE: the push strips every character except letters and spaces before sending, so titles and punctuation (Dr., O'Brien, hyphens) are removed on the way to CHEDS. CHEDS says to leave blank when the internship is only planned."
+    },
+    {
+      "raw_column": "Internship_Training_Entity_Email",
+      "target_field": "Supervisor_Email_Organization",
+      "kind": "plain",
+      "_note": "No conversion. CHEDS says to leave blank when the internship is only planned."
+    },
+    {
+      "raw_column": "Internship_Training_Entity_Contact",
+      "target_field": "Supervisor_Contact_Number_Organization",
+      "kind": "phone",
+      "_note": "Phone number is cleaned to digits plus a leading '+' because the Zoho field is a Phone Number type."
+    },
+    {
+      "raw_column": "Internship_Academic_Supervisor_Name",
+      "target_field": "Supervisor_Name_Institution",
+      "kind": "plain",
+      "_note": "No conversion here. NOTE: the push strips every character except letters and spaces before sending."
+    },
+    {
+      "raw_column": "Internship_Academic_Email",
+      "target_field": "Supervisor_Email_Institution",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Internship_Academic_Contact",
+      "target_field": "Supervisor_Contact_Number_Institution",
+      "kind": "phone",
+      "_note": "Phone number is cleaned to digits plus a leading '+' because the Zoho field is a Phone Number type."
+    },
+    {
+      "raw_column": "Internship_Status",
+      "target_field": "Status",
+      "kind": "map",
+      "value_map": {
+        "ON": "ON for Ongoing",
+        "CM": "CM for Completed",
+        "CN": "CN for Cancelled",
+        "PL": "PL for Planned"
+      },
+      "_note": "Raw status code is converted to the exact Zoho picklist text; the push sends .subString(0,2). The picklist literally reads 'ON for Ongoing' etc., which is why the code prefix must be kept."
+    },
+    {
+      "raw_column": "Internship_Payment",
+      "target_field": "Payment",
+      "kind": "map",
+      "value_map": {
+        "OR": "OR for Organanized by Organization",
+        "ST": "ST for Organanized by Student"
+      },
+      "_note": "Raw code is converted to the exact Zoho picklist text; the push sends .subString(0,2). NOTE: 'Organanized' is misspelt in both the CHEDS list and the live picklist -- reproduced verbatim so the import matches."
+    },
+    {
+      "raw_column": "Internship_Organization_TL_Number",
+      "target_field": "Organization_Trade_License",
+      "kind": "plain",
+      "_note": "No conversion -- organization trade licence number, which CHEDS says can be looked up at https://www.growth.gov.ae/G2C/."
+    },
+    {
+      "raw_column": "Internship_Organization_Address",
+      "target_field": "Organization_Address",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Internship_Organization_Emirate",
+      "target_field": "Organization_Emirate",
+      "kind": "map",
+      "value_map": {
+        "AD": "Abu Dhabi",
+        "DB": "Dubai",
+        "SH": "Sharjah",
+        "AJ": "Ajman",
+        "RK": "Ras Al Khaimah",
+        "FJ": "Fujairah",
+        "UQ": "Umm Al-Quwain",
+        "UN": "Use in case of GCC students who do not have addresses within UAE",
+        "ON": "Online Study/Teaching/Work"
+      },
+      "_note": "Raw Emirates code is converted to the exact Zoho picklist text ('AD' -> 'Abu Dhabi'); the push converts it back via Dropdown_Fields.Emirates_code()."
+    },
+    {
+      "raw_column": "Last_Updated",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the form stamps lastUpdate itself."
+    }
+  ]
+}

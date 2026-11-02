@@ -1,0 +1,105 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production29 + HEDB Data Dictionary 202601 sheet 'Employee - Salary '.",
+ "_zoho_form": "Employee_Salary",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "Salary_Institution_Code",
+   "target_field": "Institutional_Codes",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "displayformat = [Name] confirmed in .ds export. Not referenced anywhere in the push workflow script -- likely hardcoded elsewhere (check for a literal value near institutionCode) or simply unused. May still need a valid value to save the Zoho record."
+  },
+  {
+   "raw_column": "Salary_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "Salary_Academic_Year",
+   "target_field": "Academic_Year",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Academic Year",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Salary_Positions",
+   "target_field": "Position",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Position_Title() (workflow push_api_production29).",
+   "value_map": {
+    "PRF": "Professor",
+    "ADJ": "Adjunct Faculty",
+    "PTP": "Part-time Professor/Associate Professor/Assistant Professor",
+    "PRV": "Provost/Chief Academic Officer",
+    "APR": "Associate Provost",
+    "ACP": "Associate Professor",
+    "ASP": "Assistant Professor",
+    "INS": "Instructor",
+    "LEC": "Lecturer",
+    "TAA": "Teaching Assistant",
+    "RAS": "Research Assistant ",
+    "PDF": "PhD Fellow",
+    "ALT": "Assistant Lecturers",
+    "PTL": "Part time lecturer",
+    "PDC": "Post-Doc ",
+    "RES": "Researcher ",
+    "SRS": "Senior Researcher (post held at Associate Professor level)",
+    "SRA": "Senior Research Adviser (assistant professor or above) ",
+    "CEO": "Chancellor/President/CEO",
+    "VCP": "Vice Chancellor /Vice President",
+    "DEA": "Dean",
+    "VDE": "Vice Deans",
+    "CIO": "Chief information officer",
+    "CFO": "Chief Financial Office",
+    "DIR": "Director",
+    "ADR": "Assistant director",
+    "MGR": "Manager",
+    "AMG": "Assistant Manager ",
+    "TEC": "Technician",
+    "TRD": "Technician (R&D)",
+    "AAD": "Academic advisor",
+    "CAD": "Career advisor/Counselor",
+    "LIB": "Librarian",
+    "LAB": "Library Assistants",
+    "AAS": "Administrative Assistants/Secretary",
+    "SWW": "Student welfare workers",
+    "ARS": "Admission & Registration staff",
+    "RWH": "Residential wardens / Hostel supervisors",
+    "RDM": "Head/Director/Dean/Vice Dean of Research ",
+    "RMM": "Research Managers ",
+    "IT": "IT Staff",
+    "SSS": "Other Student Services Staff",
+    "SPS": "Other Student Support Staff",
+    "ASS": "Other Academic Support Staff",
+    "HOD": "Academic Department Chairs/Head",
+    "Psyc": "Psychologist ",
+    "SLI": "Sign language interpreter",
+    "SENCO": "Special needs coordinator/ Accessibility Coordinator",
+    "OTH": "Others"
+   }
+  },
+  {
+   "raw_column": "Salary_Area_of_Specialization",
+   "target_field": "Area_of_Specialization1",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Area of Specialization",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Salary_Annual",
+   "target_field": "Average_Annual_Salary",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

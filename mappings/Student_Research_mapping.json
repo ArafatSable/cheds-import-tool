@@ -1,164 +1,176 @@
 {
-  "fields": [
-    {
-      "raw_column": "SR_Institution_Code",
-      "target_field": "Institutional_Codes",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Institutional Codes",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Institutional Codes' reference list."
-    },
-    {
-      "raw_column": "SR_Academic_Period",
-      "target_field": "Academic_Period",
-      "kind": "lookup",
-      "hedb_sheet": "Academic Period",
-      "lookup_direction": "code_to_combo",
-      "_note": "Raw HEDB code is converted to a combined 'Name - Code' display value using the 'Academic Period' reference list."
-    },
-    {
-      "raw_column": "SR_Student_ID",
-      "target_field": "Student_ID",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "SR_Student_Degree",
-      "target_field": "Student_Degree",
-      "kind": "lookup",
-      "hedb_sheet": "Degree or Program Level",
-      "lookup_direction": "code_to_combo",
-      "combo_order": "code_name",
-      "_note": "Raw HEDB code is converted to a combined 'Code - Name' display value using the 'Degree or Program Level' reference list."
-    },
-    {
-      "raw_column": "SR_Program_Code",
-      "target_field": "Student_Program",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Program Master",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Program Master' reference list. The Zoho lookup displays [Name]; the push workflow sends rec.Student_Program.Code."
-    },
-    {
-      "raw_column": "SR_Type_of_Research ",
-      "target_field": "Type_of_research",
-      "kind": "map",
-      "value_map": {
-        "RA": "RA\tResearch Assistantships",
-        "FL": "FL  Faculty-led research projects",
-        "IR": "IR\tIndependent student research",
-        "CP": "CP\tCapstone projects that resulted in impact",
-        "TH": "TH  Thesis work that resulted in impact",
-        "DP": "DP\t Senior design projects that resulted in impact",
-        "TI": "TI\tThesis work with joint co-supervision from an international partner"
-      },
-      "_note": "Raw short code is converted to the exact Zoho picklist text using a 7-entry table (e.g. 'RA' -> 'RA\tResearch Assistantships'; 'FL' -> 'FL  Faculty-led research projects'; 'IR' -> 'IR\tIndependent student research'; 'CP' -> 'CP\tCapstone projects that resulted in impact'; ...). See value_map for the full list."
-    },
-    {
-      "raw_column": "SR_scholarly",
-      "target_field": "Scholarly_Activity_Type",
-      "kind": "map",
-      "value_map": {
-        "FR": "FR-FRASCATI",
-        "CR": "CR-CREATIVE ENDEAVORS"
-      },
-      "_note": "Raw short code is converted to the exact Zoho picklist text: 'FR' -> 'FR-FRASCATI'; 'CR' -> 'CR-CREATIVE ENDEAVORS'."
-    },
-    {
-      "raw_column": "SR_Intl_partner",
-      "target_field": "Name_of_the_international_partner_organisation",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "SR_Intl_Super_Name",
-      "target_field": "Name_of_the_co_supervisor_from_the_international_partner_organisation",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "SR_Research_Topic",
-      "target_field": "Research_Topic",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "SR_Research_Area",
-      "target_field": "Research_Area",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "SR_ORCID",
-      "target_field": "ORCID",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Impact_ indexed publication",
-      "target_field": "Impact__indexed_publication",
-      "kind": "yesno",
-      "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
-    },
-    {
-      "raw_column": "Impact_Registered_IP",
-      "target_field": "Impact_Registered_IP",
-      "kind": "yesno",
-      "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
-    },
-    {
-      "raw_column": "Impact_Competitions",
-      "target_field": "Impact_Competitions",
-      "kind": "yesno",
-      "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
-    },
-    {
-      "raw_column": "Impact_scholarship",
-      "target_field": "Impact_scholarship",
-      "kind": "yesno",
-      "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
-    },
-    {
-      "raw_column": "Impact_policy",
-      "target_field": "Impact_policy",
-      "kind": "yesno",
-      "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
-    },
-    {
-      "raw_column": "Impact_Govt",
-      "target_field": "Impact_Govt",
-      "kind": "yesno",
-      "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
-    },
-    {
-      "raw_column": "Impact_revenue ",
-      "target_field": "Impact_revenue",
-      "kind": "yesno",
-      "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
-    },
-    {
-      "raw_column": "Impact_Spinoff",
-      "target_field": "Impact_Spinoff",
-      "kind": "yesno",
-      "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
-    },
-    {
-      "raw_column": "Impact_public",
-      "target_field": "Impact_public",
-      "kind": "yesno",
-      "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
-    },
-    {
-      "raw_column": "Impact_education",
-      "target_field": "Impact_education",
-      "kind": "yesno",
-      "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
-    },
-    {
-      "raw_column": "Impact_media",
-      "target_field": "Impact_media",
-      "kind": "yesno",
-      "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
-    }
-  ]
+ "fields": [
+  {
+   "raw_column": "SR_Institution_Code",
+   "target_field": "Institutional_Codes",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "Raw HEDB code is converted to its descriptive Name using the 'Institutional Codes' reference list."
+  },
+  {
+   "raw_column": "SR_Academic_Period",
+   "target_field": "Academic_Period",
+   "kind": "lookup",
+   "hedb_sheet": "Academic Period",
+   "lookup_direction": "code_to_combo",
+   "_note": "Raw HEDB code is converted to a combined 'Name - Code' display value using the 'Academic Period' reference list."
+  },
+  {
+   "raw_column": "SR_Student_ID",
+   "target_field": "Student_ID",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "SR_Student_Degree",
+   "target_field": "Student_Degree",
+   "kind": "lookup",
+   "hedb_sheet": "Degree or Program Level",
+   "lookup_direction": "code_to_combo",
+   "combo_order": "code_name",
+   "_note": "Raw HEDB code is converted to a combined 'Code - Name' display value using the 'Degree or Program Level' reference list."
+  },
+  {
+   "raw_column": "SR_Program_Code",
+   "target_field": "Student_Program",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Program Master",
+   "_note": "Raw HEDB code is converted to its descriptive Name using the 'Program Master' reference list. The Zoho lookup displays [Name]; the push workflow sends rec.Student_Program.Code."
+  },
+  {
+   "raw_column": "SR_Type_of_Research ",
+   "target_field": "Type_of_research",
+   "kind": "map",
+   "value_map": {
+    "RA": "RA\tResearch Assistantships",
+    "FL": "FL  Faculty-led research projects",
+    "IR": "IR\tIndependent student research",
+    "CP": "CP\tCapstone projects that resulted in impact",
+    "TH": "TH  Thesis work that resulted in impact",
+    "DP": "DP\t Senior design projects that resulted in impact",
+    "TI": "TI\tThesis work with joint co-supervision from an international partner"
+   },
+   "_note": "Raw short code is converted to the exact Zoho picklist text using a 7-entry table (e.g. 'RA' -> 'RA\tResearch Assistantships'; 'FL' -> 'FL  Faculty-led research projects'; 'IR' -> 'IR\tIndependent student research'; 'CP' -> 'CP\tCapstone projects that resulted in impact'; ...). See value_map for the full list."
+  },
+  {
+   "raw_column": "SR_scholarly",
+   "target_field": "Scholarly_Activity_Type",
+   "kind": "map",
+   "value_map": {
+    "FR": "FR-FRASCATI",
+    "CR": "CR-CREATIVE ENDEAVORS"
+   },
+   "_note": "Raw short code is converted to the exact Zoho picklist text: 'FR' -> 'FR-FRASCATI'; 'CR' -> 'CR-CREATIVE ENDEAVORS'."
+  },
+  {
+   "raw_column": "SR_Intl_partner",
+   "target_field": "Name_of_the_international_partner_organisation",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "SR_Intl_Super_Name",
+   "target_field": "Name_of_the_co_supervisor_from_the_international_partner_organisation",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "SR_Research_Topic",
+   "target_field": "Research_Topic",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "SR_Research_Area",
+   "target_field": "Research_Area",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "SR_ORCID",
+   "target_field": "ORCID",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "Impact_ indexed publication",
+   "target_field": "Impact__indexed_publication",
+   "kind": "yesno",
+   "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
+  },
+  {
+   "raw_column": "Impact_Registered_IP",
+   "target_field": "Impact_Registered_IP",
+   "kind": "yesno",
+   "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
+  },
+  {
+   "raw_column": "Impact_Competitions",
+   "target_field": "Impact_Competitions",
+   "kind": "yesno",
+   "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
+  },
+  {
+   "raw_column": "Impact_scholarship",
+   "target_field": "Impact_scholarship",
+   "kind": "yesno",
+   "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
+  },
+  {
+   "raw_column": "Impact_policy",
+   "target_field": "Impact_policy",
+   "kind": "yesno",
+   "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
+  },
+  {
+   "raw_column": "Impact_Govt",
+   "target_field": "Impact_Govt",
+   "kind": "yesno",
+   "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
+  },
+  {
+   "raw_column": "Impact_revenue ",
+   "target_field": "Impact_revenue",
+   "kind": "yesno",
+   "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
+  },
+  {
+   "raw_column": "Impact_Spinoff",
+   "target_field": "Impact_Spinoff",
+   "kind": "yesno",
+   "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
+  },
+  {
+   "raw_column": "Impact_public",
+   "target_field": "Impact_public",
+   "kind": "yesno",
+   "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
+  },
+  {
+   "raw_column": "Impact_education",
+   "target_field": "Impact_education",
+   "kind": "yesno",
+   "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
+  },
+  {
+   "raw_column": "Impact_media",
+   "target_field": "Impact_media",
+   "kind": "yesno",
+   "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
+  },
+  {
+   "raw_column": "SR_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
 }

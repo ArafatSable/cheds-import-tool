@@ -1,0 +1,351 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production21 + HEDB Data Dictionary 202601 sheet 'Institute - Overview'.",
+ "_zoho_form": "Institute_Overview",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "Overview_Institution_Code",
+   "target_field": "Institutional_Codes",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "displayformat = [Name] confirmed in .ds export. Not referenced anywhere in the push workflow script -- likely hardcoded elsewhere (check for a literal value near institutionCode) or simply unused. May still need a valid value to save the Zoho record."
+  },
+  {
+   "raw_column": "Overview_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "Overview_Academic_Year",
+   "target_field": "Academic_Year",
+   "kind": "lookup",
+   "lookup_direction": "code_to_combo",
+   "combo_order": "name_code",
+   "combo_separator": " - ",
+   "hedb_sheet": "Academic Year",
+   "_note": "displayformat = [Name + \" - \" + Code] confirmed in .ds export -- combo order 'name_code', separator ' - '."
+  },
+  {
+   "raw_column": "Overview_Institution_Type",
+   "target_field": "Institution_Type",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.InstitutionTypes() (workflow push_api_production21).",
+   "value_map": {
+    "FE": "Public- Federal (supported by Federal government) ",
+    "PB": "Public-Local (supported by local government) ",
+    "PR": "Private",
+    "SP": "Semi-Private: Government provides financial support to cover part of the expenditure (< 50%)",
+    "FZ": "Free zone",
+    "OT": "Other"
+   }
+  },
+  {
+   "raw_column": "Overview_Institution_gender",
+   "target_field": "Institution_Gender",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Institute_Gender() (workflow push_api_production21).",
+   "value_map": {
+    "M": "Male",
+    "F": "Female",
+    "CE": "Co-Education",
+    "NCE": "Non-Co-Education"
+   }
+  },
+  {
+   "raw_column": "Overview_Accreditation_Body",
+   "target_field": "Institutional_Accreditation_Body",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Institutional_Accreditation_Body() (workflow push_api_production21).",
+   "value_map": {
+    "ACCJC": "Accrediting Commission for Community and Junior Colleges (ACCJC) Western Association of Schools and Colleges",
+    "HLC": "Higher Learning Commission (HLC)",
+    "MSCHE": "Middle States Commission on Higher Education (MSCHE)",
+    "NEASC-CIHE": "New England Association of Schools and Colleges (NEASC-CIHE) Commission on Institutions of Higher Education",
+    "SACSCOC": "Southern Association of Colleges and Schools Commission on Colleges (SACSCOC)",
+    "WSCUC": "WASC Senior College and University Commission (WSCUC)",
+    "QAA": "Quality Assurance Agency (QAA)",
+    "BAC": "British Accreditation Council (BAC)",
+    "ASIC": "Accreditation Service for International Schools, Colleges and Universities",
+    "QDLQC": "Open and Distance Learning Quality Council (QDLQC)",
+    "Ofqual": "Office of Qualifications and Examinations Regulation (Ofqual) ",
+    "OT": "Others"
+   }
+  },
+  {
+   "raw_column": "Date_international_accreditation",
+   "target_field": "Date_International_Accreditation",
+   "kind": "date"
+  },
+  {
+   "raw_column": "International_accreditation_expiration",
+   "target_field": "International_Accreditation_Expiration",
+   "kind": "date"
+  },
+  {
+   "raw_column": "Overview_Faculty_Resignation",
+   "target_field": "Faculty_Resignations",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Staff_Resignation",
+   "target_field": "Staff_Resignations",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Ownership",
+   "target_field": "Facilities_Ownership",
+   "kind": "map",
+   "value_map": {
+    "O": "Owned",
+    "R": "Rented",
+    "U": "Unknown"
+   },
+   "_note": "Picklist choices = ['Owned', 'Rented', 'Unknown']; workflow does .subString(0,1) to get a 1-char code for the API. value_map assumes raw data holds that short code -- if raw already has the full literal text, switch this field to kind:'plain' instead."
+  },
+  {
+   "raw_column": "Overview_Facilities_Area",
+   "target_field": "Total_area_of_Facilities",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Facilities_Classrooms",
+   "target_field": "Total_area_of_Classrooms",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Facilities_Labs",
+   "target_field": "Total_area_of_Labs",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Facilities_Libraries",
+   "target_field": "Total_area_of_Libraries",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Facilities_Residential",
+   "target_field": "Total_area_of_Residential_area",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Facilities_Student Services",
+   "target_field": "Total_area_for_Student_Services",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Facilities_Administration",
+   "target_field": "Total_area_for_Administration",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Accomodations",
+   "target_field": "Accommodations1",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.AccomodationType() (workflow push_api_production21).",
+   "value_map": {
+    "YFYM": "Yes for Female students and Yes to Male students",
+    "YFNM": "Yes for Female students and No for Male ones",
+    "NFYM": "No for Female students and Yes for Male students",
+    "NFNM": "No for both Female & Male students"
+   }
+  },
+  {
+   "raw_column": "Overview_Activities_Center",
+   "target_field": "Student_activities_Centre",
+   "kind": "yesno",
+   "_note": "Picklist choices = ['Yes', 'No']; workflow does .subString(0,1) for the API. Using 'yesno' for flexible Y/N/true/false/1/0 raw input."
+  },
+  {
+   "raw_column": "Overview_Career_Center",
+   "target_field": "Careers_Centre",
+   "kind": "yesno",
+   "_note": "Picklist choices = ['Yes', 'No']; workflow does .subString(0,1) for the API. Using 'yesno' for flexible Y/N/true/false/1/0 raw input."
+  },
+  {
+   "raw_column": "Overview_Sports_Facilities",
+   "target_field": "Sports_Facilities",
+   "kind": "yesno",
+   "_note": "Picklist choices = ['Yes', 'No']; workflow does .subString(0,1) for the API. Using 'yesno' for flexible Y/N/true/false/1/0 raw input."
+  },
+  {
+   "raw_column": "Overview_Parking",
+   "target_field": "Parking_Spaces",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Special_Needs_Availability",
+   "target_field": "Availability_of_facilities_services_for_People_of_Determination",
+   "kind": "yesno",
+   "_note": "Picklist choices = ['Yes', 'No']; workflow does .subString(0,1) for the API. Using 'yesno' for flexible Y/N/true/false/1/0 raw input."
+  },
+  {
+   "raw_column": "Overview_Special_Needs_Type",
+   "target_field": "Types_of_facilities_services_for_People_of_Determination1",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.people_of_determination_multiselect() (workflow push_api_production21).",
+   "value_map": {
+    "LD": "Specific Learning Disabilities",
+    "PH": "Physical and health related disability",
+    "VI": "Visual Impairment",
+    "HI": "Hearing Impairment Including Deafness",
+    "SL": "Speech and Language Disorders",
+    "AS": "Autism Spectrum Disorders",
+    "EBD": "Emotional and Behavioural Disorders",
+    "ID": "Intellectual Disabilities",
+    "ADHD": "AttentionDeficit/ Hyperactivity Disorder",
+    "OT": "Other Disabilities not covered above "
+   }
+  },
+  {
+   "raw_column": "Overview_Transport",
+   "target_field": "Transportation",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Transportation() (workflow push_api_production21).",
+   "value_map": {
+    "YFYM": "Yes for Female students and Yes to Male students",
+    "YFNM": "Yes for Female students and No for Male ones",
+    "NFYM": "No for Female students and Yes for Male students",
+    "NFNM": "No for both Female & Male students"
+   }
+  },
+  {
+   "raw_column": "Overview_Language",
+   "target_field": "Language_of_Instruction",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Room_Count",
+   "target_field": "Classrooms",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Lab_Count",
+   "target_field": "Laboratories",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Student_Faculty_Ratio",
+   "target_field": "Student_faculty_ratio",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Student_Dropout_Rate",
+   "target_field": "Student_Dropout_Rate",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_List_Of_Research_Centre",
+   "target_field": "List_of_Research_Centres",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Names_Of_Department",
+   "target_field": "Names_of_top_level_divisions_Names_of_administrative_departments_or_units",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Databases",
+   "target_field": "Library_Databases",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Interlibrary_Loan_Indicator",
+   "target_field": "Library_Inter_Library_Loan_Indicator",
+   "kind": "yesno",
+   "_note": "Picklist choices = ['Yes', 'No']; workflow does .subString(0,1) for the API. Using 'yesno' for flexible Y/N/true/false/1/0 raw input."
+  },
+  {
+   "raw_column": "Overview_Books",
+   "target_field": "Library_Books",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Computers",
+   "target_field": "Library_Computers",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Hours",
+   "target_field": "Library_Hours",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Journals",
+   "target_field": "Library_Journals",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Textbooks",
+   "target_field": "Library_Textbooks",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Ebooks",
+   "target_field": "Library_E_books",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Emedia",
+   "target_field": "Library_E_media",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Eserial",
+   "target_field": "Library_E_serial",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Contact_Minutes",
+   "target_field": "Contact_Minutes",
+   "kind": "plain",
+   "_note": "Not referenced in the push workflow script (may be unused/commented out there)."
+  },
+  {
+   "raw_column": "Overview_ENV_AC",
+   "target_field": "Environmental_Accommodations",
+   "kind": "yesno",
+   "_note": "Picklist choices = ['Yes', 'No']; workflow does .subString(0,1) for the API. Using 'yesno' for flexible Y/N/true/false/1/0 raw input."
+  },
+  {
+   "raw_column": "Overview_ENV_DTL",
+   "target_field": "Details_of_Environmental_Accommodations",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_A_AC",
+   "target_field": "Assessment_Accommodation",
+   "kind": "yesno",
+   "_note": "Picklist choices = ['Yes', 'No']; workflow does .subString(0,1) for the API. Using 'yesno' for flexible Y/N/true/false/1/0 raw input."
+  },
+  {
+   "raw_column": "Overview_A_DTL",
+   "target_field": "Assessment_Accommodations_details",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_INS_AC",
+   "target_field": "Instructional_Accommodations",
+   "kind": "yesno",
+   "_note": "Picklist choices = ['Yes', 'No']; workflow does .subString(0,1) for the API. Using 'yesno' for flexible Y/N/true/false/1/0 raw input."
+  },
+  {
+   "raw_column": "Overview_INS_DTL",
+   "target_field": "Instructional_Accommodations_details",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Overview_Branch_campus",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "HEDB 202601 column 'International Branch Campus Accreditation' has no matching field on the Zoho form Institute_Overview -- NOT imported."
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

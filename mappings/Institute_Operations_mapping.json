@@ -1,0 +1,61 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production20 + HEDB Data Dictionary 202601 sheet 'Institute - Operations'.",
+ "_zoho_form": "Institute_Operations",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "Operations_Institution_Code",
+   "target_field": "Institution_code",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "displayformat = [Name] confirmed in .ds export. Not referenced anywhere in the push workflow script -- likely hardcoded elsewhere (check for a literal value near institutionCode) or simply unused. May still need a valid value to save the Zoho record."
+  },
+  {
+   "raw_column": "Operations_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "Operations_Academic_Year",
+   "target_field": "Academic_Year",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Academic Year",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Operations_Degree",
+   "target_field": "Degree_Program_Level1",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Degree or Program Level",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Operations_Area_of_Specialization",
+   "target_field": "Area_of_Specialization_Code",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Area of Specialization",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Operations_Average_Class_Size",
+   "target_field": "Average_class_size",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Operations_Average_Lab_Size",
+   "target_field": "Average_lab_size",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

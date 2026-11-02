@@ -1,0 +1,104 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production16 + HEDB Data Dictionary 202601 sheet 'Course Faculty '.",
+ "_zoho_form": "Institute_Course_Faculty",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "Course_Institution_Code",
+   "target_field": "Institutional_Codes",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "displayformat = [Name] confirmed in .ds export. Not referenced anywhere in the push workflow script -- likely hardcoded elsewhere (check for a literal value near institutionCode) or simply unused. May still need a valid value to save the Zoho record."
+  },
+  {
+   "raw_column": "Course_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "Course_Program_Name",
+   "target_field": "Program_Code",
+   "kind": "plain",
+   "_note": "displayformat = [Code] confirmed in .ds export -- bare code, no conversion needed."
+  },
+  {
+   "raw_column": "Course_Academic_Period",
+   "target_field": "Academic_Period",
+   "kind": "plain",
+   "_note": "displayformat = [Code] confirmed in .ds export -- bare code, no conversion needed."
+  },
+  {
+   "raw_column": "Course_Name",
+   "target_field": "Course_Name",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_code",
+   "target_field": "Course_code",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_CRN",
+   "target_field": "Course_Ref_Number",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_faculty_type",
+   "target_field": "Faculty_type",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Faculty_category() (workflow push_api_production16).",
+   "value_map": {
+    "A": "Full-time Instructional Faculty: Faculty employed on a full-time basis for instruction (including those with released time for research).",
+    "B": "Part-time Instructional Faculty: Adjuncts and other instructors being paid solely for part-time classroom instruction. Also includes full-time faculty teaching less than two semesters, three quarters, two trimesters, or two four-month sessions. Employees who are not considered full-time instructional faculty but who teach one or more non-clinical credit courses may be counted as part-time faculty.",
+    "C": "Instructional faculty in preclinical and clinical medicine, faculty who are not paid (e.g., those who donate their services or are in the military), or research-only faculty, post-doctoral fellows, or pre-doctoral fellows",
+    "D": "Administrative officers with titles such as VP, dean of students, librarian, registrar, and the like, even though they may devote part of their time to classroom instruction and may have faculty status",
+    "E": "Undergraduate or graduate students who assist in the instruction of courses",
+    "F": "Faculty on sabbatical or leave with or without pay",
+    "G": "Replacement faculty for faculty on sabbatical leave or leave with pay",
+    "H": "Full-time or Part-time faculty based on a campus outside of the UAE",
+    "R": "Staff particularly hired for conducting research (Research Assistants) , OR Staff on admin contracts also conducting research. Add the position held by the staff in the column 'Administrative position' on Employee workload data set ",
+    "P": "Staff partially responsible for research. Add the position held by the staff in the column 'Administrative position' on Employee workload data set",
+    "I": "Career Advisors: Staff who are particularly dedicated towards career advising",
+    "J": "Staff who are partially working on advising students on career , entrepreneurship, internships or any other role dedicated to development of employability skills, employer relations, etc.). Add the position held by the staff in the column 'Administrative position' on Employee workload data set"
+   }
+  },
+  {
+   "raw_column": "Course_FacID",
+   "target_field": "Faculty_Staff_ID",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_FacName",
+   "target_field": "Faculty_name",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_IndustryName",
+   "target_field": "Name_of_the_industry",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_IndustryEmail",
+   "target_field": "Email_of_the_industrial_faculty",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_teaching_percent",
+   "target_field": "Percentage_of_teaching_workload",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Course_design_percent",
+   "target_field": "Percentage_of_course_design_workload",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

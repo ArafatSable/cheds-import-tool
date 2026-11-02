@@ -1,0 +1,116 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production19 + HEDB Data Dictionary 202601 sheet 'Institute -IP'.",
+ "_zoho_form": "Institute_IP",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "IP_Institution_Code",
+   "target_field": "Institutional_Code",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "displayformat = [Name] confirmed in .ds export. Not referenced anywhere in the push workflow script -- likely hardcoded elsewhere (check for a literal value near institutionCode) or simply unused. May still need a valid value to save the Zoho record."
+  },
+  {
+   "raw_column": "IP_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "IP_Year",
+   "target_field": "IP_Year",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "IP_Status",
+   "target_field": "IP_Status",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Patent_status() (workflow push_api_production19).",
+   "value_map": {
+    "F": "Filed",
+    "A": "Approved",
+    "W": "Awarded"
+   }
+  },
+  {
+   "raw_column": "IP_Title",
+   "target_field": "IP_Title",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "IP_type",
+   "target_field": "IP_type",
+   "kind": "map",
+   "value_map": {
+    "PT": "PT - Patents",
+    "PV": "PV - Plant variety protections",
+    "GU": "GU - Granted utility models",
+    "LY": "LY - Layout designs of integrated circuits",
+    "ID": "ID - Industrial design",
+    "RC": "RC- Registered copyrights (Software Copyright / Research-based Works)",
+    "EC": "EC - Educational / Creative Copyright"
+   },
+   "_note": "Picklist choices = ['PT - Patents', 'PV - Plant variety protections', 'GU - Granted utility models', 'LY - Layout designs of integrated circuits', 'ID - Industrial design', 'RC- Registered copyrights (Software Copyright / Research-based Works)', 'EC - Educational / Creative Copyright']; workflow does .subString(0,2) to get a 2-char code for the API. value_map assumes raw data holds that short code -- if raw already has the full literal text, switch this field to kind:'plain' instead."
+  },
+  {
+   "raw_column": "IP_Application_Number",
+   "target_field": "IP_Application_Number",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "IP_Date_Issued",
+   "target_field": "IP_Date_Issued",
+   "kind": "date"
+  },
+  {
+   "raw_column": "IP_EXP_date",
+   "target_field": "IP_EXP_date",
+   "kind": "date"
+  },
+  {
+   "raw_column": "IP_Number",
+   "target_field": "IP_Number",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "IP_Office",
+   "target_field": "IP_Office",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "IP_Application_Designation_Country",
+   "target_field": "Application_Designation_Country",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Country",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "IP_Inventor_ID",
+   "target_field": "Inventor_IDs",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "IP_Inventor_ORIC_ID",
+   "target_field": "Inventor_ORIC_IDs",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "IP_Applicants_Owners",
+   "target_field": "Applicants_Owners",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Percentage share of the HEI in the IP",
+   "target_field": "Percentage_share_of_the_HEI_in_the_IP",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

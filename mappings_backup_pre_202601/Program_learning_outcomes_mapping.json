@@ -1,0 +1,34 @@
+{
+  "fields": [
+    {
+      "raw_column": "PLO_Institution_Code",
+      "target_field": "Institutional_Codes",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "PLO_Program_code",
+      "target_field": "Program_Code",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "PLO_code",
+      "target_field": "PLO_code",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "PLO_description ",
+      "target_field": "Program_learning_outcome_description",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "PLO_Period",
+      "target_field": "Submission_term",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    }
+  ]
+}

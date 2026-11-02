@@ -1,0 +1,209 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production9 + HEDB Data Dictionary 202601 sheet 'Institute - R&D Expenditures'.",
+ "_zoho_form": "Institute_R_D_Classified_Expenditures",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "RD_Institution_Code",
+   "target_field": "Institution_Code",
+   "kind": "plain",
+   "_note": "displayformat = [Code] confirmed in .ds export -- bare code, no conversion needed. Not referenced anywhere in the push workflow script -- likely hardcoded elsewhere (check for a literal value near institutionCode) or simply unused. May still need a valid value to save the Zoho record."
+  },
+  {
+   "raw_column": "RD_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "RD_Fiscal_Year",
+   "target_field": "Fiscal_Year",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_New_Products",
+   "target_field": "Number_of_products",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_IP_Revenue",
+   "target_field": "IP_revenue",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_JointProjects_Govt",
+   "target_field": "Number_of_Gov_projects",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_JointProjects_Business",
+   "target_field": "Number_of_other_businesses_projects",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_JointProjects_HEI",
+   "target_field": "Number_of_HEI_projects",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_CyberSecurity",
+   "target_field": "Expenditure_on_Cyber_Security",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_AutonomousSystems",
+   "target_field": "Expenditure_on_Autonomous_systems",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_AdvancedMaterials_Manufacturing",
+   "target_field": "Expenditure_on_Advanced_Materials_Manufacturing",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_SecureSystems",
+   "target_field": "Expenditure_on_Secure_Systems",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_DirectedEnergy",
+   "target_field": "Expenditure_on_Directed_Energy",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Cryptography",
+   "target_field": "Expenditure_on_Cryptography",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Quantum",
+   "target_field": "Expenditure_on_Quantum",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Alt_RenewableEnergy",
+   "target_field": "Expenditure_on_Alternative_including_nuclear_Renewable_Energy_Technologies",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Propulsion",
+   "target_field": "Expenditure_on_Propulsion",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Biotech",
+   "target_field": "Expenditure_on_Biotech",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_BigData_AI",
+   "target_field": "Expenditure_on_Big_Data_Data_Science_AI",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Other_Tech",
+   "target_field": "Expenditure_on_Other",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Total_priorityTechnologies",
+   "target_field": "Total_Expenditure_on_Priority_Technologies",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_BasicResearch",
+   "target_field": "Expenditure_on_Basic_Research",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_AppliedResearch",
+   "target_field": "Expenditure_on_Applied_Research",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_ExperimentalDevelopment",
+   "target_field": "Expenditure_on_Experimental_Development",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Total_Research",
+   "target_field": "Total_Expenditure_on_Research",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_NaturalSciences",
+   "target_field": "Expenditure_on_Natural_sciences",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Engineering_Technology",
+   "target_field": "Expenditure_on_Engineering_and_Technology",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Medical_Health",
+   "target_field": "Expenditure_on_Medical_and_health_sciences",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Agriculture_Veterinary",
+   "target_field": "Expenditure_on_Agricultural_and_veterinary_sciences",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_SocialSciences",
+   "target_field": "Expenditure_on_Social_sciences",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Humanities_Arts",
+   "target_field": "Expenditure_on_Humanities_Arts",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Total_Science",
+   "target_field": "Total_Expenditure_on_Science",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_EnergyTransition",
+   "target_field": "Expenditure_on_Energy_Transition",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Health_HumanProsperity",
+   "target_field": "Expenditure_on_Health_and_Human_Prosperity",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_FoodSecurity",
+   "target_field": "Expenditure_on_Food_Security",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_WaterSecurity",
+   "target_field": "Expenditure_on_Water_Security",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_DigitalTech_Cyber",
+   "target_field": "Expenditure_on_Digital_Technology_and_Cybersecurity",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_AdvancedMaterials_Manufacturing_Priority",
+   "target_field": "Expenditure_on_Advanced_Materials_and_Manufacturing_Priority",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Priority_Other",
+   "target_field": "Other_priority_sectors",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "RD_Total_OtherSectors",
+   "target_field": "Total_Expenditure_on_other_priority_sectors",
+   "kind": "plain"
+  }
+ ]
+}

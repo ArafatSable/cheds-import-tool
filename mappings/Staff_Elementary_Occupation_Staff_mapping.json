@@ -1,0 +1,47 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production30 + HEDB Data Dictionary 202601 sheet 'Staff - Elementary Occ. only'.",
+ "_zoho_form": "Staff_Elementary_Occupation_Staff",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "EO_Staff_Institution_Code",
+   "target_field": "Institutional_Codes",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "displayformat = [Name] confirmed in .ds export. Not referenced anywhere in the push workflow script -- likely hardcoded elsewhere (check for a literal value near institutionCode) or simply unused. May still need a valid value to save the Zoho record."
+  },
+  {
+   "raw_column": "EO_Staff_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "EO_Academic_Period",
+   "target_field": "Academic_Period",
+   "kind": "lookup",
+   "lookup_direction": "code_to_combo",
+   "combo_order": "name_code",
+   "combo_separator": " - ",
+   "hedb_sheet": "Academic Period",
+   "_note": "displayformat = [Name + \" - \" + Code] confirmed in .ds export -- combo order 'name_code', separator ' - '."
+  },
+  {
+   "raw_column": "EO_Inhouse_Staff_Elementary",
+   "target_field": "Elementary_Occupational_Staff_Inhouse",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "EO_Outsourced_Staff_Elementary",
+   "target_field": "Elementary_Occupational_Staff_Outsourced",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

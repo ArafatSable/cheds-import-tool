@@ -1,0 +1,103 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production + HEDB Data Dictionary 202601 sheet 'Institute - Leadership CntInfo'.",
+ "_zoho_form": "Institute_Leadership_Contact_Information",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "LP_Institution_Code",
+   "target_field": "Institutional_Codes",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "displayformat = [Name] confirmed in .ds export. Not referenced anywhere in the push workflow script -- likely hardcoded elsewhere (check for a literal value near institutionCode) or simply unused. May still need a valid value to save the Zoho record."
+  },
+  {
+   "raw_column": "LP_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "LP_Academic_Year",
+   "target_field": "Academic_Year",
+   "kind": "lookup",
+   "lookup_direction": "code_to_combo",
+   "combo_order": "name_code",
+   "combo_separator": " - ",
+   "hedb_sheet": "Academic Year",
+   "_note": "displayformat = [Name + \" - \" + Code] confirmed in .ds export -- combo order 'name_code', separator ' - '."
+  },
+  {
+   "raw_column": "LP_Executive_Position",
+   "target_field": "Executive_position",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Goverance() (workflow push_api_production).",
+   "value_map": {
+    "PR": "President/CEO/Chancellor",
+    "BOT": "Board of Trustees Member",
+    "BOG": "Board of Governors Member",
+    "BOTC": "Board of Trustees-Chair ",
+    "BOGC": "Board of Governors - Chair "
+   }
+  },
+  {
+   "kind": "plain",
+   "raw_column": "LP_Name",
+   "target_field": "Name"
+  },
+  {
+   "raw_column": "LP_Title",
+   "target_field": "Title",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "LP_Email",
+   "target_field": "Email",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "LP_Phone_Number",
+   "target_field": "Office_phone_number",
+   "kind": "phone",
+   "_note": "type = phonenumber -- raw digits/dashes/spaces will be stripped to a bare '+countrycode+number' string (e.g. '+971-50-1203650' -> '+971501203650') to match Zoho's expected format."
+  },
+  {
+   "raw_column": "LP_Cell_Number",
+   "target_field": "Mobile_number",
+   "kind": "phone",
+   "_note": "type = phonenumber -- raw digits/dashes/spaces will be stripped to a bare '+countrycode+number' string (e.g. '+971-50-1203650' -> '+971501203650') to match Zoho's expected format."
+  },
+  {
+   "raw_column": "LP_Name_Parent_Organization",
+   "target_field": "Parent_Organization",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "LP_Position_Held_Parent_organization",
+   "target_field": "Position_held_at_parent_organization",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "LP_Assistant_Name",
+   "target_field": "Name_of_the_Personal_Assistant",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "LP_Assistant_Email",
+   "target_field": "Email_of_the_Personal_Assistant",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "LP_Asst_Cell_Number",
+   "target_field": "Mobile_number_of_the_Personal_Assistant",
+   "kind": "phone",
+   "_note": "type = phonenumber -- raw digits/dashes/spaces will be stripped to a bare '+countrycode+number' string (e.g. '+971-50-1203650' -> '+971501203650') to match Zoho's expected format."
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

@@ -1,41 +1,59 @@
 {
-  "fields": [
-    {
-      "raw_column": "SKL_Institution_Code",
-      "target_field": "Institutional_Codes",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "SKL_Academic_Period",
-      "target_field": "Academic_Period",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "SKL_Program_Code",
-      "target_field": "Program_Code",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Crse_Name ",
-      "target_field": "Course_Name",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Crse_code",
-      "target_field": "Course_code",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "SKL_desc",
-      "target_field": "Skills_Description",
-      "kind": "plain",
-      "_match_method": "low-confidence guess only (0.58)",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    }
-  ]
+ "fields": [
+  {
+   "raw_column": "SKL_Institution_Code",
+   "target_field": "Institutional_Codes",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "SKL_Academic_Period",
+   "target_field": "Academic_Period",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "SKL_Program_Code",
+   "target_field": "Program_Code",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "Crse_Name ",
+   "target_field": "Course_Name",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "Crse_code",
+   "target_field": "Course_code",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "SKL_desc",
+   "target_field": "Skills_Description",
+   "kind": "plain",
+   "_match_method": "low-confidence guess only (0.58)",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "SKL_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "SKL_Program_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- not imported; no corresponding writable field on the Zoho form."
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
 }

@@ -1,0 +1,244 @@
+{
+  "_source": "HEDB Data Dictionary 202601, sheet 'Employee Workload ' (note the trailing space in the sheet name)",
+  "_zoho_form": "Employee_Workload",
+  "_note": "New 2026-10-28, built against Zoho_To_CHEDS_ (34).ds. HEDB 202601 removes four fields on this sheet (Load_Full_Part_Time, Load_Credits_Delivered, Load_Total_Credited_Students, Load_Total_Non_Credited_Students -- all filled red) and the .ds carries the same note on Employee_Workload_Function; none of them appear here. raw_column values are the dictionary's 'Database Field Name' column verbatim, including the ALL-CAPS LOAD_EXCH_INST_CODE and the trailing spaces on Load_Institution_name and Load_Program_codes. Zoho stores the DISPLAY text for every dropdown; the push converts each back with a Dropdown_Fields function or .Code.",
+  "fields": [
+    {
+      "raw_column": "Load_Institution_code",
+      "target_field": "Institutional_Codes",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Institutional Codes",
+      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Institutional Codes' reference list -- this lookup displays [Name]. NOTE: unlike most forms in this app, the list here is NOT filtered to Code == \"141\", so any institution can be picked; the push hardcodes institutionCode = 141 regardless."
+    },
+    {
+      "raw_column": "Load_Institution_name ",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- the Zoho form derives the name from the institution code lookup. NOTE: this CHEDS header has a TRAILING SPACE."
+    },
+    {
+      "raw_column": "Load_Academic_Period",
+      "target_field": "Academic_Period",
+      "kind": "lookup",
+      "lookup_direction": "code_to_combo",
+      "hedb_sheet": "Academic Period",
+      "_note": "Raw HEDB code is converted to a combined 'Name - Code' display value using the 'Academic Period' reference list, because this lookup displays [Name + \" - \" + Code]. The push sends rec.Academic_Period.Code."
+    },
+    {
+      "raw_column": "Load_Employee_ID",
+      "target_field": "Employee_ID",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Load_Program_Level",
+      "target_field": "Program_Level",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Degree or Program Level",
+      "_note": "Raw CHEDS level code is converted to its descriptive Name using the 'Degree or Program Level' reference list; this lookup displays [Name] and the push sends rec.Program_Level.Code. WARNING: the Zoho picklist is filtered to Code == \"BA\" || Code == \"MB\", so ONLY Bachelors and MBA can be selected -- every other level CHEDS allows (Masters, Doctorate, Diploma, Foundation, ...) will fail to resolve. CHEDS also defines two special values with no entry in this list at all: 'GE' for faculty teaching mainly General Education/Math/basic science, and '99' for research-only or career-support staff. Widen the filter and add GE/99 options before importing anything other than BA/MB."
+    },
+    {
+      "raw_column": "Load_Area_of_Specialization",
+      "target_field": "Employee_Area_of_Specialization",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Area of Specialization",
+      "_note": "Raw CIP Family code is converted to its descriptive Name using the 'Area of Specialization' reference list; the push sends .Code back. CHEDS says to leave this blank for research-only or career-support staff."
+    },
+    {
+      "raw_column": "Load_Department_name",
+      "target_field": "Department_name",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Load_Employee_Category",
+      "target_field": "Employee_Category1",
+      "kind": "map",
+      "value_map": {
+        "A": "Full-time Instructional Faculty: Faculty employed on a full-time basis for instruction",
+        "B": "Part-time Instructional Faculty: Adjuncts and other instructors being paid solely for part-time",
+        "C": "Instructional faculty in preclinical and clinical medicine, faculty who are not paid",
+        "D": "Administrative officers with titles such as VP, dean of students, librarian, registrar",
+        "E": "Undergraduate or graduate students who assist in the instruction of courses",
+        "F": "Faculty on sabbatical or leave with or without pay",
+        "G": "Replacement faculty for faculty on sabbatical leave or leave with pay",
+        "H": "Full-time or Part-time faculty based on a campus outside of the UAE,",
+        "R": "Staff particularly hired for conducting research (Research Assistants) , OR Staff on admin contracts",
+        "P": "Staff partially responsible for research. Add the position held by the staff in the column 'Admin",
+        "I": "Career Advisors: Staff who are particularly dedicated towards career advising.",
+        "J": "Staff who are partially working on advising students on career , entrepreneurship"
+      },
+      "_note": "Raw employee-category code is converted to the exact Zoho picklist text using a 12-entry table built from the 'Faculty Category' list (A..H, R, P, I, J). The Zoho choices are shortened versions of the dictionary's descriptions -- the text here is the live picklist's, which is what the import needs. The push converts it back via Dropdown_Fields.Employee_Category(). CHEDS test case: if EXCH_IN_OUT is filled then this must be 'H', and vice versa."
+    },
+    {
+      "raw_column": "Load_Position_Title",
+      "target_field": "Employee_position",
+      "kind": "map",
+      "value_map": {
+        "PRF": "Professor",
+        "ACP": "Associate Professor",
+        "ASP": "Assistant Professor",
+        "INS": "Instructor",
+        "LEC": "Lecturer",
+        "TAA": "Teaching Assistant",
+        "RAS": "Research Assistant",
+        "PDF": "PhD Fellow",
+        "ALT": "Assistant Lecturers",
+        "PTL": "Part time lecturer",
+        "PDC": "Post-Doc",
+        "RES": "Researcher",
+        "SRS": "Senior Researcher (post held at Associate Professor level)",
+        "SRA": "Senior Research Adviser (assistant professor or above)",
+        "CEO": "Chancellor/President/CEO",
+        "VCP": "Vice Chancellor /Vice President",
+        "DEA": "Dean",
+        "VDE": "Vice Deans",
+        "CIO": "Chief information officer",
+        "CFO": "Chief Financial Office",
+        "DIR": "Director",
+        "ADR": "Assistant director",
+        "MGR": "Manager",
+        "AMG": "Assistant Manager",
+        "TEC": "Technician",
+        "TRD": "Technician (R&D)",
+        "AAD": "Academic advisor",
+        "CAD": "Career advisor/Counselor",
+        "LIB": "Librarian",
+        "LAB": "Library Assistants",
+        "AAS": "Administrative Assistants/Secretary",
+        "SWW": "Student welfare workers",
+        "ARS": "Admission & Registration staff",
+        "RWH": "Residential wardens / Hostel supervisors",
+        "RDM": "Head/Director/Dean/Vice Dean of Research",
+        "RMM": "Research Managers",
+        "IT": "IT Staff",
+        "SSS": "Other Student Services Staff",
+        "SPS": "Other Student Support Staff",
+        "ASS": "Other Academic Support Staff",
+        "HOD": "Academic Department Chairs/Head",
+        "Psyc": "Psychologist",
+        "SLI": "Sign language interpreter",
+        "SENCO": "Special needs coordinator/ Accessibility Coordinator",
+        "OTH": "Others",
+        "ADJ": "Adjunct Faculty",
+        "PTP": "Part-time Professor/Associate Professor/Assistant Professor",
+        "PRV": "Provost/Chief Academic Officer",
+        "APR": "Associate Provost"
+      },
+      "_note": "Raw Staff Position code is converted to the exact Zoho picklist text. WARNING (1): this form merges 'Instructor' (INS) and 'Lecturer' (LEC) into ONE choice, 'Instructor/Lecturer', so the two codes cannot be told apart -- both are mapped to it here, and Employee - Basic Details keeps them separate, so the same raw code produces different text on the two forms. WARNING (2): HEDB 202601 ADDS two position codes, 'ADJ' (Adjunct Faculty) and 'PTP' (Part-time Professor/Associate Professor/Assistant Professor) -- both are marked green/new on the Staff Position tab and NEITHER exists on this form, so a row using them is flagged and left as-is. Add both choices to Employee_position (and to Employee - Basic Details' Position_Title) before submitting. Also note Dropdown_Fields.Position_Title() is shared with Employee - Basic Details, whose choice list differs here, so confirm it still resolves 'Instructor/Lecturer' on the push."
+    },
+    {
+      "raw_column": "Load_Administrative_Position",
+      "target_field": "Additional_Position",
+      "kind": "plain",
+      "_note": "No conversion -- open text. CHEDS asks for the position held here when Employee Category is 'P' (staff partially responsible for research)."
+    },
+    {
+      "raw_column": "Load_Maximum_Workload",
+      "target_field": "Maximum_Workload_per_semester1",
+      "kind": "plain",
+      "_note": "No conversion -- credit-hour value, number with up to two decimals."
+    },
+    {
+      "raw_column": "Load_Research_Workload",
+      "target_field": "Research_Workload1",
+      "kind": "plain",
+      "_note": "No conversion -- credit-hour value, number with up to two decimals."
+    },
+    {
+      "raw_column": "Load_Career_Related_Credits",
+      "target_field": "Admin_Workload1",
+      "kind": "plain",
+      "_note": "No conversion -- credit-hour value. CHEDS calls this 'Admin Workload (report Career Advising and related fields)'; the Zoho field is Admin_Workload1 and the push key is adminWorkloadCareerAdvisingAndRelatedFields."
+    },
+    {
+      "raw_column": "Load_Other_Workload",
+      "target_field": "Other_Admin_Workload1",
+      "kind": "plain",
+      "_note": "No conversion -- credit-hour value. Other admin workload EXCLUDING career advisory and the related fields already reported in Admin Workload, to avoid double counting."
+    },
+    {
+      "raw_column": "Load_Teaching_Workload",
+      "target_field": "Teaching_Workload1",
+      "kind": "plain",
+      "_note": "No conversion -- credit (or contact) hours out of the total maximum workload, including both credit and non-credit courses."
+    },
+    {
+      "raw_column": "Load_Exch_In_Out",
+      "target_field": "EXCH_IN_OUT",
+      "kind": "map",
+      "value_map": {
+        "IN": "IN",
+        "OT": "OT"
+      },
+      "_note": "Pass-through with validation: the Zoho picklist stores the CHEDS code itself ('IN' / 'OT'), so an identity value_map is used rather than kind 'plain' so anything else is flagged in the Report. The push sends rec.EXCH_IN_OUT unchanged."
+    },
+    {
+      "raw_column": "LOAD_EXCH_INST_CODE",
+      "target_field": "EXCH_Institution_Code",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Universities",
+      "_note": "Raw CHEDS University Code is converted to its descriptive Name using the 'Universities' reference list; this lookup displays [Name] and the push sends .Code. NOTE: CHEDS writes this header in ALL CAPS ('LOAD_EXCH_INST_CODE') while every other column on the sheet is 'Load_...' -- it must match character-for-character. Required whenever EXCH_IN_OUT is filled."
+    },
+    {
+      "raw_column": "Load_Exch_Institution_Name",
+      "target_field": "EXCH_Institution_name",
+      "kind": "plain",
+      "_note": "No conversion. Required whenever EXCH_IN_OUT is filled."
+    },
+    {
+      "raw_column": "Load_Exch_Institution_country_code",
+      "target_field": "EXCH_Instituion_country_code",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Country",
+      "_note": "Raw 2-letter nation code is converted to its descriptive Name using the 'Country' reference list; the push sends .Code. NOTE: the Zoho field name misspells 'Institution' as 'Instituion' -- that is the live link name, not a typo here. Required whenever EXCH_IN_OUT is filled."
+    },
+    {
+      "raw_column": "Load_Total_Credited_Courses",
+      "target_field": "Total_Credited_Courses",
+      "kind": "plain",
+      "_note": "No conversion -- whole number. CHEDS: cannot be blank when teaching workload is not 0."
+    },
+    {
+      "raw_column": "Load_Total_Non_Credited_Course",
+      "target_field": "Total_Non_Credited_Course_Sections",
+      "kind": "plain",
+      "_note": "No conversion -- whole number. CHEDS: cannot be blank when teaching workload is not 0. NOTE the header is singular ('Course'), while the Zoho field is 'Total_Non_Credited_Course_Sections'."
+    },
+    {
+      "raw_column": "Load_Department_Joining_Date",
+      "target_field": "Department_joining_Date",
+      "kind": "date",
+      "_note": "Date-time values are trimmed to a plain date (time portion removed) and written as yyyy-mm-dd; the push re-formats with .toString(\"yyyy-MM-dd\")."
+    },
+    {
+      "raw_column": "Load_Program_codes ",
+      "target_field": "Load_Program_codes",
+      "kind": "plain",
+      "_note": "No conversion -- program codes from the Program Master, carried through as text. NOTE: this CHEDS header has a TRAILING SPACE. WARNING: the push does NOT currently send this field."
+    },
+    {
+      "raw_column": "Load_Publications",
+      "target_field": "Load_Publications",
+      "kind": "plain",
+      "_note": "No conversion -- whole number. WARNING: the push does NOT currently send this field."
+    },
+    {
+      "raw_column": "Load_FWCI",
+      "target_field": "Load_FWCI",
+      "kind": "plain",
+      "_note": "No conversion -- number with two decimal places. WARNING: the push does NOT currently send this field."
+    },
+    {
+      "raw_column": "Last_Updated",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API. The form also has its own Last_Updated date field plus a lastUpdated datetime stamped by the push."
+    }
+  ]
+}

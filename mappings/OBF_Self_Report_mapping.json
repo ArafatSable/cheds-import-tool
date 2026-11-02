@@ -1,0 +1,595 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production24 + HEDB Data Dictionary 202601 sheet 'OBF self report '.",
+ "_zoho_form": "OBF_Self_Report",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "obf_Institution_Code",
+   "target_field": "Institutional_Codes",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "displayformat = [Name] confirmed in .ds export. Not referenced anywhere in the push workflow script -- likely hardcoded elsewhere (check for a literal value near institutionCode) or simply unused. May still need a valid value to save the Zoho record."
+  },
+  {
+   "raw_column": "obf_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "obf_Academic_Year",
+   "target_field": "Academic_Year1",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Academic Year",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "OBF1.1.D",
+   "target_field": "D",
+   "kind": "plain"
+  },
+  {
+   "kind": "plain",
+   "raw_column": "OBF1.1.N",
+   "target_field": "N"
+  },
+  {
+   "raw_column": "OBF1.1.R",
+   "target_field": "R",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF1.1M",
+   "target_field": "Mechanism_of_collecting_the_data",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF1.2.D",
+   "target_field": "D1",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF1.2.N",
+   "target_field": "N1",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF1.2.R",
+   "target_field": "R1",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF1.2M",
+   "target_field": "Mechanism_of_collecting_the_data1",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.1.D",
+   "target_field": "D2",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.1.N",
+   "target_field": "N2",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.1.R",
+   "target_field": "R2",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.1M",
+   "target_field": "Mechanism_of_collecting_the_data2",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.2.D",
+   "target_field": "D3",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.2.N",
+   "target_field": "N3",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.2.R",
+   "target_field": "R3",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.2M",
+   "target_field": "Mechanism_of_collecting_the_data3",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.3.D",
+   "target_field": "D4",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.3.N",
+   "target_field": "N4",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.3.R",
+   "target_field": "R4",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.3M",
+   "target_field": "Mechanism_of_collecting_the_data4",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.4.D",
+   "target_field": "D5",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.4.N",
+   "target_field": "N5",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.4.R",
+   "target_field": "R5",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.4M",
+   "target_field": "Mechanism_of_collecting_the_data5",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.5.D",
+   "target_field": "D6",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.5.N",
+   "target_field": "N6",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.5.R",
+   "target_field": "R6",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.5M",
+   "target_field": "Mechanism_of_collecting_the_data6",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.6.D",
+   "target_field": "D7",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.6.N",
+   "target_field": "N7",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.6.N",
+   "target_field": "N7",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF2.6M",
+   "target_field": "Mechanism_of_collecting_the_data7",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.1.D",
+   "target_field": "D8",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.1.N",
+   "target_field": "N8",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.1.R",
+   "target_field": "R8",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.1M",
+   "target_field": "Mechanism_of_collecting_the_data8",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.2.D",
+   "target_field": "D9",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.2.N",
+   "target_field": "N9",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.2.R",
+   "target_field": "R9",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.2M",
+   "target_field": "Mechanism_of_collecting_the_data9",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.3.D",
+   "target_field": "D10",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.3.N",
+   "target_field": "N10",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.3.R",
+   "target_field": "R10",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.3M",
+   "target_field": "Mechanism_of_collecting_the_data10",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.4.D",
+   "target_field": "D11",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.4.N",
+   "target_field": "N11",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.4.R",
+   "target_field": "R11",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF3.4M",
+   "target_field": "Mechanism_of_collecting_the_data11",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.1.D",
+   "target_field": "D12",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.1.N",
+   "target_field": "N12",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.1.R",
+   "target_field": "R12",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.1M",
+   "target_field": "Mechanism_of_collecting_the_data12",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.2.D",
+   "target_field": "D13",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.2.N",
+   "target_field": "N13",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.2.R",
+   "target_field": "R13",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.2M",
+   "target_field": "Mechanism_of_collecting_the_data13",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.3.D",
+   "target_field": "D14",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.3.N",
+   "target_field": "N14",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.3.R",
+   "target_field": "R14",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.3M",
+   "target_field": "Mechanism_of_collecting_the_data14",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.4.D",
+   "target_field": "D15",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.4.N",
+   "target_field": "N15",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.4.R",
+   "target_field": "R15",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.4M",
+   "target_field": "Mechanism_of_collecting_the_data15",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.5.D",
+   "target_field": "D16",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.5.N",
+   "target_field": "N16",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.5.R",
+   "target_field": "R16",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.5M",
+   "target_field": "Mechanism_of_collecting_the_data16",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.6.D",
+   "target_field": "D17",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.6.N",
+   "target_field": "N17",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.6.R",
+   "target_field": "R17",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF4.6M",
+   "target_field": "Mechanism_of_collecting_the_data17",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.D",
+   "target_field": "D18",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.N",
+   "target_field": "N18",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.R",
+   "target_field": "R18",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1M",
+   "target_field": "Mechanism_of_collecting_the_data18",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.2.D",
+   "target_field": "D19",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.2.N",
+   "target_field": "N19",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.2.R",
+   "target_field": "R19",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.2M",
+   "target_field": "Mechanism_of_collecting_the_data19",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.3.D",
+   "target_field": "D23",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.3.N",
+   "target_field": "N23",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.3.R",
+   "target_field": "R23",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.3M",
+   "target_field": "Mechanism_of_Collecting_the_data23",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.4.D",
+   "target_field": "D20",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.4.N",
+   "target_field": "N20",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.4.R",
+   "target_field": "R20",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.4M",
+   "target_field": "Mechanism_of_collecting_the_data20",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF6.1.D",
+   "target_field": "D21",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF6.1.N",
+   "target_field": "N21",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF6.1.R",
+   "target_field": "R21",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF6.1M",
+   "target_field": "Mechanism_of_collecting_the_data21",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF6.2.D",
+   "target_field": "D22",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF6.2.N",
+   "target_field": "N22",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF6.2.R",
+   "target_field": "R22",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF6.2M",
+   "target_field": "Mechanism_of_collecting_the_data22",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P1.D",
+   "target_field": "D24",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P1.N",
+   "target_field": "N24",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P1.R",
+   "target_field": "R24",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P1.M",
+   "target_field": "Mechanism_of_collecting_the_data27",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P2.D",
+   "target_field": "D25",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P2.N",
+   "target_field": "N25",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P2.R",
+   "target_field": "R25",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P2.M",
+   "target_field": "Mechanism_of_collecting_the_data26",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P3.D",
+   "target_field": "D26",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P3.N",
+   "target_field": "N26",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P3.R",
+   "target_field": "R26",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P3.M",
+   "target_field": "Mechanism_of_collecting_the_data25",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P4.D",
+   "target_field": "D27",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P4.N",
+   "target_field": "N27",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P4.R",
+   "target_field": "R27",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "OBF5.1.P4.M",
+   "target_field": "Mechanism_of_collecting_the_data24",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

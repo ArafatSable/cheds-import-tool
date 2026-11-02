@@ -1,0 +1,252 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow push_api_production15 + HEDB Data Dictionary 202601 sheet 'Institute - Events'.",
+ "_zoho_form": "Institute_Events",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "Events_InstCode",
+   "target_field": "Institutional_Codes",
+   "kind": "lookup",
+   "lookup_direction": "code_to_combo",
+   "combo_order": "code_name",
+   "combo_separator": " - ",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "displayformat = [Code + \" - \" + Name] confirmed in .ds export -- combo order 'code_name', separator ' - '. Not referenced anywhere in the push workflow script -- likely hardcoded elsewhere (check for a literal value near institutionCode) or simply unused. May still need a valid value to save the Zoho record."
+  },
+  {
+   "raw_column": "Events_InstName",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "Event_ID",
+   "target_field": "Event_ID",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Event_Year",
+   "target_field": "Year_field",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Event_Department",
+   "target_field": "Department1",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Event_College",
+   "target_field": "College1",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Event_Name",
+   "target_field": "Event_Name",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Event_NameAR",
+   "target_field": "Event_Name__Arabic",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Event_Desc",
+   "target_field": "Event_Description",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Event_DescAR",
+   "target_field": "Event_Description__Arabic",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Event_Website",
+   "target_field": "Website",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Event_main_category",
+   "target_field": "Event_Main_category",
+   "kind": "map",
+   "value_map": {
+    "AE": "AE - Academic Event",
+    "CE": "CE - Community Events"
+   },
+   "_note": "Picklist choices = ['AE - Academic Event', 'CE - Community Events']; workflow does .subString(0,2) to get a 2-char code for the API. value_map assumes raw data holds that short code -- if raw already has the full literal text, switch this field to kind:'plain' instead."
+  },
+  {
+   "raw_column": "Event_Category",
+   "target_field": "Event_Category1",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.EventsCategory() (workflow push_api_production15).",
+   "value_map": {
+    "AC": "Academic: Events focused on educational content, knowledge sharing, and intellectual engagement",
+    "RI": "Research and Innovation: Events dedicated to showcasing research, sharing advancements, and promoting innovation",
+    "CE": "Community Engagement and Outreach: Events designed to engage with the broader community outside the university, including charity events, volunteer opportunities, and public workshops that promote community service and social responsibility.",
+    "PD": "Professional Development: Events aimed at building skills, competencies, and career readiness",
+    "IN": "Industry and Career Connections: Events designed to bridge the gap between academia and industry, providing students and faculty with opportunities to connect with professionals and learn about industry trends.",
+    "HW": "Health and Wellness: Events promoting physical (sport) and mental well-being, supporting a healthy campus environment."
+   }
+  },
+  {
+   "raw_column": "Event_Type",
+   "target_field": "Event_Type1",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Event_Type() (workflow push_api_production15).",
+   "value_map": {
+    "CN": "Conference: A large-scale event that brings together multiple speakers, sessions, and sometimes workshops around a central theme, often spanning one or more days.",
+    "WS": "Workshop: A hands-on, interactive session where participants engage in activities or practical exercises to develop specific skills or knowledge.",
+    "CM": "Competition: A contest or challenge, often academic, technical, or sports-related, where participants compete to demonstrate skills or knowledge.",
+    "SM": "Seminar: A focused session where a speaker or panel of experts shares insights on a specific topic, often followed by a Q&A session.",
+    "SYM": "Symposium: Similar to a conference but often more academic in nature, typically focusing on presentations and discussions on specialized topics.",
+    "LC": "Lecture: A presentation given by an expert or academic, primarily informational, often targeting students or faculty with a particular academic or professional interest.",
+    "EF": "Exhibition/Fair: A showcase or gathering, often involving booths or displays, where various participants (such as companies, organizations, or departments) present information and engage with attendees. This includes career fairs, open houses, and industry expos.",
+    "CE": "Cultural Event: An event focused on celebrating or sharing cultural aspects, such as music, dance, art, or traditions, typically aimed at enhancing community engagement and diversity awareness.",
+    "NE": "Networking Event: An event designed to facilitate relationship-building and professional networking, often featuring informal activities like meet-and-greets or receptions.",
+    "CO": "Community Outreach: Events intended to engage and serve the local community, such as volunteer activities, charity events, and educational workshops for non-university members.",
+    "PD": "Panel Discussion/forum: A structured conversation where multiple speakers discuss a topic from different perspectives, usually moderated and including audience interaction.",
+    "WB": "Webinar: An online seminar or presentation, similar to an in-person seminar but conducted virtually, often with a broader, remote audience.",
+    "TS": "Training Session: A structured learning experience focusing on developing specific skills or competencies, often targeted at faculty, staff, or students.",
+    "CR": "Ceremony: A formal event to recognize and celebrate achievements within the university community, often honoring students, faculty, or staff for accomplishments.",
+    "EP": "Educational programs: Structured teaching to grow skills or knowledge",
+    "PL": "Public Lectures: Accessible expert talks for broader audience",
+    "VL": "Volunteering: Unpaid work to support communities or causes ",
+    "FC": "Free courses: Free knowledge or skill building courses online or in-person",
+    "OT": "Other"
+   }
+  },
+  {
+   "raw_column": "HEI_role",
+   "target_field": "HEI_Role1",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Event_role() (workflow push_api_production15).",
+   "value_map": {
+    "HS": "Hosting an Event",
+    "OE": "Organizing an Event",
+    "EP": "Event Partner",
+    "SP": "Event Sponsor"
+   }
+  },
+  {
+   "raw_column": "Event_Industry",
+   "target_field": "Event_Industry",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Event_specialization",
+   "target_field": "Event_Specialization",
+   "kind": "plain",
+   "_note": "displayformat = [Code] confirmed in .ds export -- bare code, no conversion needed."
+  },
+  {
+   "raw_column": "Event_Venue",
+   "target_field": "Venue",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Event_City",
+   "target_field": "City1",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Emirates_code() (workflow push_api_production15).",
+   "value_map": {
+    "AD": "Abu Dhabi",
+    "DB": "Dubai",
+    "SH": "Sharjah",
+    "AJ": "Ajman",
+    "RK": "Ras Al Khaimah",
+    "FJ": "Fujairah",
+    "UQ": "Umm Al-Quwain",
+    "UN": "Use in case of GCC students who do not have addresses within UAE",
+    "ON": "Online Study/Teaching/Work"
+   }
+  },
+  {
+   "raw_column": "Event_Country",
+   "target_field": "Countries",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Country",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Event_Start_Date",
+   "target_field": "Start_Date",
+   "kind": "date"
+  },
+  {
+   "raw_column": "Event_End_Date",
+   "target_field": "End_Date",
+   "kind": "date"
+  },
+  {
+   "raw_column": "Event_hours",
+   "target_field": "Event_duration",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Event_Audience",
+   "target_field": "Targeted_Audience1",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Target_Audiance() (workflow push_api_production15).",
+   "value_map": {
+    "ST": "Students/ Perspective Studetns/ Alumni/ Parents & Families of students and alumni",
+    "FS": "Faculty & Staff",
+    "CG": "Community & General Public",
+    "RA": "Researchers and Academics",
+    "IN": "Industry, Employers",
+    "OD": "Officail delegates and diplomats",
+    "MI": "Mix audience with a combination of any of the above options "
+   }
+  },
+  {
+   "raw_column": "Audience_Type",
+   "target_field": "Audience_Type1",
+   "kind": "map",
+   "value_map": {
+    "I": "Internal Event",
+    "E": "External Events",
+    "B": "Both"
+   },
+   "_note": "Picklist choices = ['Internal Event', 'External Events', 'Both']; workflow does .subString(0,1) to get a 1-char code for the API. value_map assumes raw data holds that short code -- if raw already has the full literal text, switch this field to kind:'plain' instead."
+  },
+  {
+   "raw_column": "Event_Attendees",
+   "target_field": "Number_of_Attendees1",
+   "kind": "map",
+   "value_map": {
+    "A": "A - Less than 5",
+    "B": "B - 5<15",
+    "C": "C - 15<20",
+    "D": "D - 20<50",
+    "E": "E - 50<100",
+    "F": "F - 100<150",
+    "G": "G - 150<200",
+    "H": "H - >200"
+   },
+   "_note": "Picklist choices = ['A - Less than 5', 'B - 5<15', 'C - 15<20', 'D - 20<50', 'E - 50<100', 'F - 100<150', 'G - 150<200', 'H - >200']; workflow does .subString(0,1) to get a 1-char code for the API. value_map assumes raw data holds that short code -- if raw already has the full literal text, switch this field to kind:'plain' instead."
+  },
+  {
+   "raw_column": "Event_Scope",
+   "target_field": "Scope_field1",
+   "kind": "map",
+   "value_map": {
+    "L": "L: Local",
+    "R": "R: Regional (MENA)",
+    "I": "I: International"
+   },
+   "_note": "Picklist choices = ['L: Local', 'R: Regional (MENA)', 'I: International']; workflow does .subString(0,1) to get a 1-char code for the API. value_map assumes raw data holds that short code -- if raw already has the full literal text, switch this field to kind:'plain' instead."
+  },
+  {
+   "raw_column": "Event_student_ind",
+   "target_field": "Open_to_students",
+   "kind": "yesno",
+   "_note": "Picklist choices = ['Yes', 'No']; workflow does .subString(0,1) for the API. Using 'yesno' for flexible Y/N/true/false/1/0 raw input."
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

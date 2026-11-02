@@ -1,0 +1,119 @@
+{
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow Push_Api_Production40 + HEDB Data Dictionary 202601 sheet 'Institute - Patents'.",
+ "_zoho_form": "Institute_Patents",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "Patent_Institution_Code",
+   "target_field": "Institutional_Codes",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "displayformat = [Name] confirmed in .ds export. Not referenced anywhere in the push workflow script -- likely hardcoded elsewhere (check for a literal value near institutionCode) or simply unused. May still need a valid value to save the Zoho record."
+  },
+  {
+   "raw_column": "Patent_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "Patent_Year",
+   "kind": "plain",
+   "target_field": "Academic_Year",
+   "_note": "HEDB calls this 'Year'; the Zoho field is the numeric 'Academic Year' on the Patents form. No conversion."
+  },
+  {
+   "raw_column": "Patent_Status",
+   "target_field": "Patent_Status",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Patent_status() (workflow Push_Api_Production40).",
+   "value_map": {
+    "F": "Filed",
+    "A": "Approved",
+    "W": "Awarded"
+   }
+  },
+  {
+   "raw_column": "Patent_Title",
+   "target_field": "Title",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Patent_Application_Number",
+   "target_field": "Patent_Application_Number",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Patent_Date_Issued",
+   "target_field": "Patent_Date_Issued",
+   "kind": "date"
+  },
+  {
+   "raw_column": "Patent_Number",
+   "target_field": "Patent_Number1",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Patent_Office",
+   "target_field": "Patent_Office",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.patent_office() (workflow Push_Api_Production40).",
+   "value_map": {
+    "WIPO": "World Intellectual Property Organization",
+    "EPO": "European Patent Office",
+    "USPTO": "United States Patent and Trademark Office",
+    "IPO": "Intellectual Property Office",
+    "JPO": "Japan Patent Office",
+    "AU": "IP Australia",
+    "BR": "National Institute of Industrial Property",
+    "DK": "Danish Patent and Trademark Office",
+    "CL": "INAPI National Institute of Industrial Property",
+    "CN": "State Intellectual Property Office of the People's Republic of China",
+    "EAPO": "Eurasian Patent Office",
+    "EE": "Estonian Patent Office",
+    "ES": "Spanish Patent and Trademark Office",
+    "FI": "National Board of Patents and Registration of Finland",
+    "GB": "United Kingdom Intellectual Property Office",
+    "IB": "International Bureau",
+    "IN": "Indian Patent Office",
+    "KR": "Korean Intellectual Property Office",
+    "MA": "Moroccan Office of Industrial and Commercial Property",
+    "NL": "Netherlands Patent Office",
+    "NZ": "New Zealand Intellectual Property Office",
+    "SE": "Swedish Patent and Registration Office",
+    "UAEPO": "UAE Patent Office ",
+    "OTH": "Other office"
+   }
+  },
+  {
+   "raw_column": "Patent_Application_Designation_Country",
+   "target_field": "Application_Designation_Country",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Country",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Patent_Inventor_ID",
+   "target_field": "Inventor_IDs",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Patent_Inventor_ORIC_ID",
+   "target_field": "Inventor_ORIC_IDs",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Patent_Applicants_Owners",
+   "target_field": "Applicants_Owners",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
+}

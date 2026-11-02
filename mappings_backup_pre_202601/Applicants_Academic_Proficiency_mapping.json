@@ -1,0 +1,65 @@
+{
+  "_form_note": "Verified against the production push workflow ('push_api_production18') in the .ds export -- confidence is high. Same pattern as Applicants_Basic_Details: institutionCode is hardcoded to 141 in the push script regardless of the Institutional_Codes field's value.",
+  "fields": [
+    {
+      "raw_column": "App_Institution_Code",
+      "target_field": "Institutional_Codes",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Institutional Codes",
+      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Institutional Codes' reference list. Not used by the actual API push (institutionCode is hardcoded to 141) -- only populates the Zoho record for display."
+    },
+    {
+      "raw_column": "App_Institution_Name",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "HEDB carries this as a separate free-text column, but the Zoho form only has one institution field (Institutional_Codes, a picklist driven by App_Institution_Code). Redundant with the code lookup above -- intentionally not imported separately."
+    },
+    {
+      "raw_column": "App_Academic_Period",
+      "target_field": "Academic_Period",
+      "kind": "lookup",
+      "lookup_direction": "code_to_combo",
+      "combo_order": "name_code",
+      "combo_separator": " - ",
+      "hedb_sheet": "Academic Period",
+      "_note": "Raw HEDB code is converted to a combined 'Name - Code' display value using the 'Academic Period' reference list (matches the form's displayformat = [Name + \" - \" + Code])."
+    },
+    {
+      "raw_column": "App_Degrees",
+      "target_field": "Degree_Program_Level",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Degree or Program Level",
+      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Degree or Program Level' reference list. Unlike Applicants_Basic_Details, this form's picklist is NOT filtered to a fixed code subset (values = Degree_Program_Level.ID with no [Code == ...] filter), so any valid degree code should resolve here."
+    },
+    {
+      "raw_column": "App_Area_of_Specialization",
+      "target_field": "Area_of_Specialization",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Area of Specialization",
+      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Area of Specialization' reference list. HEDB notes '99' should be used if the specialization isn't listed -- make sure code 99 exists in your Zoho Area_of_Specialization lookup form."
+    },
+    {
+      "raw_column": "App_Language_Test_Name",
+      "target_field": "Academic_Proficiency_Tests",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Acad Proficiency Test",
+      "_note": "Raw HEDB test code is converted to its descriptive Name using the 'Acad Proficiency Test' reference list."
+    },
+    {
+      "raw_column": "App_Language_Test_Score",
+      "target_field": "Average_Academic_Proficiency_Exam_Score",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file. HEDB note: for programs/specializations where no test is required, use test code 13 and score 0 rather than leaving this blank."
+    },
+    {
+      "raw_column": "Last_Updated",
+      "target_field": "Last_Updated_Date_Time",
+      "kind": "date",
+      "_note": "Date-time values are trimmed to a plain date (time portion removed) and written as yyyy-mm-dd."
+    }
+  ]
+}

@@ -1,0 +1,238 @@
+{
+  "_source": "HEDB Data Dictionary 202601, sheet 'Inst Research Units' (Institute - Research & Innovation Unit)",
+  "_zoho_form": "Institute_Research_innovation_unit",
+  "_note": "New 2026-10-22. raw_column values are the dictionary's 'Database Field Name' column verbatim, except the two duplicated contact columns (see their notes). Zoho stores the DISPLAY text for every dropdown; the production push workflow converts each one back to its CHEDS code.",
+  "fields": [
+    {
+      "raw_column": "Institution_Code",
+      "target_field": "Institutional_Codes",
+      "kind": "lookup",
+      "lookup_direction": "code_to_name",
+      "hedb_sheet": "Institutional Codes",
+      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Institutional Codes' reference list -- the Zoho lookup displays [Name] and is filtered to Code == \"141\"."
+    },
+    {
+      "raw_column": "Institution_Name",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- the Zoho form derives the name from the Institutional Codes lookup, so no column is written."
+    },
+    {
+      "raw_column": "RI_Fiscal_Year",
+      "target_field": "Year_field",
+      "kind": "plain",
+      "_note": "No conversion. Zoho field is 'Year' (Year_field), max 4 chars; the push sends rec.Year_field.toString()."
+    },
+    {
+      "raw_column": "RI_Unit_ID",
+      "target_field": "Unit_ID",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "RI_Unit_Name",
+      "target_field": "Unit_Name",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "RI_Unit_Type",
+      "target_field": "Unit_Type1",
+      "kind": "map",
+      "value_map": {
+        "RSU": "Research Administration & Funding Support Unit",
+        "ORC": "Office of Research Compliance",
+        "RCU": "Research Center Unit",
+        "JRC": "Joint Research Centers",
+        "TTO": "Technology Transfer Office",
+        "ILO": "Industry Liaison Office",
+        "IEC": "Innovation & Entrepreneurship Center",
+        "GRO": "Graduate Research Office"
+      },
+      "_note": "Raw R&I Unit Type code is converted to the exact Zoho picklist text using an 8-entry table (e.g. 'RSU' -> 'Research Administration & Funding Support Unit'; 'RCU' -> 'Research Center Unit'). The push workflow converts it back to the code via Dropdown_Fields.research_inovation_type()."
+    },
+    {
+      "raw_column": "RI_Unit_Year",
+      "target_field": "Year_of_establishment_Number",
+      "kind": "plain",
+      "_note": "No conversion. CHEDS requires a 4-digit year not later than the current year."
+    },
+    {
+      "raw_column": "RI_Unit_FORD",
+      "target_field": "Field_of_RnD2",
+      "kind": "multimap",
+      "value_map": {
+        "1.1": "Mathematics",
+        "1.2": "Computer and Information Sciences",
+        "1.3": "Physical Sciences",
+        "1.4": "Chemical Sciences",
+        "1.5": "Earth and Related Environmental Sciences",
+        "1.6": "Biological Sciences",
+        "1.7": "Other Natural Sciences",
+        "2.1": "Civil Engineering",
+        "2.2": "Electrical, Electronic, and Information Engineering",
+        "2.3": "Mechanical Engineering",
+        "2.4": "Chemical Engineering",
+        "2.5": "Materials Engineering",
+        "2.6": "Medical Engineering",
+        "2.7": "Environmental Engineering",
+        "2.8": "Environmental Biotechnology",
+        "2.9": "Industrial Biotechnology",
+        "2.10": "Nanotechnology",
+        "2.11": "Nanotechnology",
+        "2.12": "Other Engineering and Technologies",
+        "3.1": "Basic Medicine",
+        "3.2": "Clinical Medicine",
+        "3.3": "Health Sciences",
+        "3.4": "Medical Biotechnology",
+        "3.5": "Other Medical Sciences",
+        "4.1": "Agriculture, Forestry, and Fisheries",
+        "4.2": "Animal and Dairy Science",
+        "4.3": "Veterinary Science",
+        "4.4": "Agricultural Biotechnology",
+        "4.5": "Other Agricultural Sciences",
+        "5.1": "Psychology",
+        "5.2": "Economics and Business",
+        "5.3": "Educational Sciences",
+        "5.4": "Sociology",
+        "5.5": "Law",
+        "5.6": "Political Science",
+        "5.7": "Social and Economic Geography",
+        "5.8": "Media and Communications",
+        "5.9": "Other Social Sciences",
+        "6.1": "History and Archaeology",
+        "6.2": "Languages and Literature",
+        "6.3": "Philosophy, Ethics, and Religion",
+        "6.4": "Arts (Performing and Visual)",
+        "6.5": "Other Humanities",
+        "9.9": "Not Applicable"
+      },
+      "input_separator": ",",
+      "output_separator": ", ",
+      "_note": "Multi-select. Each comma-separated Fields-of-R&D code is converted to the exact Zoho multi-select text and re-joined with ', ' (e.g. '2.1, 3.5, 5.3' -> 'Civil Engineering, Other Medical Sciences, Educational Sciences'). WARNING: the HEDB 'Fields of R&D' sheet numbers Nanotechnology 2.11 in its code column but 2.10 in its outline column, and Excel stores both as floats so 2.10 reads back as '2.1' -- which collides with Civil Engineering. Both 2.10 and 2.11 are accepted here as Nanotechnology; confirm the intended code with CHEDS before the first push."
+    },
+    {
+      "raw_column": "RI_Unit_Priority",
+      "target_field": "National_R_D_Priority",
+      "kind": "map",
+      "value_map": {
+        "E0": "E0 - Energy Transition",
+        "E1": "E1 - Solar Energy",
+        "E2": "E2 - Hydrogen Production and Storage",
+        "E3": "E3 - Carbon Dioxide Capture and Storage",
+        "H0": "H0 - Health and Human Prosperity",
+        "H1": "H1 - Cardiovascular Disorders and Metabolic Syndrome",
+        "H2": "H2 - Cancer",
+        "H3": "H3 - Human Prosperity",
+        "F0": "F0 - Food Security",
+        "F1": "F1 - Fishing and Aquaculture",
+        "F2": "F2 - Sustainable Production Technologies",
+        "W0": "W0 - Water Security",
+        "W1": "W1 - Sustainable Desalination",
+        "W2": "W2 - Water Reuse",
+        "D0": "D0 - Digital Technology and Cybersecurity",
+        "D1": "D1 - Data Science",
+        "D2": "D2 - Machine Learning and Artificial Intelligence",
+        "D3": "D3 - Cybersecurity",
+        "A0": "A0 - Advanced Materials and Manufacturing",
+        "A1": "A1 - Functional Materials",
+        "A2": "A2 - Smart Materials",
+        "A3": "A3 - 3D Printing"
+      },
+      "_note": "Raw R&D Priority code is converted to the exact Zoho picklist text ('E0' -> 'E0 - Energy Transition'); the push sends .subString(0,2) to recover the code. WARNING: CHEDS says multiple priorities are permissible, but the Zoho field is a single-select picklist, so only one code per row can be carried today."
+    },
+    {
+      "raw_column": "Unit_Description",
+      "target_field": "Unit_Description",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Annual_expenditure",
+      "target_field": "Total_annual_RnI_expenditure",
+      "kind": "plain",
+      "_note": "No conversion. Value is AED, whole number (no currency symbol or thousands separators)."
+    },
+    {
+      "raw_column": "Funding_Source",
+      "target_field": "Funding_Source",
+      "kind": "multimap",
+      "value_map": {
+        "G": "Government",
+        "BS": "Business Sector",
+        "HEI": "Higher Education Institutions",
+        "NO": "Nonprofit Organizations",
+        "IF": "International Funding",
+        "SF": "Self Funding"
+      },
+      "input_separator": ",",
+      "output_separator": ", ",
+      "_note": "Multi-select. Each comma-separated Funding Source Type code is converted to the exact Zoho multi-select text and re-joined with ', ' (e.g. 'G, HEI' -> 'Government, Higher Education Institutions'). The push workflow converts it back via Dropdown_Fields.Funding_source_type()."
+    },
+    {
+      "raw_column": "Collaborating_Entities",
+      "target_field": "Collaborating_Entities",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Unit_City",
+      "target_field": "Unit_City1",
+      "kind": "map",
+      "value_map": {
+        "AD": "Abu Dhabi",
+        "DB": "Dubai",
+        "SH": "Sharjah",
+        "AJ": "Ajman",
+        "RK": "Ras Al Khaimah",
+        "FJ": "Fujairah",
+        "UQ": "Umm Al-Quwain",
+        "UN": "Use in case of GCC students who do not have addresses within UAE",
+        "ON": "Online Study/Teaching/Work"
+      },
+      "_note": "Raw Emirates code is converted to the exact Zoho picklist text ('AD' -> 'Abu Dhabi'); the push converts it back via Dropdown_Fields.Emirates_code()."
+    },
+    {
+      "raw_column": "Unit_Head",
+      "target_field": "Unit_Head",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Contact_Email",
+      "target_field": "Contact_Email_of_the_unit_head",
+      "kind": "plain",
+      "_note": "Unit HEAD's email. NOTE: HEDB 202601 gives the same Database Field Name 'Contact_Email' to both the unit head's email and the unit's email. This entry takes the first occurrence; the unit-level one is read from 'Contact_Email_Unit' -- rename that second column in the raw file before building."
+    },
+    {
+      "raw_column": "Contact_Phone",
+      "target_field": "Contact_Phone_of_the_unit_head",
+      "kind": "plain",
+      "_note": "Unit HEAD's phone (Zoho field is plain text, so the raw formatting is kept). NOTE: HEDB 202601 reuses 'Contact_Phone' for both the head's and the unit's phone -- the unit-level one is read from 'Contact_Phone_Unit'."
+    },
+    {
+      "raw_column": "Contact_Email_Unit",
+      "target_field": "Contact_Email",
+      "kind": "plain",
+      "_note": "Unit-level email. TODO: HEDB 202601 names this column 'Contact_Email', identical to the unit head's. Two identical headers cannot coexist in one sheet, so rename the second one to 'Contact_Email_Unit' in the raw file (or change this raw_column to whatever CHEDS actually emits)."
+    },
+    {
+      "raw_column": "Contact_Phone_Unit",
+      "target_field": "Contact_Phone",
+      "kind": "phone",
+      "_note": "Unit-level phone, cleaned to digits plus a leading '+' because the Zoho field is a Phone Number type. TODO: HEDB 202601 names this column 'Contact_Phone', identical to the unit head's -- rename the second one to 'Contact_Phone_Unit' in the raw file."
+    },
+    {
+      "raw_column": "Contact_Website",
+      "target_field": "Website1",
+      "kind": "plain",
+      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+    },
+    {
+      "raw_column": "Last_Updated",
+      "target_field": null,
+      "kind": "unmapped",
+      "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API. The Zoho form stamps lastUpdated itself on a successful push."
+    }
+  ]
+}

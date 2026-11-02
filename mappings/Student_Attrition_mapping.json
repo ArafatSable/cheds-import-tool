@@ -1,234 +1,246 @@
 {
-  "_form_note": "Student_Attrition (Zoho form 'Student – Attrition'), built from Zoho_To_CHEDS_(23).ds field definitions + the push workflow 'push_api_production2' (POST .../Integration/Students/Attrition) + the four thisapp.Dropdown_Fields functions it calls (Gender, Student_Level_Code, Attrition_Category, Attrition_Reason). Raw column names = HEDB 'Student- Attrition' Database Field Names. institutionCode is hardcoded to 141 in the workflow, but Institution_code is a mandatory field on the form so it's still imported. Attrition_Reason uses 'value_map_by': the same code (TR) means different things under different categories, so the reason is resolved per row using that row's Attrition_Category -- and a reason that doesn't belong to its category is flagged rather than silently mapped. 2026 reason codes TI, TRP, TRM are mapped to the new picklist labels added on the Zoho form.",
-  "fields": [
-    {
-      "raw_column": "Attrition_Institution_Code",
-      "target_field": "Institution_code",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Institutional Codes",
-      "_note": "Form displayformat = [Name]. Code (141) converted to the institution Name."
-    },
-    {
-      "raw_column": "Attrition_Submission_Term",
-      "target_field": "Submission_Term",
-      "kind": "lookup",
-      "lookup_direction": "code_to_combo",
-      "combo_order": "name_code",
-      "combo_separator": " - ",
-      "hedb_sheet": "Academic Period",
-      "_note": "Form displayformat = [Name + \" - \" + Code]. Workflow sends .Code.toNumber()."
-    },
-    {
-      "raw_column": "Attrition_Academic_Period",
-      "target_field": "Last_Academic_Period",
-      "kind": "lookup",
-      "lookup_direction": "code_to_combo",
-      "combo_order": "name_code",
-      "combo_separator": " - ",
-      "hedb_sheet": "Academic Period",
-      "_note": "Form displayformat = [Name + \" - \" + Code]. HEDB DB field name is 'Attrition_Academic_Period'."
-    },
-    {
-      "raw_column": "Attrition_Student_ID",
-      "target_field": "Student_ID",
-      "kind": "plain",
-      "_note": "No conversion."
-    },
-    {
-      "raw_column": "Attrition_Emirates_ID",
-      "target_field": "Emirates_ID",
-      "kind": "plain",
-      "_note": "15-digit Number. HEDB: use 999999999999999 if not available."
-    },
-    {
-      "raw_column": "Attrition_Student_Name_English",
-      "target_field": "Student_Name_English",
-      "kind": "plain",
-      "_note": "No conversion."
-    },
-    {
-      "raw_column": "Attrition_Name_Arabic",
-      "target_field": "Student_Name_Arabic",
-      "kind": "plain",
-      "_note": "Optional -- leave blank if not available."
-    },
-    {
-      "raw_column": "Attrition_Gender",
-      "target_field": "Gender",
-      "kind": "map",
-      "value_map": {
-        "M": "Male",
-        "F": "Female",
-        "U": "Unreported due to privacy laws applicable (e.g. GDPR , FERPA)"
-      },
-      "_note": "Exact reverse of Dropdown_Fields.Gender()."
-    },
-    {
-      "raw_column": "Attrition_Student_DOB",
-      "target_field": "Student_DOB",
-      "kind": "date",
-      "_note": "Trimmed to yyyy-mm-dd."
-    },
-    {
-      "raw_column": "Attrition_Nationality",
-      "target_field": "Nationality",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Country",
-      "_note": "2-letter code converted to country Name."
-    },
-    {
-      "raw_column": "Attrition_Student_Level",
-      "target_field": "Student_Level_Level_Code",
-      "kind": "map",
-      "value_map": {
-        "FN": "Foundation",
-        "RM": "Remedial program (pre Masters).",
-        "FR": "Freshman",
-        "SP": "Sophomore",
-        "JR": "Junior",
-        "SR": "Senior",
-        "M1": "Masters - Year1",
-        "M2": "Masters - Year2 ( 50% or more of required credits completed)",
-        "M3": "Masters - Year3",
-        "D1": "Doctorate 1: Not advanced to candidacy",
-        "D2": "Doctorate 2: Advanced to candidacy",
-        "PD": "Post-doctorate",
-        "PF": "Professional Education",
-        "CR": "Certificate/Credential",
-        "DP": "Diploma",
-        "HD": "Higher Diploma",
-        "P1": "Phase A :Year 1 or 2 or 3 (MBBS), Year 1 (JD or MD), Year 1,2, 3 of DD (Dentistry)",
-        "P2": "Phase B: Year 4, 5, 6 (MBBS), Year 2 (JD or MD), Year 4,5 of DD (Dentistry)",
-        "P3": "Medical residency and training (above year 5) , Year 3 and above (JD or MD)",
-        "PG": "Post graduate diploma",
-        "MC": "Microcredential"
-      },
-      "_note": "Exact form picklist text. ZOHO BUG: Dropdown_Fields.Student_Level_Code() uses contains(), so 'Diploma' matches 'Higher Diploma' and DP is pushed as HD."
-    },
-    {
-      "raw_column": "Attrition_Area_of_Specialization",
-      "target_field": "Area_of_Specialization_CIP_Family_code",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Area of Specialization",
-      "_note": "CIP family code converted to Name. HEDB: 99 for undeclared."
-    },
-    {
-      "raw_column": "Attrition_Program_Code",
-      "target_field": "Program_Program_Code",
-      "kind": "plain",
-      "_note": "Bare program code imported unchanged, e.g. 141-6511-999999999."
-    },
-    {
-      "raw_column": "Attrition_Category",
-      "target_field": "Attrition_Category",
-      "kind": "map",
-      "value_map": {
-        "VW": "Voluntary Withdrawal (complete)",
-        "D": "Dismissal",
-        "LA": "Registration Postponement /term withdrawal",
-        "S": "Probation/Hold on registration imposed by the institution",
-        "TR": "Transfer to another program"
-      },
-      "_note": "Exact reverse of Dropdown_Fields.Attrition_Category()."
-    },
-    {
-      "raw_column": "Attrition_Reason",
-      "target_field": "Attrition_Reason",
-      "kind": "map",
-      "value_map": {
-        "TRA": "Transfer to an institute abroad",
-        "FR": "Financial Reasons",
-        "W": "Employment",
-        "FC": "Family Commitments",
-        "HR": "Health Reasons",
-        "DT": "Death",
-        "NT": "Not interested in the major",
-        "RL": "Relocation",
-        "FL": "Cannot manage full time study load",
-        "CL": "Cultural issues (e.g. co-education, etc.)",
-        "AR": "Aacdemic Reasons (e.g. low GPA)",
-        "PA": "Personal reasons not defined elsewhere",
-        "RV": "Residency/Visa Issues",
-        "OT": "Others",
-        "AD": "Academic Dismissal: for reasons related to bad academic performance",
-        "NAD": "Non-academic dismissal. For reasons related to behavior",
-        "NAF": "Non academic dismissal due to financial reasons (student could not pay the fee)",
-        "AS": "Academic Suspension",
-        "NS": "Non-academic suspension",
-        "MS": "National Military Service",
-        "PR": "Peronal reasons",
-        "FT": "Failure to register in the courses",
-        "MJ": "Change of major from next semester",
-        "TI": "Transportation Issues - Withdrawal",
-        "TRP": "Voluntary transfer to another program",
-        "TRM": "Mandated transfer to another program (low grades/academic reasons)"
-      },
-      "value_map_by": {
-        "raw_column": "Attrition_Category",
-        "maps": {
-          "VW": {
-            "TR": "Transfer to an institute within UAE",
-            "TRA": "Transfer to an institute abroad",
-            "FR": "Financial Reasons",
-            "W": "Employment",
-            "FC": "Family Commitments",
-            "HR": "Health Reasons",
-            "DT": "Death",
-            "NT": "Not interested in the major",
-            "RL": "Relocation",
-            "FL": "Cannot manage full time study load",
-            "CL": "Cultural issues (e.g. co-education, etc.)",
-            "AR": "Aacdemic Reasons (e.g. low GPA)",
-            "PA": "Personal reasons not defined elsewhere",
-            "TI": "Transportation Issues - Withdrawal",
-            "RV": "Residency/Visa Issues",
-            "TRP": "Voluntary transfer to another program",
-            "OT": "Others"
-          },
-          "D": {
-            "AD": "Academic Dismissal: for reasons related to bad academic performance",
-            "NAD": "Non-academic dismissal. For reasons related to behavior",
-            "NAF": "Non academic dismissal due to financial reasons (student could not pay the fee)",
-            "TRM": "Mandated transfer to another program (low grades/academic reasons)"
-          },
-          "S": {
-            "AS": "Academic Suspension",
-            "NS": "Non-academic suspension"
-          },
-          "LA": {
-            "FR": "Financial Reasons",
-            "W": "Employment",
-            "FC": "Family Commitments",
-            "HR": "Health Reasons",
-            "MS": "National Military Service",
-            "PR": "Peronal reasons",
-            "FT": "Failure to register in the courses",
-            "TR": "Transportation issues",
-            "MJ": "Change of major from next semester",
-            "OT": "Others"
-          },
-          "TR": {
-            "TRP": "Voluntary transfer to another program",
-            "TRM": "Mandated transfer to another program (low grades/academic reasons)"
-          }
-        }
-      },
-      "_note": "Resolved per row using Attrition_Category (TR = 'Transfer to an institute within UAE' under VW, 'Transportation issues' under LA). 2026 codes: TI, TRP (VW), TRM (D), TRP/TRM (TR). Labels match the updated Zoho picklist + Dropdown_Fields.Attrition_Reason()."
-    },
-    {
-      "raw_column": "Attrition_Withdrawn_Credits",
-      "target_field": "Withdrawn_Credit_Hours",
-      "kind": "plain",
-      "_note": "NEW 202601. Decimal. Header assumed by analogy with Funding_Withdrawn_Credits; rename if your export differs."
-    },
-    {
-      "raw_column": "Attrition_Excess_Absence_Credits",
-      "target_field": "Credit_Hours_Exceeding_15_Absence_Limit",
-      "kind": "plain",
-      "_note": "NEW 202601. Decimal. Header assumed by analogy with Funding_Excess_Absence_Credits; rename if your export differs."
+ "_form_note": "Student_Attrition (Zoho form 'Student – Attrition'), built from Zoho_To_CHEDS_(23).ds field definitions + the push workflow 'push_api_production2' (POST .../Integration/Students/Attrition) + the four thisapp.Dropdown_Fields functions it calls (Gender, Student_Level_Code, Attrition_Category, Attrition_Reason). Raw column names = HEDB 'Student- Attrition' Database Field Names. institutionCode is hardcoded to 141 in the workflow, but Institution_code is a mandatory field on the form so it's still imported. Attrition_Reason uses 'value_map_by': the same code (TR) means different things under different categories, so the reason is resolved per row using that row's Attrition_Category -- and a reason that doesn't belong to its category is flagged rather than silently mapped. 2026 reason codes TI, TRP, TRM are mapped to the new picklist labels added on the Zoho form.",
+ "fields": [
+  {
+   "raw_column": "Attrition_Institution_Code",
+   "target_field": "Institution_code",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "Form displayformat = [Name]. Code (141) converted to the institution Name."
+  },
+  {
+   "raw_column": "Attrition_Submission_Term",
+   "target_field": "Submission_Term",
+   "kind": "lookup",
+   "lookup_direction": "code_to_combo",
+   "combo_order": "name_code",
+   "combo_separator": " - ",
+   "hedb_sheet": "Academic Period",
+   "_note": "Form displayformat = [Name + \" - \" + Code]. Workflow sends .Code.toNumber()."
+  },
+  {
+   "raw_column": "Attrition_Academic_Period",
+   "target_field": "Last_Academic_Period",
+   "kind": "lookup",
+   "lookup_direction": "code_to_combo",
+   "combo_order": "name_code",
+   "combo_separator": " - ",
+   "hedb_sheet": "Academic Period",
+   "_note": "Form displayformat = [Name + \" - \" + Code]. HEDB DB field name is 'Attrition_Academic_Period'."
+  },
+  {
+   "raw_column": "Attrition_Student_ID",
+   "target_field": "Student_ID",
+   "kind": "plain",
+   "_note": "No conversion."
+  },
+  {
+   "raw_column": "Attrition_Emirates_ID",
+   "target_field": "Emirates_ID",
+   "kind": "plain",
+   "_note": "15-digit Number. HEDB: use 999999999999999 if not available."
+  },
+  {
+   "raw_column": "Attrition_Student_Name_English",
+   "target_field": "Student_Name_English",
+   "kind": "plain",
+   "_note": "No conversion."
+  },
+  {
+   "raw_column": "Attrition_Name_Arabic",
+   "target_field": "Student_Name_Arabic",
+   "kind": "plain",
+   "_note": "Optional -- leave blank if not available."
+  },
+  {
+   "raw_column": "Attrition_Gender",
+   "target_field": "Gender",
+   "kind": "map",
+   "value_map": {
+    "M": "Male",
+    "F": "Female",
+    "U": "Unreported due to privacy laws applicable (e.g. GDPR , FERPA)"
+   },
+   "_note": "Exact reverse of Dropdown_Fields.Gender()."
+  },
+  {
+   "raw_column": "Attrition_Student_DOB",
+   "target_field": "Student_DOB",
+   "kind": "date",
+   "_note": "Trimmed to yyyy-mm-dd."
+  },
+  {
+   "raw_column": "Attrition_Nationality",
+   "target_field": "Nationality",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Country",
+   "_note": "2-letter code converted to country Name."
+  },
+  {
+   "raw_column": "Attrition_Student_Level",
+   "target_field": "Student_Level_Level_Code",
+   "kind": "map",
+   "value_map": {
+    "FN": "Foundation",
+    "RM": "Remedial program (pre Masters).",
+    "FR": "Freshman",
+    "SP": "Sophomore",
+    "JR": "Junior",
+    "SR": "Senior",
+    "M1": "Masters - Year1",
+    "M2": "Masters - Year2 ( 50% or more of required credits completed)",
+    "M3": "Masters - Year3",
+    "D1": "Doctorate 1: Not advanced to candidacy",
+    "D2": "Doctorate 2: Advanced to candidacy",
+    "PD": "Post-doctorate",
+    "PF": "Professional Education",
+    "CR": "Certificate/Credential",
+    "DP": "Diploma",
+    "HD": "Higher Diploma",
+    "P1": "Phase A :Year 1 or 2 or 3 (MBBS), Year 1 (JD or MD), Year 1,2, 3 of DD (Dentistry)",
+    "P2": "Phase B: Year 4, 5, 6 (MBBS), Year 2 (JD or MD), Year 4,5 of DD (Dentistry)",
+    "P3": "Medical residency and training (above year 5) , Year 3 and above (JD or MD)",
+    "PG": "Post graduate diploma",
+    "MC": "Microcredential"
+   },
+   "_note": "Exact form picklist text. ZOHO BUG: Dropdown_Fields.Student_Level_Code() uses contains(), so 'Diploma' matches 'Higher Diploma' and DP is pushed as HD."
+  },
+  {
+   "raw_column": "Attrition_Area_of_Specialization",
+   "target_field": "Area_of_Specialization_CIP_Family_code",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Area of Specialization",
+   "_note": "CIP family code converted to Name. HEDB: 99 for undeclared."
+  },
+  {
+   "raw_column": "Attrition_Program_Code",
+   "target_field": "Program_Program_Code",
+   "kind": "plain",
+   "_note": "Bare program code imported unchanged, e.g. 141-6511-999999999."
+  },
+  {
+   "raw_column": "Attrition_Category",
+   "target_field": "Attrition_Category",
+   "kind": "map",
+   "value_map": {
+    "VW": "Voluntary Withdrawal (complete)",
+    "D": "Dismissal",
+    "LA": "Registration Postponement /term withdrawal",
+    "S": "Probation/Hold on registration imposed by the institution",
+    "TR": "Transfer to another program"
+   },
+   "_note": "Exact reverse of Dropdown_Fields.Attrition_Category()."
+  },
+  {
+   "raw_column": "Attrition_Reason",
+   "target_field": "Attrition_Reason",
+   "kind": "map",
+   "value_map": {
+    "TRA": "Transfer to an institute abroad",
+    "FR": "Financial Reasons",
+    "W": "Employment",
+    "FC": "Family Commitments",
+    "HR": "Health Reasons",
+    "DT": "Death",
+    "NT": "Not interested in the major",
+    "RL": "Relocation",
+    "FL": "Cannot manage full time study load",
+    "CL": "Cultural issues (e.g. co-education, etc.)",
+    "AR": "Aacdemic Reasons (e.g. low GPA)",
+    "PA": "Personal reasons not defined elsewhere",
+    "RV": "Residency/Visa Issues",
+    "OT": "Others",
+    "AD": "Academic Dismissal: for reasons related to bad academic performance",
+    "NAD": "Non-academic dismissal. For reasons related to behavior",
+    "NAF": "Non academic dismissal due to financial reasons (student could not pay the fee)",
+    "AS": "Academic Suspension",
+    "NS": "Non-academic suspension",
+    "MS": "National Military Service",
+    "PR": "Peronal reasons",
+    "FT": "Failure to register in the courses",
+    "MJ": "Change of major from next semester",
+    "TI": "Transportation Issues - Withdrawal",
+    "TRP": "Voluntary transfer to another program",
+    "TRM": "Mandated transfer to another program (low grades/academic reasons)"
+   },
+   "value_map_by": {
+    "raw_column": "Attrition_Category",
+    "maps": {
+     "VW": {
+      "TR": "Transfer to an institute within UAE",
+      "TRA": "Transfer to an institute abroad",
+      "FR": "Financial Reasons",
+      "W": "Employment",
+      "FC": "Family Commitments",
+      "HR": "Health Reasons",
+      "DT": "Death",
+      "NT": "Not interested in the major",
+      "RL": "Relocation",
+      "FL": "Cannot manage full time study load",
+      "CL": "Cultural issues (e.g. co-education, etc.)",
+      "AR": "Aacdemic Reasons (e.g. low GPA)",
+      "PA": "Personal reasons not defined elsewhere",
+      "TI": "Transportation Issues - Withdrawal",
+      "RV": "Residency/Visa Issues",
+      "TRP": "Voluntary transfer to another program",
+      "OT": "Others"
+     },
+     "D": {
+      "AD": "Academic Dismissal: for reasons related to bad academic performance",
+      "NAD": "Non-academic dismissal. For reasons related to behavior",
+      "NAF": "Non academic dismissal due to financial reasons (student could not pay the fee)",
+      "TRM": "Mandated transfer to another program (low grades/academic reasons)"
+     },
+     "S": {
+      "AS": "Academic Suspension",
+      "NS": "Non-academic suspension"
+     },
+     "LA": {
+      "FR": "Financial Reasons",
+      "W": "Employment",
+      "FC": "Family Commitments",
+      "HR": "Health Reasons",
+      "MS": "National Military Service",
+      "PR": "Peronal reasons",
+      "FT": "Failure to register in the courses",
+      "TR": "Transportation issues",
+      "MJ": "Change of major from next semester",
+      "OT": "Others"
+     },
+     "TR": {
+      "TRP": "Voluntary transfer to another program",
+      "TRM": "Mandated transfer to another program (low grades/academic reasons)"
+     }
     }
-  ]
+   },
+   "_note": "Resolved per row using Attrition_Category (TR = 'Transfer to an institute within UAE' under VW, 'Transportation issues' under LA). 2026 codes: TI, TRP (VW), TRM (D), TRP/TRM (TR). Labels match the updated Zoho picklist + Dropdown_Fields.Attrition_Reason()."
+  },
+  {
+   "raw_column": "Attrition_Withdrawn_Credits",
+   "target_field": "Withdrawn_Credit_Hours",
+   "kind": "plain",
+   "_note": "NEW 202601. Decimal. Header assumed by analogy with Funding_Withdrawn_Credits; rename if your export differs."
+  },
+  {
+   "raw_column": "Attrition_Excess_Absence_Credits",
+   "target_field": "Credit_Hours_Exceeding_15_Absence_Limit",
+   "kind": "plain",
+   "_note": "NEW 202601. Decimal. Header assumed by analogy with Funding_Excess_Absence_Credits; rename if your export differs."
+  },
+  {
+   "raw_column": "Attrition_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
 }

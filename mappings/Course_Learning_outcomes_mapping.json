@@ -1,46 +1,64 @@
 {
-  "fields": [
-    {
-      "raw_column": "CLO_Institution_Code",
-      "target_field": "Institutional_Codes",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "CLO_Program_Code",
-      "target_field": "Program_Code",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "CLO_Academic_Period",
-      "target_field": "Academic_Period",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Crse_Name",
-      "target_field": "Course_Name",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Crse_code",
-      "target_field": "Course_code",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "CLO_code",
-      "target_field": "CLO_code",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "CLO_desc",
-      "target_field": "CLO_Description",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    }
-  ]
+ "fields": [
+  {
+   "raw_column": "CLO_Institution_Code",
+   "target_field": "Institutional_Codes",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "CLO_Program_Code",
+   "target_field": "Program_Code",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "CLO_Academic_Period",
+   "target_field": "Academic_Period",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "Crse_Name",
+   "target_field": "Course_Name",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "Crse_code",
+   "target_field": "Course_code",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "CLO_code",
+   "target_field": "CLO_code",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "CLO_desc",
+   "target_field": "CLO_Description",
+   "kind": "plain",
+   "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
+  },
+  {
+   "raw_column": "CLO_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "CLO_Program_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho 'Program' field is a lookup displaying [Name + \" - \" + Code], so it is resolved from the program code column, not from this name text."
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
 }

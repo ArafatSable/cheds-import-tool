@@ -1,270 +1,255 @@
 {
-  "fields": [
-    {
-      "raw_column": "Grad_Institution_Code",
-      "target_field": "Institution_Code",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Institutional Codes",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Institutional Codes' reference list."
-    },
-    {
-      "raw_column": "Grad_Academic_Period",
-      "target_field": "Graduation_Academic_Period1",
-      "kind": "lookup",
-      "lookup_direction": "code_to_combo",
-      "combo_order": "name_code",
-      "combo_separator": " - ",
-      "hedb_sheet": "Academic Period",
-      "_note": "Raw HEDB code is converted to a combined 'Name - Code' display value using the 'Academic Period' reference list."
-    },
-    {
-      "raw_column": "Grad_Student_ID",
-      "target_field": "Student_ID",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_Al_Ethbara",
-      "target_field": "Al_Ethbara",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_Emirates_ID",
-      "target_field": "Emirates_ID",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_Missing_EID",
-      "target_field": "Reason_why_Emirates_ID_is_missing",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Missing Emirates ID Reasons",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Missing Emirates ID Reasons' reference list."
-    },
-    {
-      "raw_column": "Grad_Passport_Number",
-      "target_field": "Passport_Number",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_Student_Name_English",
-      "target_field": "Graduate_Name_English",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_Student_Name_Arabic",
-      "target_field": "Graduate_Name_Arabic",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_Gender",
-      "target_field": "Gender",
-      "kind": "map",
-      "value_map": {
-        "M": "Male",
-        "F": "Female",
-        "U": "Unreported due to privacy laws applicable (e.g. GDPR , FERPA)"
-      },
-      "_note": "Raw short code is converted to the exact Zoho picklist text: 'M' -> 'Male'; 'F' -> 'Female'; 'U' -> 'Unreported due to privacy laws applicable (e.g. GDPR , FERPA)'."
-    },
-    {
-      "raw_column": "Grad_Student_DOB",
-      "target_field": "Graduate_DOB",
-      "kind": "date",
-      "_note": "Date-time values are trimmed to a plain date (time portion removed) and written as yyyy-mm-dd so Zoho's Date field accepts them."
-    },
-    {
-      "raw_column": "Grad_Student_Mobile_Number",
-      "target_field": "Graduate_Mobile_Number",
-      "kind": "phone",
-      "_note": "Phone number is cleaned to digits only (plus a leading '+' if present) -- dashes, spaces, and other punctuation are stripped, e.g. '+971-50-1203650' -> '+971501203650'."
-    },
-    {
-      "raw_column": "Grad_Health_Fitness_Certificate",
-      "target_field": "People_of_Determination",
-      "kind": "map",
-      "value_map": {
-        "Y": "Yes",
-        "N": "No",
-        "U": "Unknown/ Undeclared"
-      },
-      "_note": "Raw short code is converted to the exact Zoho picklist text: 'Y' -> 'Yes'; 'N' -> 'No'; 'U' -> 'Unknown/ Undeclared'."
-    },
-    {
-      "raw_column": "Grad_Marital_Status_Code",
-      "target_field": "Marital_Status_Code",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Marital status",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Marital status' reference list."
-    },
-    {
-      "raw_column": "Grad_Nationality",
-      "target_field": "Nationality",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Country",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Country' reference list."
-    },
-    {
-      "raw_column": "Grad_Nationality_of_Mother",
-      "target_field": "Nationality_of_Mother",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Country",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Country' reference list."
-    },
-    {
-      "raw_column": "Grad_Home_Emirate",
-      "target_field": "Home_Emirate_Emirates_Code",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Emirates",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Emirates' reference list."
-    },
-    {
-      "raw_column": "Grad_Student_Campus",
-      "target_field": "Graduate_Campus",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Campus",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Campus' reference list."
-    },
-    {
-      "raw_column": "Grad_1st_Academic_Period",
-      "target_field": "st_Academic_Period",
-      "kind": "lookup",
-      "lookup_direction": "code_to_combo",
-      "combo_order": "name_code",
-      "combo_separator": " - ",
-      "hedb_sheet": "Academic Period",
-      "_note": "Raw HEDB code is converted to a combined 'Name - Code' display value using the 'Academic Period' reference list."
-    },
-    {
-      "raw_column": "Grad_Student_Degree",
-      "target_field": "Graduate_Degree",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Degree or Program Level",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Degree or Program Level' reference list."
-    },
-    {
-      "raw_column": "Grad_Area_of_Specialization",
-      "target_field": "Graduate_Area_of_Specialization_CIP_Family_code",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Area of Specialization",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Area of Specialization' reference list."
-    },
-    {
-      "raw_column": "Grad_Student_Major",
-      "target_field": "Graduate_Major_text",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_Program_Code",
-      "target_field": "Graduate_Major_CIP_Major_Classification",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Program Master",
-      "_note": "FIXED: was looking up the raw CIP code (e.g. '52.0201') directly against 'Program Master' without specifying which columns to match -- CIP codes aren't unique per program (BBA and MBA can share one), and without code_col/name_col the lookup was reading the wrong columns entirely, so it never resolved. Now derives from Grad_Program_Code instead: looks up the row in 'Program Master' whose CAA Program Code (column 3) matches, and takes that row's Program Name (column 5). NOTE: I haven't seen this form's Field Properties/Display Fields setting the way I confirmed it for the Enrollments form's equivalent field -- if Zoho actually expects a combo like 'CIP Code - Program Code' here too rather than just the Name, let me know the exact Display Fields configuration and I'll adjust (name_col/lookup_direction) to match.",
-      "code_col": 3,
-      "name_col": 5
-    },
-    {
-      "raw_column": "Grad_Minor",
-      "target_field": "Graduate_Minor_text",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_Program_Code",
-      "target_field": "Graduate_Program",
-      "kind": "lookup",
-      "lookup_direction": "code_to_name",
-      "hedb_sheet": "Program Master",
-      "_note": "Raw HEDB code is converted to its descriptive Name using the 'Program Master' reference list."
-    },
-    {
-      "raw_column": "Grad_Student_Email_Address",
-      "target_field": "Graduate_Email_Address",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_Mode_of_Study",
-      "target_field": "Mode_of_Program_Study_FT_PT",
-      "kind": "map",
-      "value_map": {
-        "FT": "Full-Time",
-        "PT": "Part-Time"
-      },
-      "_note": "Raw short code is converted to the exact Zoho picklist text: 'FT' -> 'Full-Time'; 'PT' -> 'Part-Time'."
-    },
-    {
-      "raw_column": "Grad_Master_Thesis_Title",
-      "target_field": "Master_Thesis_Title",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_PhD_Dissertation_Title",
-      "target_field": "PhD_Dissertation_Title",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_Total_Credits_Cumulated",
-      "target_field": "Total_Credits_Accumulated",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_GPA_Cumulative",
-      "target_field": "GPA_Cumulative",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_Total_Academic_Periods_Regular",
-      "target_field": "Total_Academic_Periods_Regular",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_Total_Academic_Periods_Supplementary",
-      "target_field": "Total_Academic_Periods_Supplementary",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_Submission_Term",
-      "target_field": "Submission_Term",
-      "kind": "lookup",
-      "lookup_direction": "code_to_combo",
-      "combo_order": "name_code",
-      "combo_separator": " - ",
-      "hedb_sheet": "Academic Period",
-      "_note": "Raw HEDB code is converted to a combined 'Name - Code' display value using the 'Academic Period' reference list."
-    },
-    {
-      "raw_column": "Grad_LC",
-      "target_field": "GraduatesLC",
-      "kind": "plain",
-      "_note": "No conversion applied -- value is imported exactly as provided in the raw file."
-    },
-    {
-      "raw_column": "Grad_Workplacement",
-      "target_field": "Graduates_Workplacement",
-      "kind": "yesno",
-      "_note": "Raw Y/N (or true/false, 1/0) is converted to the exact word 'Yes'/'No' that Zoho's picklist expects."
-    }
-  ]
+ "_source": "Built from Zoho_To_CHEDS_ (35).ds workflow Push_Api_Production41 + HEDB Data Dictionary 202601 sheet 'Graduates'.",
+ "_zoho_form": "Student_Graduates",
+ "_note": "raw_column values are the HEDB 202601 'Database Field Name' headers. Picklist value_maps come from the literal code/name tables inside the app's thisapp.Dropdown_Fields functions, so the imported text matches the Zoho choice exactly and the push converts it back to the Ministry code.",
+ "fields": [
+  {
+   "raw_column": "Grad_Institution_Code",
+   "target_field": "Institution_Code",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Institutional Codes",
+   "_note": "displayformat = [Name] confirmed in .ds export. Not referenced anywhere in the push workflow script -- likely hardcoded elsewhere (check for a literal value near institutionCode) or simply unused. May still need a valid value to save the Zoho record."
+  },
+  {
+   "raw_column": "Grad_Institution_Name",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
+  },
+  {
+   "raw_column": "Grad_Academic_Period",
+   "target_field": "Graduation_Academic_Period1",
+   "kind": "lookup",
+   "lookup_direction": "code_to_combo",
+   "combo_order": "name_code",
+   "combo_separator": " - ",
+   "hedb_sheet": "Academic Period",
+   "_note": "displayformat = [Name + \" - \" + Code] confirmed in .ds export -- combo order 'name_code', separator ' - '."
+  },
+  {
+   "raw_column": "Grad_Student_ID",
+   "target_field": "Student_ID",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Grad_Emirates_ID",
+   "target_field": "Emirates_ID",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Grad_Missing_EID",
+   "target_field": "Reason_why_Emirates_ID_is_missing",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Reason_why_Missing() (workflow Push_Api_Production41).",
+   "value_map": {
+    "GCC": "GCC Resident with no Emirates ID",
+    "VISITING": "Visiting Student/Staff",
+    "ONLINE": "Distance Learning Student Or Faculty teaching online only (outside of UAE) or staff working remotely",
+    "NEW": "New student/faculty and Emirates ID is applied for",
+    "MAR": "Students with UAE passport but not UAE Nationals (Marsoom)",
+    "PRLW": "Emirates ID cannot be provided as GDPR/FERPA and/or other privacy laws are applicable on the records of the student/employee",
+    "DPL": "Family of diplomats. Do not required emirates ID"
+   }
+  },
+  {
+   "raw_column": "Grad_Passport_Number",
+   "target_field": "Passport_Number",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Grad_Student_Name_English",
+   "target_field": "Graduate_Name_English",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Grad_Student_Name_Arabic",
+   "target_field": "Graduate_Name_Arabic",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Grad_Gender",
+   "target_field": "Gender",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Gender() (workflow Push_Api_Production41).",
+   "value_map": {
+    "M": "Male",
+    "F": "Female",
+    "U": "Unreported due to privacy laws applicable (e.g. GDPR , FERPA)"
+   }
+  },
+  {
+   "raw_column": "Grad_Student_DOB",
+   "target_field": "Graduate_DOB",
+   "kind": "date"
+  },
+  {
+   "raw_column": "Grad_Student_Email_Address",
+   "target_field": "Graduate_Email_Address",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Grad_Student_Mobile_Number",
+   "target_field": "Graduate_Mobile_Number",
+   "kind": "phone",
+   "_note": "type = phonenumber -- raw digits/dashes/spaces will be stripped to a bare '+countrycode+number' string (e.g. '+971-50-1203650' -> '+971501203650') to match Zoho's expected format."
+  },
+  {
+   "raw_column": "Grad_Health_Fitness_Certificate",
+   "target_field": "People_of_Determination",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.people_of_determination() (workflow Push_Api_Production41).",
+   "value_map": {
+    "Y": "Yes",
+    "N": "No",
+    "U": "Unknown/ Undeclared"
+   }
+  },
+  {
+   "raw_column": "Grad_Nationality",
+   "target_field": "Nationality",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Country",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Grad_Nationality_of_Mother",
+   "target_field": "Nationality_of_Mother",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Country",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Grad_Home_Emirate",
+   "target_field": "Home_Emirate_Emirates_Code",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Emirates_code() (workflow Push_Api_Production41).",
+   "value_map": {
+    "AD": "Abu Dhabi",
+    "DB": "Dubai",
+    "SH": "Sharjah",
+    "AJ": "Ajman",
+    "RK": "Ras Al Khaimah",
+    "FJ": "Fujairah",
+    "UQ": "Umm Al-Quwain",
+    "UN": "Use in case of GCC students who do not have addresses within UAE",
+    "ON": "Online Study/Teaching/Work"
+   }
+  },
+  {
+   "raw_column": "Grad_Student_Campus",
+   "target_field": "Graduate_Campus",
+   "kind": "map",
+   "_note": "HEDB code is converted to the exact Zoho picklist choice text; the push converts it back with thisapp.Dropdown_Fields.Campus() (workflow Push_Api_Production41).",
+   "value_map": {
+    "AD": "Abu Dhabi",
+    "DB": "Dubai",
+    "SH": "Sharjah",
+    "AJ": "Ajman",
+    "RK": "Ras Al Khaimah",
+    "FJ": "Fujairah",
+    "UQ": "Umm Al-Quwain",
+    "AA": "Al Ain",
+    "RW": "Ruwais",
+    "MZ": "Madinat Zayed",
+    "KF": "Khorfakan",
+    "DI": "Dibba",
+    "KH": "Khalba",
+    "DD": "Dhaid",
+    "AAM": "Al Ain Men's Campus",
+    "AAW": "Al Ain Women's Campus",
+    "ADM": "Abu Dhabi Men's Campus",
+    "ADW": "Abu Dhabi Women's Campus",
+    "MZM": "Madinat Zayed Men's Campus",
+    "MZW": "Madinat Zayed Women's Campus",
+    "RUM": "Ruwais Men's Campus",
+    "RUW": "Ruwais Women's Campus",
+    "DBM": "Dubai Men's Campus",
+    "DBW": "Dubai Women's Campus",
+    "SJM": "Sharjah Men's Campus",
+    "SJW": "Sharjah Women's Campus",
+    "FJM": "Fujairah Men's Campus",
+    "FJW": "Fujairah Women's Campus",
+    "RKM": "Ras Al Khaimah Men's Campus",
+    "RKW": "Ras Al Khaimah Women's Campus",
+    "MEL": "Melaha",
+    "ON": "Online"
+   }
+  },
+  {
+   "raw_column": "Grad_1st_Academic_Period",
+   "target_field": "st_Academic_Period",
+   "kind": "lookup",
+   "lookup_direction": "code_to_combo",
+   "combo_order": "name_code",
+   "combo_separator": " - ",
+   "hedb_sheet": "Academic Period",
+   "_note": "displayformat = [Name + \" - \" + Code] confirmed in .ds export -- combo order 'name_code', separator ' - '."
+  },
+  {
+   "raw_column": "Grad_Student_Degree",
+   "target_field": "Graduate_Degree",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Degree or Program Level",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Grad_Minor",
+   "target_field": "Graduate_Minor_text",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Grad_Program_Code",
+   "target_field": "Graduate_Program",
+   "kind": "lookup",
+   "lookup_direction": "code_to_name",
+   "hedb_sheet": "Program Master",
+   "_note": "displayformat = [Name] confirmed in .ds export."
+  },
+  {
+   "raw_column": "Grad_Second_Program_code",
+   "target_field": "Second_Program_Program_Code",
+   "kind": "plain",
+   "_note": "displayformat = [Code] confirmed in .ds export -- bare code, no conversion needed."
+  },
+  {
+   "raw_column": "Grad_Total_Credits_Cumulated",
+   "target_field": "Total_Credits_Accumulated",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Grad_GPA_Cumulative",
+   "target_field": "GPA_Cumulative",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Grad_Total_Academic_Periods_Regular",
+   "target_field": "Total_Academic_Periods_Regular",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Grad_Total_Academic_Periods_Supplementary",
+   "target_field": "Total_Academic_Periods_Supplementary",
+   "kind": "plain"
+  },
+  {
+   "raw_column": "Grad_Submission_Term",
+   "target_field": "Submission_Term",
+   "kind": "lookup",
+   "lookup_direction": "code_to_combo",
+   "combo_order": "name_code",
+   "combo_separator": " - ",
+   "hedb_sheet": "Academic Period",
+   "_note": "displayformat = [Name + \" - \" + Code] confirmed in .ds export -- combo order 'name_code', separator ' - '."
+  },
+  {
+   "raw_column": "Last_Updated",
+   "target_field": null,
+   "kind": "unmapped",
+   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
+  }
+ ]
 }
