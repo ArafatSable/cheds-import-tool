@@ -67,6 +67,8 @@ ALL_FORMS = {
 }
 
 # --- withheld until SIU Dubai approves them (2026-11-02) ---------------------
+# 2026-11-04 released: Program Learning Outcomes, Course Learning Outcomes,
+# Program Skills, Institute - R&D Classified Expenditures.
 # Delete a line to release that dataset into the app. The mapping JSON is
 # already in mappings/ and verified against HEDB 202601, so nothing else has to
 # change -- the entry reappears in the picker on the next app reload.
@@ -77,9 +79,6 @@ HIDDEN = {
     "17. Students - SOD",
     "23. Courses",
     "24. Course Faculty",
-    "2. Course Learning Outcomes",
-    "1. Program Learning Outcomes",
-    "3. Program Skills",
     "30. Institute - Events",
     "32. Institute - Overview",
     "34. Institute - Partnerships",
@@ -89,7 +88,6 @@ HIDDEN = {
     "38. Institute - Publications",
     "40. Institute - Startups & Spinoffs",
     "37. Institute - Intellectual Property",
-    "39. Institute - R&D Classified Expenditures",
     "29. OBF Self Report",
 }
 
