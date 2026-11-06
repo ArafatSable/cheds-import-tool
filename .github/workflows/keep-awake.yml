@@ -4,7 +4,7 @@
 # requests the app URL every 6 hours, which counts as a visit and resets
 # that clock, so the client never lands on the "app is waking up" screen.
 #
-# It touches nothing in the app itself -- it is one HTTP GET from a
+# It touches nothing in the app itself -- it is one HTTP request from a
 # throwaway runner. To stop it: delete this file, or disable the workflow
 # in the repository's Actions tab.
 #
@@ -32,15 +32,21 @@ jobs:
         run: |
           URL="https://arafatsable-cheds-import-tool-app-streamlit-umxrz5.streamlit.app"
           echo "Pinging $URL"
-          # --retry covers a cold start or a brief blip; a non-2xx/3xx
-          # response fails the job so it shows up red in the Actions tab.
-          code=$(curl -sSL \
+          # NO -L here, deliberately. streamlit.app answers a plain cookieless
+          # request with a redirect that loops, so following redirects ends in
+          # "curl: (47) Maximum (50) redirects followed". We do not need the
+          # page -- only proof the server answered, which is what resets the
+          # 12-hour sleep timer. So: one request, no redirect following, and a
+          # 3xx counts as success.
+          code=$(curl -sS \
                    --retry 3 --retry-delay 20 --retry-all-errors \
-                   --max-time 90 \
+                   --max-time 60 \
+                   -A "keep-awake-bot (github actions)" \
                    -o /dev/null -w "%{http_code}" \
                    "$URL")
           echo "HTTP $code"
           case "$code" in
             2*|3*) echo "App responded. Sleep timer reset." ;;
+            000)   echo "No response at all - app or platform unreachable."; exit 1 ;;
             *)     echo "Unexpected response: $code"; exit 1 ;;
           esac
