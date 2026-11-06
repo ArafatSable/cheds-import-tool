@@ -52,10 +52,10 @@ jobs:
           
           echo "HTTP Response Code: $code"
           
-          # A 200 means it successfully reset the timer / woke up
-          if [ "$code" -eq 200 ]; then
+          # Streamlit can return a 200 or 204 to signify success
+          if [ "$code" -eq 200 ] || [ "$code" -eq 204 ]; then
             echo "Success! The app is awake or the sleep timer has been reset."
           else
-            echo "Failed to wake app. Expected HTTP 200, got $code"
+            echo "Failed to wake app. Expected HTTP 200 or 204, got $code"
             exit 1
           fi
