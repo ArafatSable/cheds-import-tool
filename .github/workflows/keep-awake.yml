@@ -1,52 +1,61 @@
-# Keeps the Streamlit Community Cloud app from hibernating.
-#
-# Streamlit puts an app to sleep after 12 hours with no traffic. This job
-# requests the app URL every 6 hours, which counts as a visit and resets
-# that clock, so the client never lands on the "app is waking up" screen.
-#
-# It touches nothing in the app itself -- it is one HTTP request from a
-# throwaway runner. To stop it: delete this file, or disable the workflow
-# in the repository's Actions tab.
-#
-# Note: GitHub pauses scheduled workflows in a repository with no commits
-# for 60 days. You get an email and can re-enable it in one click.
-
 name: keep-awake
 
 on:
   schedule:
-    # Every 6 hours at :17 past. The odd minute avoids the top-of-hour
-    # rush, when GitHub is most likely to delay a scheduled run.
+    # Runs every 6 hours at 17 minutes past the hour
     - cron: "17 */6 * * *"
-  workflow_dispatch:        # lets you trigger a run by hand from the Actions tab
+  workflow_dispatch: # Allows you to manually trigger it from the Actions tab
 
 permissions:
-  contents: read            # the job only makes an outbound request
+  contents: read
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Ping the Streamlit app
+      - name: Wake up Streamlit app via API
         run: |
           URL="https://arafatsable-cheds-import-tool-app-streamlit-umxrz5.streamlit.app"
-          echo "Pinging $URL"
-          # NO -L here, deliberately. streamlit.app answers a plain cookieless
-          # request with a redirect that loops, so following redirects ends in
-          # "curl: (47) Maximum (50) redirects followed". We do not need the
-          # page -- only proof the server answered, which is what resets the
-          # 12-hour sleep timer. So: one request, no redirect following, and a
-          # 3xx counts as success.
+          echo "Targeting app: $URL"
+          
+          COOKIES=$(mktemp)
+          
+          # Step 1: Hit the app status API to fetch cookies and extract the CSRF token
+          echo "Fetching CSRF token..."
+          CSRF_TOKEN=$(curl --silent --output /dev/null --dump-header - \
+            --cookie-jar "$COOKIES" \
+            "$URL/api/v2/app/status" \
+            | tr -d '\r' \
+            | awk -F': ' 'tolower($1) == "x-csrf-token" { print $2 }')
+          
+          if [ -z "$CSRF_TOKEN" ]; then
+            echo "Error: Could not retrieve CSRF token. Streamlit API structure may have changed."
+            exit 1
+          fi
+          echo "CSRF token successfully acquired."
+
+          # Step 2: Generate a random fake machine ID to mimic a browser session
+          MACHINE_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')
+
+          # Step 3: Send the official resume payload to wake up the app
+          echo "Sending resume/wake command..."
           code=$(curl -sS \
-                   --retry 3 --retry-delay 20 --retry-all-errors \
-                   --max-time 60 \
-                   -A "keep-awake-bot (github actions)" \
-                   -o /dev/null -w "%{http_code}" \
-                   "$URL")
-          echo "HTTP $code"
-          case "$code" in
-            2*|3*) echo "App responded. Sleep timer reset." ;;
-            000)   echo "No response at all - app or platform unreachable."; exit 1 ;;
-            *)     echo "Unexpected response: $code"; exit 1 ;;
-          esac
+            --cookie "$COOKIES" --cookie-jar "$COOKIES" \
+            --header "x-csrf-token: $CSRF_TOKEN" \
+            --header "x-streamlit-machine-id: $MACHINE_ID" \
+            --header "origin: $URL" \
+            --header "referer: $URL/" \
+            -o /dev/null -w "%{http_code}" \
+            --request POST \
+            "$URL/api/v2/app/resume")
+          
+          echo "HTTP Response Code: $code"
+          
+          # A 200 means it successfully reset the timer / woke up
+          if [ "$code" -eq 200 ]; then
+            echo "Success! The app is awake or the sleep timer has been reset."
+          else
+            echo "Failed to wake app. Expected HTTP 200, got $code"
+            exit 1
+          fi
