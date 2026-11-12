@@ -72,24 +72,15 @@ ALL_FORMS = {
 # Delete a line to release that dataset into the app. The mapping JSON is
 # already in mappings/ and verified against HEDB 202601, so nothing else has to
 # change -- the entry reappears in the picker on the next app reload.
-HIDDEN = {
-    "10. Graduates",
-    "9. Graduate Licensure",
-    "22. Students - Internship",
-    "17. Students - SOD",
-    "23. Courses",
-    "24. Course Faculty",
-    "30. Institute - Events",
-    "32. Institute - Overview",
-    "34. Institute - Partnerships",
-    "35. Institute - Employers",
-    "8. Institute - Financials",
-    "33. Institute - Leadership Contact Information",
-    "38. Institute - Publications",
-    "40. Institute - Startups & Spinoffs",
-    "37. Institute - Intellectual Property",
-    "29. OBF Self Report",
-}
+HIDDEN = set([
+    # 2026-11-12: everything released. SIU Dubai has approved the full set,
+    # so all 40 datasets are now offered in the app.
+    #
+    # To withhold a dataset again, add its exact ALL_FORMS key here, e.g.
+    #     "29. OBF Self Report",
+    # A name that is not in ALL_FORMS raises at import, so a typo cannot
+    # silently leave something exposed.
+])
 
 # Guard against a typo in HIDDEN silently hiding nothing.
 _unknown = HIDDEN - set(ALL_FORMS)
