@@ -1424,6 +1424,18 @@ def parse_date_value(v):
     return True, None, False  # blank -- nothing to parse, not an error
 
 
+def norm_header(h):
+    """Excel headers routinely arrive with stray leading/trailing whitespace --
+    the HEDB exports carry it on several columns (e.g. 'Course_Name ',
+    'Load_Institution_name '). Matching a config's raw_column against a header
+    character-for-character then silently drops the column. Compare on the
+    trimmed form instead; the ONLY normalisation is whitespace, so two
+    genuinely different headers can never collide."""
+    if h is None:
+        return None
+    return str(h).strip()
+
+
 def build_import_ready(raw_path, config_path, hedb_path, out_path, sheet=None):
     """
     The actual raw-Excel -> import-ready-Excel transform, factored out of
@@ -1438,7 +1450,7 @@ def build_import_ready(raw_path, config_path, hedb_path, out_path, sheet=None):
 
     raw_wb = openpyxl.load_workbook(raw_path, data_only=True)
     raw_ws = raw_wb[raw_wb.sheetnames[0]] if not sheet else raw_wb[sheet]
-    headers = [raw_ws.cell(row=1, column=c).value for c in range(1, raw_ws.max_column + 1)]
+    headers = [norm_header(raw_ws.cell(row=1, column=c).value) for c in range(1, raw_ws.max_column + 1)]
 
     rows = []
     for r in range(2, raw_ws.max_row + 1):
@@ -1475,7 +1487,7 @@ def build_import_ready(raw_path, config_path, hedb_path, out_path, sheet=None):
         notes = []
         text_cells = []
         for fdef in config["fields"]:
-            raw_col = fdef["raw_column"]
+            raw_col = norm_header(fdef["raw_column"])
             target = fdef["target_field"]
             kind = fdef.get("kind", "plain")
             v = row.get(raw_col)
@@ -1906,7 +1918,7 @@ def build_issue_report(raw_path, config_path, hedb_path, out_path, sheet=None):
 
     raw_wb = openpyxl.load_workbook(raw_path, data_only=True)
     raw_ws = raw_wb[raw_wb.sheetnames[0]] if not sheet else raw_wb[sheet]
-    headers = [raw_ws.cell(row=1, column=c).value for c in range(1, raw_ws.max_column + 1)]
+    headers = [norm_header(raw_ws.cell(row=1, column=c).value) for c in range(1, raw_ws.max_column + 1)]
     header_to_col = {h: c + 1 for c, h in enumerate(headers) if h}
 
     hedb_wb = openpyxl.load_workbook(hedb_path, data_only=True)
@@ -1935,7 +1947,7 @@ def build_issue_report(raw_path, config_path, hedb_path, out_path, sheet=None):
         cell.alignment = Alignment(wrap_text=True, vertical="center")
     r = 2
     for i, fdef in enumerate(config["fields"], start=1):
-        raw_col = fdef["raw_column"]
+        raw_col = norm_header(fdef["raw_column"])
         target = fdef["target_field"]
         found = raw_col in header_to_col
         colmap.cell(row=r, column=1, value=i)
