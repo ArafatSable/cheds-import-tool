@@ -99,12 +99,6 @@
    "raw_column": "Course_design_percent",
    "target_field": "Percentage_of_course_design_workload",
    "kind": "plain"
-  },
-  {
-   "raw_column": "Last_Updated",
-   "target_field": null,
-   "kind": "unmapped",
-   "_note": "Reference only -- CHEDS says to send Last Updated ONLY through the master API; the push stamps it with zoho.currenttime on success."
   }
  ]
 }
