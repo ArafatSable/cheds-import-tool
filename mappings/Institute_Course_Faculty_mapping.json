@@ -18,8 +18,14 @@
    "_note": "Reference only -- the Zoho form derives the institution name from the institution code lookup, so no column is written."
   },
   {
-   "raw_column": "Course_Program_Name",
+   "raw_column": "Program_Code",
    "target_field": "Program_Code",
+   "kind": "plain",
+   "_note": "displayformat = [Code] confirmed in .ds export -- bare code, no conversion needed."
+  },
+  {
+   "raw_column": "Course_Program_Name",
+   "target_field": "Program_Name",
    "kind": "plain",
    "_note": "displayformat = [Code] confirmed in .ds export -- bare code, no conversion needed."
   },
