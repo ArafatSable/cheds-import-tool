@@ -23,8 +23,8 @@
    "kind": "plain",
    "_note": "displayformat = [Code] confirmed in .ds export -- bare code, no conversion needed."
   },
-  {
- "raw_column": "Course_Program_Name",
+ {
+ "raw_column": "Program_Code",
  "target_field": "Program_Name",
  "kind": "lookup",
  "lookup_direction": "code_to_combo",
@@ -32,7 +32,7 @@
  "combo_separator": " - ",
  "hedb_sheet": "Program Master",
  "_note": "The Zoho 'Program Name' field is a lookup into Program_Code whose Display Fields are Name then ' - ' then Code, so the cell must read 'NAME - CODE'. Resolved from the CODE column (Program_Code), not from Course_Program_Name: the code is the reliable key and many programmes share a name. The same raw column also feeds Program_Code above."
-},
+}
   {
    "raw_column": "Course_Academic_Period",
    "target_field": "Academic_Period",
